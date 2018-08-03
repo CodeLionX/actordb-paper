@@ -8,5 +8,4 @@ cache:
     - /tmp/texlive
     - $HOME/.texlive
 script:
-  - source ./bin/build.sh
-
+  - source ./bin/build.sh paper
