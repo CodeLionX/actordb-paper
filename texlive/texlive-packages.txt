@@ -1,3 +1,4 @@
+amsmath
 mathtools
 xcolor
 pdfpages
