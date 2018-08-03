@@ -22,11 +22,11 @@ iftex
 cmap
 microtype
 ccicons
-ngerman
 etoolbox
-newtxmath
+newtx
 csquotes
-graphicx
 cleveref
 biblatex
 logreq
+babel-german
+mnsymbol
