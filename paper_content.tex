@@ -1,0 +1,64 @@
+
+Paper Goals (for us):
+\begin{itemize}
+  \item Concept / Approach: Domain design with actors (How does a Actor Database System look like in our view?)
+  \item Memory overhead of actor-design? feasible
+  \item Queries between actors and optimization through concurrency
+\end{itemize}
+        
+\section{Introduction}\label{sec:intro}
+  \subsection{Motivation}
+  % existing db landscape: KV-stores and RDBMS
+  % tradeoffs of these two
+  % motivational statement about importance of parallelization for data processing [sources]
+  % data processing close to data storage [sources]
+  
+  % summarize chapters \ref{sec:dactors} and \ref{sec:actor_database_systems} in 2-3 sentences
+
+  \subsection{Contribution}
+  % can we propose our framework?
+  % our idea: domain-level object actor db in a framework
+  % business logic defined as part of data tier using framework
+  % QUESTION TO TORSTEN: de-facto this is disputable as our framework is more of a application dev framework, so arguably we push data tier into app tier
+
+  \subsection{Paper Overview}
+
+\section{Related Work}
+% Possibly last thing in the Introduction before overview of the rest of the paper
+\begin{enumerate}
+  \item actor model
+  \item actor database systems
+  \item --> manifesto
+  \item domain driven design
+  \item akka
+  \item similar approaches: ReactDB, actorDB
+\end{enumerate}
+
+\section{Domain Actor Database Concept}
+  
+  \subsection{Domain Actors}\label{sec:dactors}
+  % intro to actors
+  % models domain object
+  
+  \subsection{Actor Database Systems}\label{sec:actor_database_systems}
+  % how actors solve the above storage problem
+
+\section{Domain Actor Database Framework}\label{sec:framework}
+% Describe implementation details and framework design
+  \subsection{Actor Design}
+
+  \subsection{Memory Storage}
+
+  \subsection{Multi-Actor Queries}
+  
+  \subsection{Discussion}
+
+\section{Experiments}\label{sec:experiments}
+
+  \subsection{What does actors cost?}
+
+  \subsection{Query Optimization}
+  
+  \subsection{Discussion}
+
+\section{Conclusion}\label{sec:conclusion}
