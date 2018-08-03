@@ -20,3 +20,4 @@ nag
 iftex
 cmap
 microtype
+ccicons
