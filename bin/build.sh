@@ -2,7 +2,7 @@
 
 mainFile=$1
 pdfName=$1.pdf
-[ -z "$1" ] && pdfName=$2
+[ -z "$2" ] && pdfName=$2
 
 echo "Checking file existance for ${pdfName}"
 # remove pdfs if present
