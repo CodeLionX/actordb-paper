@@ -9,5 +9,9 @@ cache:
     - $HOME/.texlive
 script:
   - source ./bin/build.sh paper
-after_script:
-  - source ./bin/travis-push.sh paper.pdf
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: source ./bin/travis-push.sh paper.pdf
+  on:
+    all_branches: true

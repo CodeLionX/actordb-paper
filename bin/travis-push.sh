@@ -7,7 +7,7 @@ echo "Trying to push PDF to GitHub"
 git config --global user.email "travis@travis-ci.org"
 git config --global user.name "Travis CI"
 
-git add "${pdfFile}"
+git add -f "${pdfFile}"
 git commit -m "Travis update of PDF: ${pdfFile}\n $(date) (Build ${TRAVIS_BUILD_NUMBER})" -m "[skip ci]"
 
 if [ $? -eq 0]; then
