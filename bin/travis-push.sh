@@ -14,7 +14,7 @@ git commit -m "Travis update of PDF: ${pdfFile} on $(date) (Build ${TRAVIS_BUILD
 if [ $? -eq 0 ]; then
   echo "A new PDF file exists. Uploading it to GitHub"
   git remote add github "https://${GH_TOKEN}@github.com/CodeLionX/actordb-paper.git" >/dev/null 2>&1
-  git push --quiet --set-upstream github ${TRAVIS_BRANCH}
+  git push --quiet --set-upstream github ${TRAVIS_BRANCH} >/dev/null 2>&1
 else
   echo "No changes. Skipping upload"
 fi
