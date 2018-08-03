@@ -30,3 +30,4 @@ biblatex
 logreq
 babel-german
 mnsymbol
+fontaxes
