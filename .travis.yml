@@ -8,7 +8,8 @@ cache:
     - /tmp/texlive
     - $HOME/.texlive
 script:
-  - bash ./bin/build.sh paper
+  - echo "${PATH}"
+  - ./bin/build.sh paper
 deploy:
   skip_cleanup: true
   provider: script
