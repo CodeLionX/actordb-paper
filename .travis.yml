@@ -8,7 +8,7 @@ cache:
     - /tmp/texlive
     - $HOME/.texlive
 script:
-  - echo "${PATH}"
+  - whereis pdflatex
   - ./bin/build.sh paper
 deploy:
   skip_cleanup: true

@@ -15,6 +15,7 @@ echo "Checking file existance for ${pdfName}"
 
 # build pdf
 echo "Building PDF using pdflatex and biber on ${mainFile}.tex"
+echo "$PATH"
 pdflatex -synctex=1 -interaction=nonstopmode -shell-escape "${mainFile}.tex"
 biber "${mainFile}"
 pdflatex -synctex=1 -interaction=nonstopmode -shell-escape "${mainFile}.tex"
