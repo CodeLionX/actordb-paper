@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
 mainFile=$1
-[ -z "$2" ] && pdfName=$2 || pdfName=$1.pdf
+if [ -z $2 ]; then
+  pdfName=$2
+else
+  pdfName=$1.pdf
+fi
+echo "Setting pdf name to ${pdfName}"
 
 echo "Checking file existance for ${pdfName}"
 # remove pdfs if present
