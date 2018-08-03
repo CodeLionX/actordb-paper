@@ -9,5 +9,5 @@ cache:
     - $HOME/.texlive
 script:
   - source ./bin/build.sh paper
-after_success:
+after_script:
   - source ./bin/travis-push.sh paper.pdf
