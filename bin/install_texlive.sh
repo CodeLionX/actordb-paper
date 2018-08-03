@@ -29,7 +29,7 @@ tlmgr install luatex biblatex biber
 tlmgr install xkeyval collection-latex collection-langeuropean
 
 # Other contrib packages: done as a block to avoid multiple calls to tlmgr
-# One package per line
+# One package per line in file texlive-packages.txt
 tlmgr install $(cat texlive/texlive-packages.txt)
 
 # Keep no backups (not required, simply makes cache bigger)
