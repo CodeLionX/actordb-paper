@@ -2,16 +2,16 @@ language: generic
 
 # Build PDF using texlive and pdflatex
 install:
-  - source ./bin/install_texlive.sh
+  - ./bin/install_texlive.sh
 cache:
   directories:
     - /tmp/texlive
     - $HOME/.texlive
 script:
-  - source ./bin/build.sh paper
+  - ./bin/build.sh paper
 deploy:
   skip_cleanup: true
   provider: script
-  script: source ./bin/travis-push.sh paper.pdf
+  script: ./bin/travis-push.sh paper.pdf
   on:
     all_branches: true
