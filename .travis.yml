@@ -1,0 +1,12 @@
+language: generic
+
+# Build PDF using texlive and pdflatex
+install:
+  - source ./bin/install_texlive.sh
+cache:
+  directories:
+    - /tmp/texlive
+    - $HOME/.texlive
+script:
+  - bin/build.sh
+
