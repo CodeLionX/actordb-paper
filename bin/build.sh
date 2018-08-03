@@ -21,7 +21,7 @@ biber "${mainFile}"
 pdflatex -synctex=1 -interaction=nonstopmode -shell-escape "${mainFile}.tex"
 
 # only exit successfully if pdf was build successfully
-if [ -f "${pdfName}" ]; then
+if [ -f "${mainFile}.pdf" ]; then
   echo "Build successfully produced PDF"
   mv "${mainFile}.pdf" "${pdfName}"
   exit 0
