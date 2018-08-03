@@ -17,6 +17,7 @@ echo "Building PDF using pdflatex and biber on ${mainFile}.tex"
 pdflatex -synctex=1 -interaction=nonstopmode -shell-escape "${mainFile}.tex"
 biber "${mainFile}"
 pdflatex -synctex=1 -interaction=nonstopmode -shell-escape "${mainFile}.tex"
+mv "${mainFile}.pdf" "${pdfName}"
 
 # only exit successfully if pdf was build successfully
 [ -f "${pdfName}" ] && exit 0 || exit 1

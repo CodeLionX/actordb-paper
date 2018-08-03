@@ -8,6 +8,6 @@ cache:
     - /tmp/texlive
     - $HOME/.texlive
 script:
-  - source ./bin/build.sh paper
+  - source ./bin/build.sh paper ActorDB.pdf
 after_success:
-  - source ./bin/travis-push.sh
+  - source ./bin/travis-push.sh ActorDB.pdf
