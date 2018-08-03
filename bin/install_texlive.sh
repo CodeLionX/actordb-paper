@@ -23,7 +23,7 @@ fi
 
 # Just including texlua so the cache check above works
 # Needed for any use of texlua even if not testing LuaTeX
-tlmgr install luatex
+tlmgr install luatex biblatex biber
 
 # Needed for TeX Live 2017 and minimum tex packages
 tlmgr install xkeyval collection-latex collection-langeuropean
