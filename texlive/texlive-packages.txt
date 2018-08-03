@@ -28,3 +28,4 @@ csquotes
 graphicx
 cleveref
 biblatex
+logreq
