@@ -1,17 +1,18 @@
 language: generic
-
-# Build PDF using texlive and pdflatex
 install:
-  - source ./bin/install_texlive.sh
+- source ./bin/install_texlive.sh
 cache:
   directories:
-    - /tmp/texlive
-    - $HOME/.texlive
+  - "/tmp/texlive"
+  - "$HOME/.texlive"
 script:
-  - ./bin/build.sh paper
+- "./bin/build.sh paper"
 deploy:
   skip_cleanup: true
   provider: script
-  script: ./bin/travis-push.sh paper.pdf
+  script: "./bin/travis-push.sh paper.pdf"
   on:
     all_branches: true
+env:
+  global:
+    secure: kIdH+582uP6pTPJ2rvfnfFMXpkaTV69aE1aRKCkSMT5oN/Nf0SOvM9QIfOtqTAVBTyRCy8XHY2boisM5qmbDbmPpIzgdfaWmaOxT9uvlPIc34Mm6X4eB+8cY5iTPttqT+b26OQ8xSSfttPM5dj8+sAV98pRxJsf72efl+kpAU6vNK/chkeoKOI3sMpnE16/whKCsEVX/41SUFRqAZbvxBzmx9tqW2msKoriGGpJXHnMUhfl/LnKUS/bNofuCD3EdORbXGe/xQrvRpfq8V6ffflwGlf1G67tc9vA0Pl5b41l+EBMznL3rJGmYejbbIF3i8aUxfNSpkM1uq5dWSoYHVmdHsszAQdEr4j0ox1XPKZEFLBkkES2hKClbgVQepzMfvmFY8BgLR+S9vg7jODUTvtceIobpO2zEZINy6VTeNBpHndfkidM42Z1/WGFYPSKiImVagc9SrcjD+3buBrIXIjFWRja5tnVoKfgAenwPr9ekUnUsSiZYPXbv1NGRH03bqhLJOc1jMcfCDFeWaV/ZCKAje6VbX4RW26uv5om7oWGSRDDj08Hjvd0atEE32I2OyFNwpAKfrJcDB+k5xUN4mijLrjVXYMWExDOLKaiVVdM8ozyEtbygR+cjwMW9VbEk9FtUuBJoAKFbGwipUQDSDj55fpcLknG8fJDoKQd22Pc=
