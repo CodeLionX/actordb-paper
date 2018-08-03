@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
 mainFile=$1
-pdfName=$1.pdf
-[ -z "$2" ] && pdfName=$2
+[ -z "$2" ] && pdfName=$2 || pdfName=$1.pdf
 
 echo "Checking file existance for ${pdfName}"
 # remove pdfs if present
