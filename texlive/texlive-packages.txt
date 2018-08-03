@@ -22,3 +22,9 @@ cmap
 microtype
 ccicons
 ngerman
+etoolbox
+newtxmath
+csquotes
+graphicx
+cleveref
+biblatex
