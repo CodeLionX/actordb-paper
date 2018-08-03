@@ -17,3 +17,4 @@ collection-fontsrecommended
 environ
 imakeidx
 nag
+iftex
