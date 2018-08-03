@@ -24,6 +24,7 @@ microtype
 ccicons
 etoolbox
 newtx
+newtxtt
 csquotes
 cleveref
 biblatex
