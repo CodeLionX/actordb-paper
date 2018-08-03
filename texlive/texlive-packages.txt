@@ -1,16 +1,11 @@
-amsmath
-amscls
 mathtools
 xcolor
 pdfpages
 pgf
-hyperref
 pgfplots
 listings
 scalerel
 listofitems
-amsfonts
-fancyhdr
 float
 booktabs
 enumitem
@@ -21,7 +16,4 @@ caption
 collection-fontsrecommended
 environ
 imakeidx
-graphics
-tools
-babel
 nag

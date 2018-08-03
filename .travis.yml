@@ -8,5 +8,5 @@ cache:
     - /tmp/texlive
     - $HOME/.texlive
 script:
-  - bin/build.sh
+  - ./bin/build.sh
 
