@@ -1,4 +1,4 @@
-# actordb-paper
+# actordb-paper [![Build Status](https://travis-ci.com/CodeLionX/actordb-paper.svg?token=pqFUU2qudhkNenBcNwxf&branch=master)](https://travis-ci.com/CodeLionX/actordb-paper)
 Paper about https://github.com/CodeLionX/actordb
 
 ## Contents
