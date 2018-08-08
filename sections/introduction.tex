@@ -1,20 +1,26 @@
-% !TeX root = paper.tex
+% !TeX root = ../paper.tex
 % !TeX encoding = UTF-8
 % !TeX spellcheck = en_US
 
 \section{Introduction}\label{sec:intro}
-\subsection{Motivation}
-  % existing db landscape: KV-stores and RDBMS
-  % tradeoffs of these two
+  % \subsection{Motivation}
+  % Impedance mismatch between data and application logic tier
+  %  ORM’s try to solve this problem
+  % Database scalability
+
   % motivational statement about importance of parallelization for data processing [sources]
+  % "die wichtigsten Motivationspunkte könnt ihr ja aus dem survey ziehen: Objekt mapping explizit machen, skalierbarkeit, fehlertolleranz, wartbarkeit des codes etc. und alles insbesondere wenn es mit stored procedures los geht; die sind der ganz große feind ;-)"
   % data processing close to data storage [sources]
   
-  % summarize chapters \ref{sec:dactors} and \ref{sec:actor_database_systems} in 2-3 sentences
+  % \subsection{Our Concept}
+  % summarize chapters \ref{sec:dactors} and \ref{sec:actor_database_systems} in 2-3 sentences ("auch ein paar sätze mehr")
 
-\subsection{Contribution}
-  % can we propose our framework?
-  % our idea: domain-level object actor db in a framework
-  % business logic defined as part of data tier using framework
+  % \subsection{Contribution}
+  % can we propose our framework? - No "was, bei dem ihr innovativ was neues als erste gemacht ahbt"
+  % "Übertragung der Idee von Actor Databases auf das Akka Framework"
+
   % QUESTION TO TORSTEN: de-facto this is disputable as our framework is more of a application dev framework, so arguably we push data tier into app tier
+  % "stellt den vergleich am besten mit einem OR-Mapper wie hybernate her oder JPA. Auch mit einer Datenbank nutzt man i.d.R. frameworks, die den Datenverkehr und das Übersetzen der Business-Objekte in Datenbank-Objekte regeln und somit den Entwicklungsprocess wie ein framework beeinflussen. Man bindet euch wie jede andere bibliothek in ein Programm ein und da dürft ihr wie all diese anderen bibliotheken gerne von frameworks sprechen. der große unterschied ist, dass ihr ganz direkt und nah an den Daten seid und so dinge machen könnt, die andernfalls stored procedures oder andere tiefe Eingriffe aus dem Anwendungscode in die separate Datenbank erfordern. Plus das ganze Datenmanagement ist automatisch verteil-, parallelisier- und skalierbar."
 
-\subsection{Paper Overview}
+  % \subsection{Paper Overview}
+  % summarize and reference all following chapters
