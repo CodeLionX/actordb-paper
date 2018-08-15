@@ -4,11 +4,63 @@
 
 \section{Related Work}
 
+  \subsection{Actor Model}
+  % https://www.brianstorti.com/the-actor-model/
+  % https://en.wikipedia.org/wiki/Actor_model
+  % https://doc.akka.io/docs/akka/2.5.3/scala/guide/actors-intro.html
+  % https://link.springer.com/content/pdf/10.1007%2F978-3-642-39038-8.pdf#page=318 (page 302)
+  The actor programming model is a conceptual model for concurrent computation.
+  The core primitive in this model are actors, which run independently of each other in different computational threads.
+  An actor is an encapsulated object that communicates exclusively via asynchronous messages.
+  Incoming messages are stored in a mailbox and this allows actors to process messages one at a time.
+  An actor can only access and modify its own internal state.
+  For affecting other actors, it must rely on exchanging messages.
+  On receiving a message an actor can modify its state, create new actors, and send more messages.
+  % \enquote{The actor model brings OOP back to the system level with actors appearing to developers very much like the familiar model of interacting objects}~\cite{bernstein:orleans}.
+
+  There are different libraries and languages providing actor model functionality:
+  Erlang is a concurrent programming language designed for distributed and high-available systems in the telecommunication sector~\cite{armstrong:erlang}.
+  Akka implements the actor model for the Java Virtual Machine and can be used in the languages Java and Scala~\cite{akka}.
+  Akka.Net is a community-driven port of the Akka toolkit for the .NET platform in the languages C\# and F\#~\cite{akka.net}.
+
+  \subsection{Virtual Actor Model}
+  While the actor programming model is still low level and lets the developer deal with actor lifecycle management, handling race conditions, physically distributing actors and failure handling, there is the virtual actor programming model, which raises the abstraction level of actors.
+  It still adheres to the plain actor model, but treats actors as virtual entities.
+  In this model actor lifecycle management and distribution is managed by the framework or runtime and not by the application developer.
+  The physical location of the actor is transparent to the application.
+  This model is comparable to virtual memory, which allows access to a memory address whether it is currently physically available or not.
+
+  Orleans --> virtual actor model for .NET \cite{bernstein:orleans}
+  \begin{enumerate}
+    \item an actor exists at any time (virtually)
+    \item automatic instantiation of actors (on-demand and reclaiming of space based on resource management)
+    \item an actor never fails, automatic recreation of actors caused by crashing actor/server
+    \item creation of multiple instances for stateless actors for scale out
+  \end{enumerate}
+
+  corresponding framework for jvm: Orbit~\cite{orbit}
+  % https://github.com/orbit/orbit
+  \begin{itemize}
+    \item at any time an virtual actor can be active or inactive (like Schrödinger's cat)
+    \item a message to an inactive actor will active it
+    \item actor state is usually store in a database and gets loaded during activation
+  \end{itemize}
+
+  Discussion about virtual actors in Akka.NET (also applies to Akka): \url{https://github.com/akkadotnet/akka.net/issues/756}
+  -- somewhat implemented with cluster sharding project
+
+  In this paper we denote virtual actors as vactors, because this clearly distinguishes actors of the actor model (actor) from those of the virtual actor model (vactor).
+
+
+  \subsection{Actor Database Systems}
+
+  \begin{itemize}
+    \item --> manifesto
+    \item --> existing work in Orleans
+  \end{itemize}
+
 % Possibly last thing in the Introduction before overview of the rest of the paper
 \begin{enumerate}
-  \item actor programming model (kurz: Akka, Orleans etc und dass halt meistens was in Orleans probiert wurde und bisher nicht in Akka)
-  \item actor database systems
-  \item --> manifesto
-  \item --> existing work in Orleans
+  \item dass halt meistens was in Orleans probiert wurde und bisher nicht in Akka
   \item similar approaches: ReactDB, actorDB
 \end{enumerate}
