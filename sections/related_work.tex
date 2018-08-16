@@ -58,20 +58,37 @@
   Akka Cluster Sharding also supports passivation of actors.
   This means that unused persistent actors can be unloaded to free up memory (passivation).
   A message to passive actors will instruct the framework to load it back into memory.
-  
 
   In this paper we denote virtual actors as vactors, because this clearly distinguishes actors of the actor model (actor) from those of the virtual actor model (vactor).
+  
+  
 
 
   \subsection{Actor Database Systems}
-
   \begin{itemize}
-    \item --> manifesto
+    \item manifesto~\cite{manifesto}
+      \begin{itemize}
+        \item actors and virtual actors: state management in application (main mem. or persistent)
+        \item application also has to handle faults and consistency requirements
+        \item no atomicity or consistency guarantees out-of-the-box
+        \item need of state management guarantees in actor systems --> actor database system
+        \item give vision about new database system paradigm: actor database systems
+        \item list required features of such a system (tenants)
+      \end{itemize}
     \item --> existing work in Orleans
+    \item ReactDB (same author than manifesto)~\cite{Shah:reactdb}
+    \item actorDB~\cite{biokoda:actordb}
+      \begin{itemize}
+        \item ACID-conform
+        \item \enquote{An actor is a mini fully relational SQL database.}~\cite{biokoda:actordb}
+        \item distributed consensus algorithm (Raft) with leaders
+        \item relies on SQLite
+        \item explicit partitioning and replication
+        \item uses mySQL-protocol
+      \end{itemize}
   \end{itemize}
 
 % Possibly last thing in the Introduction before overview of the rest of the paper
 \begin{enumerate}
   \item dass halt meistens was in Orleans probiert wurde und bisher nicht in Akka
-  \item similar approaches: ReactDB, actorDB
 \end{enumerate}
