@@ -39,3 +39,4 @@ xfor
 textcase
 tools
 datatool
+substr
