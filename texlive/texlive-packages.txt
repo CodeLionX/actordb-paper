@@ -1,4 +1,5 @@
 amsmath
+amsgen
 mathtools
 xcolor
 pdfpages
@@ -34,4 +35,8 @@ mnsymbol
 fontaxes
 boondox
 glossaries
-
+mfirstuc
+xfor
+longtable
+datatool-base
+textcase
