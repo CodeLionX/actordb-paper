@@ -20,7 +20,7 @@
 
   There are different libraries and languages providing actor model functionality:
   Erlang is a concurrent programming language designed for distributed and high-available systems in the telecommunication sector~\cite{armstrong:erlang}.
-  Akka implements the actor model for the Java Virtual Machine and can be used in the languages Java and Scala~\cite{akka}.
+  Akka implements the actor model for the \gls{jvm} and can be used in the languages Java and Scala~\cite{akka}.
   Akka.Net is a community-driven port of the Akka toolkit for the .NET platform in the languages C\# and F\#~\cite{akka.net}.
 
   \subsection{Virtual Actor Model}
@@ -28,26 +28,37 @@
   It still adheres to the plain actor model, but treats actors as virtual entities.
   In this model actor lifecycle management and distribution is managed by the framework or runtime and not by the application developer.
   The physical location of the actor is transparent to the application.
-  This model is comparable to virtual memory, which allows access to a memory address whether it is currently physically available or not.
+  This model is comparable to virtual memory, which allows processes to access a memory address whether it is currently physically available or not.
+  
+  The virtual actor model was introduced with the Orleans framework for .NET by Microsoft Research~\cite{bernstein:orleans}.
+  In Orleans, actors (virtually) exist at any time.
+  There is no possibility to create an actor explicitly.
+  Instead this task is handled by the runtime and it instantiates actors on demand.
+  The runtime resource management deals with unused actors and reclaims their space automatically.
+  The Orleans runtime guarantees that actors are always available.
+  This means, that in the view of an application developer an actor can never fail.
+  The runtime will deal with crashing actors and servers and recreate missing actor incarnations accordingly.
+  Stateless actors have multiple incarnations to be able to scale out hot actors.
+  
+  The corresponding framework for the \gls{jvm} is Orbit~\cite{orbit}.
+  In Orbit, a virtual actor can be active or inactive.
+  But those two states are transparent to the application developer.
+  Similar to Orleans, messages to an inactive actor in Orbit will activate it, so the actor can receive the sent message.
+  Actor state in Orbit is usually stored in a database and this allows activation and deactivation of actors by the runtime.
+  During activation of an actor, the state is read from database and the actor gets active.
+  Before the actor is deactivated, its state is written back to the database.
 
-  Orleans --> virtual actor model for .NET \cite{bernstein:orleans}
-  \begin{enumerate}
-    \item an actor exists at any time (virtually)
-    \item automatic instantiation of actors (on-demand and reclaiming of space based on resource management)
-    \item an actor never fails, automatic recreation of actors caused by crashing actor/server
-    \item creation of multiple instances for stateless actors for scale out
-  \end{enumerate}
-
-  corresponding framework for jvm: Orbit~\cite{orbit}
-  % https://github.com/orbit/orbit
-  \begin{itemize}
-    \item at any time an virtual actor can be active or inactive (like Schrödinger's cat)
-    \item a message to an inactive actor will active it
-    \item actor state is usually store in a database and gets loaded during activation
-  \end{itemize}
-
-  Discussion about virtual actors in Akka.NET (also applies to Akka): \url{https://github.com/akkadotnet/akka.net/issues/756}
-  -- somewhat implemented with cluster sharding project
+  %Discussion about virtual actors in Akka.NET (also applies to Akka): \url{https://github.com/akkadotnet/akka.net/issues/756}
+  %-- somewhat implemented with cluster sharding project
+  Akka provides similar functionality with Akka Cluster Sharding~\cite{akka:clustersharding}.
+  It introduces the separation of virtual and physical Akka actors.
+  Actors are first grouped into shards, which can then be located at different physical locations.
+  The distribution of the shards and their actors is managed by the framework and it also deals with the routing of the messages and re-balancing the shards to different nodes based on different strategies.
+  A developer must not know, where a specific actor is physically located to send messages to it.
+  Akka Cluster Sharding also supports passivation of actors.
+  This means that unused persistent actors can be unloaded to free up memory (passivation).
+  A message to passive actors will instruct the framework to load it back into memory.
+  
 
   In this paper we denote virtual actors as vactors, because this clearly distinguishes actors of the actor model (actor) from those of the virtual actor model (vactor).
 
