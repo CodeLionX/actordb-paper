@@ -4,7 +4,7 @@ language: generic
 # build master branch, branches starting with `ci-` or `ci/` and commits with `[build pdf]`
 if: branch == master OR \
     branch ~= /^(?i:ci)(-|\/).*$/ OR \
-    commit_message ~= /\[build pdf\]/
+    commit_message ~= /^.*\[build pdf\].*$/
 
 # install texlive for using pdflatex and biber in the build
 install:
