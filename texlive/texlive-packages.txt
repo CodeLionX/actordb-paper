@@ -1,5 +1,4 @@
 amsmath
-amsgen
 mathtools
 xcolor
 pdfpages
@@ -37,6 +36,6 @@ boondox
 glossaries
 mfirstuc
 xfor
-longtable
-datatool-base
 textcase
+tools
+datatool
