@@ -9,22 +9,22 @@
   % https://en.wikipedia.org/wiki/Actor_model
   % https://doc.akka.io/docs/akka/2.5.3/scala/guide/actors-intro.html
   % https://link.springer.com/content/pdf/10.1007%2F978-3-642-39038-8.pdf#page=318 (page 302)
-  The actor programming model is a conceptual model for concurrent computation.
-  The core primitive in this model are actors, which run independently of each other in different computational threads.
-  An actor is an encapsulated object that communicates exclusively via asynchronous messages.
+  Actor Programming denotes a conceptual model for concurrent computation.
+  The core primitive in this model are actors, which are objects comprised of state and behaviour that execute computational tasks independently and concurrently.
+  Actor communication takes place exclusively via asynchronous message passing.
   Incoming messages are stored in a mailbox and this allows actors to process messages one at a time.
   An actor can only access and modify its own internal state.
   For affecting other actors, it must rely on exchanging messages.
   On receiving a message an actor can modify its state, create new actors, and send more messages.
   % \enquote{The actor model brings OOP back to the system level with actors appearing to developers very much like the familiar model of interacting objects}~\cite{bernstein:orleans}.
 
-  There are different libraries and languages providing actor model functionality:
-  Erlang is a concurrent programming language designed for distributed and high-available systems in the telecommunication sector~\cite{armstrong:erlang}.
-  Akka implements the actor model for the \gls{jvm} and can be used in the languages Java and Scala~\cite{akka}.
+  Various programming languages and libraries implement the actor model and provide the corresponding functionality:
+  The Erlang programming language supports concurrency using the actor programming model and is designed for distributed and high-available systems in the telecommunication sector~\cite{armstrong:erlang}.
+  Akka implements the actor model for the \gls{jvm} and can be used in the programming languages Java and Scala~\cite{akka}.
   Akka.Net is a community-driven port of the Akka toolkit for the .NET platform in the languages C\# and F\#~\cite{akka.net}.
 
   \subsection{Virtual Actor Model}
-  While the actor programming model is still low level and lets the developer deal with actor lifecycle management, handling race conditions, physically distributing actors and failure handling, there is the virtual actor programming model, which raises the abstraction level of actors.
+  While the actor programming model allows for low-level interaction with the actor lifecycle management, handling race conditions, physically distributing actors and failure handling, the virtual actor programming model raises the abstraction level of actor objects.
   It still adheres to the plain actor model, but treats actors as virtual entities.
   In this model actor lifecycle management and distribution is managed by the framework or runtime and not by the application developer.
   The physical location of the actor is transparent to the application.
