@@ -1,10 +1,10 @@
 language: generic
 
 # conditional build
+conditions: v1
+
 # build master branch, branches starting with `ci-` or `ci/` and commits with `[build pdf]`
-if: branch == master OR \
-    branch ~= /^(?i:ci)(-|\/).*$/ OR \
-    commit_message ~= /^.*build pdf.*$/
+if: branch == master || branch =~ ^(?i:ci)(-|\/).* || commit_message =~ /^.*\[build pdf\].*$/
 
 # install texlive for using pdflatex and biber in the build
 install:
