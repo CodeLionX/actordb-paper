@@ -29,7 +29,7 @@
   In this model actor lifecycle management and distribution is managed by the framework or runtime and not by the application developer.
   The physical location of the actor is transparent to the application.
   This model is comparable to virtual memory, which allows processes to access a memory address whether it is currently physically available or not.
-  
+
   The virtual actor model was introduced with the Orleans framework for .NET by Microsoft Research~\cite{bernstein:orleans}.
   In Orleans, actors (virtually) exist at any time.
   There is no possibility to create an actor explicitly.
@@ -39,7 +39,7 @@
   This means, that in the view of an application developer an actor can never fail.
   The runtime will deal with crashing actors and servers and recreate missing actor incarnations accordingly.
   Stateless actors have multiple incarnations to be able to scale out hot actors.
-  
+
   The corresponding framework for the \gls{jvm} is Orbit~\cite{orbit}.
   In Orbit, a virtual actor can be active or inactive.
   But those two states are transparent to the application developer.
@@ -60,8 +60,6 @@
   A message to passive actors will instruct the framework to load it back into memory.
 
   In this paper we denote virtual actors as vactors, because this clearly distinguishes actors of the actor model (actor) from those of the virtual actor model (vactor).
-  
-  
 
 
   \subsection{Actor Database Systems}
