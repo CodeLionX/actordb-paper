@@ -25,3 +25,8 @@ The PDF is built only for the branches `master`, `ci-*` and `ci/*` and pushed ba
 
 Please be aware that every _push_ to the `master`-branch will trigger a build of the PDF and the corresponding commit by Travis.
 This will force you to re-sync your local repository's master branch (`git pull`) before you can push again.
+
+### Use Travis to generate a current snapshot PDF
+
+You can instruct Travis CI to build the current version of the PDF and push it back to your branch via putting `[build pdf]` in your commit message.
+This is independent from the branch-dependent build-rules and works in every branch.
