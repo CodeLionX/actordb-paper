@@ -33,3 +33,5 @@ babel-german
 mnsymbol
 fontaxes
 boondox
+glossaries
+
