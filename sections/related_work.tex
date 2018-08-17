@@ -24,7 +24,7 @@
   Akka.Net is a community-driven port of the Akka toolkit for the .NET platform in the languages C\# and F\#~\cite{akka.net}.
 
   \subsection{Virtual Actor Model}
-  While the actor programming model allows for low-level interaction with the actor lifecycle management, handling race conditions, physically distributing actors and failure handling, the virtual actor programming model raises the abstraction level of actor objects.
+  While the actor programming model allows for low-level interaction with the actor lifecycle management, handling race conditions, physically distributing actors, and failure handling, the virtual actor programming model raises the abstraction level of actor objects.
   It still adheres to the plain actor model, but treats actors as virtual entities.
   In this model actor lifecycle management and distribution is managed by the framework or runtime and not by the application developer.
   The physical location of the actor is transparent to the application.
@@ -34,7 +34,7 @@
   In Orleans, actors (virtually) exist at any time.
   There is no possibility to create an actor explicitly.
   Instead this task is handled by the runtime and it instantiates actors on demand.
-  The runtime resource management deals with unused actors and reclaims their space automatically.
+  The runtime's resource management deals with unused actors and reclaims their space automatically.
   The Orleans runtime guarantees that actors are always available.
   This means, that in the view of an application developer an actor can never fail.
   The runtime will deal with crashing actors and servers and recreate missing actor incarnations accordingly.
@@ -63,16 +63,25 @@
 
 
   \subsection{Actor Database Systems}
+  The actor and virtual actor programming model is increasingly used to build soft caching layers and cloud applications for various purposes~\cite{erlang_uses,akka_uses,orleans_uses}.
+  This shows the appeal of the programming model that allows developers to easily develop modular and scalable software, which can be deployed in the heterogenous parallel cloud computing infrastructure.
+  
+  Despite this popularity \citeauthor{manifesto}~\cite{manifesto} state that actor programming models still expose state management to the application.
+  The developer has to decide how to handle state persistence and how to satisfy the failure and consistency requirements of the application, because atomicity or consistency of state across actors is not guaranteed out-of-the-box.
+  \citeauthor{manifesto} see a need of state management guarantees in actor systems and propose to integrate actor-based programming models in database management systems.
+  \textit{Actor database systems} should be designed as a logical distributed runtime with state management guarantees.
+  They should allow and encourage the design of modular, scalable and cloud-ready applications.
+  \citeauthor{manifesto} outline four tenets that identify an actor database system and specify needed features in their manifesto~\cite{manifesto}.
+  To give an overview about their work we list the four tenants of an actor database system:
+  \begin{description}
+    \item[Tenet 1] Modularity and encapsulation by a logical actor construct
+    \item[Tenet 2] Asynchronous, nested function shipping
+    \item[Tenet 3] Transaction and declarative querying functionality
+    \item[Tenet 4] Security, monitoring, administration and auditability
+  \end{description}
+  
+  
   \begin{itemize}
-    \item manifesto~\cite{manifesto}
-      \begin{itemize}
-        \item actors and virtual actors: state management in application (main mem. or persistent)
-        \item application also has to handle faults and consistency requirements
-        \item no atomicity or consistency guarantees out-of-the-box
-        \item need of state management guarantees in actor systems --> actor database system
-        \item give vision about new database system paradigm: actor database systems
-        \item list required features of such a system (tenants)
-      \end{itemize}
     \item --> existing work in Orleans
     \item ReactDB (same author than manifesto)~\cite{Shah:reactdb}
     \item actorDB~\cite{biokoda:actordb}
