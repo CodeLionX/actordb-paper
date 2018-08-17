@@ -66,9 +66,9 @@
   The actor and virtual actor programming model is increasingly used to build soft caching layers and cloud applications for various purposes~\cite{erlang_uses,akka_uses,orleans_uses}.
   This shows the appeal of the programming model that allows developers to easily develop modular and scalable software, which can be deployed in the heterogenous parallel cloud computing infrastructure.
   
-  Despite this popularity \citeauthor{manifesto}~\cite{manifesto} state that actor programming models still expose state management to the application.
+  Despite this popularity, actor programming models still expose state management to the application.
   The developer has to decide how to handle state persistence and how to satisfy the failure and consistency requirements of the application, because atomicity or consistency of state across actors is not guaranteed out-of-the-box.
-  \citeauthor{manifesto} see a need of state management guarantees in actor systems and propose to integrate actor-based programming models in database management systems.
+  \citeauthor{manifesto}~\cite{manifesto} see a need of state management guarantees in actor systems and propose to integrate actor-based programming models in database management systems.
   \textit{Actor database systems} should be designed as a logical distributed runtime with state management guarantees.
   They should allow and encourage the design of modular, scalable and cloud-ready applications.
   \citeauthor{manifesto} outline four tenets that identify an actor database system and specify needed features in their manifesto~\cite{manifesto}.
@@ -84,8 +84,18 @@
   \begin{itemize}
     \item --> existing work in Orleans
     \item ReactDB (same author than manifesto)~\cite{Shah:reactdb}
+      \begin{itemize}
+        \item follow proposition of manifesto
+        \item application-defined actors with relational semantics (local entity consisting of state as relations and function calls)
+        \item OLTP database system
+        \item in-memory
+        \item intra-transaction parallelism, state encapsulation
+        \item within \textit{Reactors}: classic declarative querying
+        \item across \textit{Reactors}: explicit asynchronous function calls, transactions with serializability guarantees
+      \end{itemize}
     \item actorDB~\cite{biokoda:actordb}
       \begin{itemize}
+        \item Erlang
         \item ACID-conform
         \item \enquote{An actor is a mini fully relational SQL database.}~\cite{biokoda:actordb}
         \item distributed consensus algorithm (Raft) with leaders
@@ -95,7 +105,6 @@
       \end{itemize}
   \end{itemize}
 
-% Possibly last thing in the Introduction before overview of the rest of the paper
 \begin{enumerate}
   \item dass halt meistens was in Orleans probiert wurde und bisher nicht in Akka
 \end{enumerate}
