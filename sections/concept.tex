@@ -2,13 +2,18 @@
 % !TeX encoding = UTF-8
 % !TeX spellcheck = en_US
 
-\section{Domain Actor Database Concept}
-\subsection{Domain Actors}\label{sec:dactors}
-  % intro to actors
-  % models domain object
+\section{Domain Actor Database Concept}\label{sec:concept}
+  We base our work on the concept of actor database systems as introduced by~\citeauthor{manifesto}~\cite{manifesto}.
+  Similar as in~\cite{Shah:reactdb}, actors in our approach consist of state abstracted as relations and asynchronous function processing logic.
+  The application developer defines actors and the asynchronous functions.
+  Different to previous approaches, we use Scala as programming language and Akka as the reference actor model to implement an framework for actor database systems, which is explained in section~\ref{sec:framework}.
 
-\subsection{Actor Database Systems}\label{sec:actor_database_systems}
-  % how actors solve the impedance mismatch
-  % "passt auf, dass hier eure Idee im Vordergrund steht und ihr nicht auf andere Gebiete ausschweift"
-  % Computation parallelization on a domain-level object basis
-  % Modularity, Testability
+  \subsection{Domain Actors}\label{sec:dactors}
+    % intro to actors
+    % models domain object
+
+  \subsection{Actor Database Systems}\label{sec:actor_database_systems}
+    % how actors solve the impedance mismatch
+    % "passt auf, dass hier eure Idee im Vordergrund steht und ihr nicht auf andere Gebiete ausschweift"
+    % Computation parallelization on a domain-level object basis
+    % Modularity, Testability

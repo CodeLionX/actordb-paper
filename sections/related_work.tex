@@ -79,32 +79,26 @@
     \item[Tenet 3] Transaction and declarative querying functionality
     \item[Tenet 4] Security, monitoring, administration and auditability
   \end{description}
-  
-  
-  \begin{itemize}
-    \item --> existing work in Orleans
-    \item ReactDB (same author than manifesto)~\cite{Shah:reactdb}
-      \begin{itemize}
-        \item follow proposition of manifesto
-        \item application-defined actors with relational semantics (local entity consisting of state as relations and function calls)
-        \item OLTP database system
-        \item in-memory
-        \item intra-transaction parallelism, state encapsulation
-        \item within \textit{Reactors}: classic declarative querying
-        \item across \textit{Reactors}: explicit asynchronous function calls, transactions with serializability guarantees
-      \end{itemize}
-    \item actorDB~\cite{biokoda:actordb}
-      \begin{itemize}
-        \item Erlang
-        \item ACID-conform
-        \item \enquote{An actor is a mini fully relational SQL database.}~\cite{biokoda:actordb}
-        \item distributed consensus algorithm (Raft) with leaders
-        \item relies on SQLite
-        \item explicit partitioning and replication
-        \item uses mySQL-protocol
-      \end{itemize}
-  \end{itemize}
 
-\begin{enumerate}
-  \item dass halt meistens was in Orleans probiert wurde und bisher nicht in Akka
-\end{enumerate}
+  Many work in this area has been done in the Orleans framework.
+  \citeauthor{Shah:reactdb}~\cite{Shah:reactdb} tightly followed the propositions of the manifesto and developed the \reactdb{} system.
+  It is an in-memory OLTP database system that is programmed via application-defined actors with relational semantics, called reactors.
+  An reactor is a local entity consisting of state encapsulated as relations that can process function calls asynchronously.
+  Within reactors classic declarative querying can be used, but across actors explicit asynchronous function calls must be defined.
+  \citeauthor{Shah:reactdb} show that transactions across reactors can have serializability guarantees.
+  \citeauthor{Eldeeb:transactions}~\cite{Eldeeb:transactions} introduce a new transaction protocol for distributed actors improving the throughput compared to the two-phase commit protocol.
+  They implemented their system in the Orleans framework and tested it on Microsoft Azure.
+  \citeauthor{Bernstein:indexing}~\cite{Bernstein:indexing} explores indexing mechanisms in an actor database system.
+  They propose a new indexing architecture based on the Orleans framework that is fault-tolerant and eventually-consistent.
+
+  \citeauthor{biokoda:actordb} takes a different approach to combine actor programming models and relational database systems.
+  In their development actorDB, an actor encapsulates a full relational SQL database using the SQLite database engine\footnote{\url{https://www.sqlite.org/about.html}}.
+  Actors can be deployed in an distributed cloud environment and communicate asynchronously.
+  The database is ACID-conform and enforces consistency across actors with the Raft consensus protocol~\cite{raft}.
+  The database can used via the MySQL-protocol
+
+  Most research in the field of actor database systems was done in Orleans and Erlang.
+  One approach in Akka getting near to our definition of an actor database system is from~\citeauthor{actorbase}.
+  He and his students combine the actor model with Key-Value-Stores.
+  But their approach does not take the relational features discussed earlier into account.
+  
