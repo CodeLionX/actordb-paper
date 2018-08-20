@@ -33,3 +33,12 @@ babel-german
 mnsymbol
 fontaxes
 boondox
+glossaries
+mfirstuc
+xfor
+textcase
+tools
+datatool
+substr
+fp
+tracklang
