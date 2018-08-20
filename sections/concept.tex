@@ -3,10 +3,32 @@
 % !TeX spellcheck = en_US
 
 \section{Domain Actor Database Concept}\label{sec:concept}
+  Our concept is based on the idea of actor database systems as introduced by~\citeauthor{manifesto}~\cite{manifesto}.
+  We agree, that a database system should be a distributed runtime that can be programmed like that.
+  We see the combination of application logic and data storage in one tier as the main benefit of actor database systems.
+  This architecture allows leveraging domain and application knowledge to dynamically model the data layout, especially concerning data partitioning and replication schemes.
+  This will make the database system modular, cloud-ready and scalable.
+  % add here: why is it better to use domain knowledge to partition and distribute data?
 
   \subsection{Domain Actors}\label{sec:dactors}
-    % intro to actors
-    % models domain object
+    Similar to \citeauthor{Shah:reactdb}~\cite{Shah:reactdb}, we introduce a special type of actor, called Domain Actor (\gls{dactor} for short), that acts as an application-defined scaling unit.
+    \glspl{dactor} represent real domain objects and encapsulate the object's state and application logic in an actor.
+    Modeling domain objects with actors enforces technical encapsulation of state access due to the purely private state in actors and the need of explicit asynchronous messaging between the actors.
+    This supports designing a modular and extensible database system and improves scalability of the system.
+    It naturally grows based on the load.
+    For example, if customers are modeled as \glspl{dactor} in an e-commerce application, then the system scales linearly with the number of customers using it, because each customer is represented with a separate \gls{dactor}.
+    This also illustrates that such a system tends to be more robust compared to monolithic systems, because if customer A's \gls{dactor} crashes for an unknown reason, all other customer \glspl{dactor} are unaffected.
+    State querying and modification within \glspl{dactor} is possible in a declarative way, but communication across all kind of actors is explicitly asynchronous.
+    Actors provide single-threaded semantics, which makes enforcing constraints on data tied to one domain object stored inside \glspl{dactor} no issue.
+    It is implemented via application logic within the \gls{dactor}.
+
+    Consistency?
+    % akka:
+    % message-passing
+    % supervision
+
+    % im framework:
+    % beispiel
 
   \subsection{Actor Database Systems}\label{sec:actor_database_systems}
     % how actors solve the impedance mismatch
