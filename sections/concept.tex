@@ -4,33 +4,79 @@
 
 \section{Domain Actor Database Concept}\label{sec:concept}
   Our concept is based on the idea of actor database systems as introduced by~\citeauthor{manifesto}~\cite{manifesto}.
-  We agree, that a database system should be a distributed runtime that can be programmed like that.
-  We see the combination of application logic and data storage in one tier as the main benefit of actor database systems.
+  Database systems should be a distributed runtime and provide the appropriate programming abstraction.
+  This is solved by actor database systems.
+  The combination of application and data tier provides considerable advantages for data-centric systems.
   This architecture allows leveraging domain and application knowledge to dynamically model the data layout, especially concerning data partitioning and replication schemes.
-  This will make the database system modular, cloud-ready and scalable.
+  This makes the database system modular, cloud-ready and scalable.
   % add here: why is it better to use domain knowledge to partition and distribute data?
 
   \subsection{Domain Actors}\label{sec:dactors}
     Similar to \citeauthor{Shah:reactdb}~\cite{Shah:reactdb}, we introduce a special type of actor, called Domain Actor (\gls{dactor} for short), that acts as an application-defined scaling unit.
-    \glspl{dactor} represent real domain objects and encapsulate the object's state and application logic in an actor.
-    Modeling domain objects with actors enforces technical encapsulation of state access due to the purely private state in actors and the need of explicit asynchronous messaging between the actors.
-    This supports designing a modular and extensible database system and improves scalability of the system.
-    It naturally grows based on the load.
-    For example, if customers are modeled as \glspl{dactor} in an e-commerce application, then the system scales linearly with the number of customers using it, because each customer is represented with a separate \gls{dactor}.
+    \glspl{dactor} can be used to model application-domain objects and encapsulate the object's state and application logic in an actor.
+    Using actors for this enforces technical encapsulation of state access due to the purely private state in actors and the need of explicit asynchronous messaging between the actors.
+    This makes it easier to reason about state changes, bugs and other failures, as only code within the \gls{dactor} can change the corresponding state.
+
+    As \glspl{dactor} not only contain data, but also the corresponding domain logic, computation is executed concurrently.
+    This supports designing a modular and extensible database system and improves scalability.
+    The system grows naturally based on the load.
+    Take an e-commerce application as an example for that:
+    If we have a customer entity for every customer in our system, then we can model each entity as a \gls{dactor}.
+    This allows our system to scale linearly with the number of customers using it, because each customer is represented with their own \gls{dactor}, which holds their information and performs computations.
     This also illustrates that such a system tends to be more robust compared to monolithic systems, because if customer A's \gls{dactor} crashes for an unknown reason, all other customer \glspl{dactor} are unaffected.
-    State querying and modification within \glspl{dactor} is possible in a declarative way, but communication across all kind of actors is explicitly asynchronous.
+
     Actors provide single-threaded semantics, which makes enforcing constraints on data tied to one domain object stored inside \glspl{dactor} no issue.
     It is implemented via application logic within the \gls{dactor}.
+    State querying and modification within \glspl{dactor} is possible in a declarative way, but communication across all kind of actors is explicitly defined via asynchronous messages and how the \glspl{dactor} handle the said messages.
 
-    Consistency?
-    % akka:
+  \subsection{Communication between Domain Actors}
+    Not all computation can be done with the information residing in a single \gls{dactor}.
+    Communication between \glspl{dactor} and other actors is required.
+    As already mentioned, this inter-actor communication is realized via asynchronous message passing.
+    \dots
+
+    There are different message patterns possible:
+    \begin{enumerate}
+      \item\label{enum:comp_pattern_1} \textbf{Cascading Computation} \dots
+      \item\label{enum:comp_pattern_2} \textbf{Sequential Computation} \dots
+      \item\label{enum:comp_pattern_3} \textbf{Concurrent Computation} \dots
+    \end{enumerate}
+
+    Introducing functors for \ref{enum:comp_pattern_2} and \ref{enum:comp_pattern_3} \dots
+
+
+  \subsection{Domain Actor Database System}\label{sec:domain_actor_database}
+    A domain actor database system is the combination of \glspl{dactor} and other types of actors, which together offer an interface to other applications or clients.
+    The domain actor database system provides a distributed runtime for persisting data and performing computations on it.
+    Each \gls{dactor} must incarnate a specific \gls{dactor} type.
+    This type is defined by application developers and determines the data schema encapsulated by the \gls{dactor} and the messages it can handle.
+    \glspl{dactor} are the only place in the system that actually have persistent state.
+    Other actors are stateless or have non-durable state, such as intermediate results or actor references.
+
+    \begin{itemize}
+      \item How to develop such a system?
+        \begin{itemize}
+            \item requirements analysis
+            \item queries (CRUD or analytics?)
+            \item decompose application domain into relations and entities (=dactors)
+            \item keep scaling in mind
+            \item define dactor types (including their relations and messages)
+            \item define messaging patterns for queries (query types)
+            \item define entry-points (APIs, interfaces, services) --> stateless actors
+            \item implement messaging patterns (using functors)
+        \end{itemize}
+      \item Consistency?
+      \item Transactional guarantees?
+    \end{itemize}
+
+    % akka: (i would put this in 4.)
     % message-passing
     % supervision
 
     % im framework:
     % beispiel
 
-  \subsection{Actor Database Systems}\label{sec:actor_database_systems}
+
     % how actors solve the impedance mismatch
     % "passt auf, dass hier eure Idee im Vordergrund steht und ihr nicht auf andere Gebiete ausschweift"
     % Computation parallelization on a domain-level object basis
