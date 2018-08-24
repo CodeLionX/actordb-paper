@@ -14,8 +14,8 @@
   Individual actors communicate with each other exclusively via asynchronous message passing.
   Incoming messages are stored in a mailbox allowing for the separate and independent processing of each message.
   On receiving a message an actor can modify its state, send a finite amount of messages to other actors, and create new actors.
-  An actors internal state is only available to said actor which encourages a shared-nothing systems architecture.
-  The self-contained nature of actors and the fact that, through asynchronous message passing, actors provide a model for lock-free concurrency allows for naturally scaling out applications and systems~\cite{vernon2015reactive}.
+  An actor's internal state is only available to said actor which encourages a shared-nothing system architecture.
+  The self-contained nature of actors and the fact that, through asynchronous message passing, actors provide a lock-free concurrency model, allows for naturally scaling out applications and systems~\cite{vernon2015reactive}.
   % \enquote{The actor model brings OOP back to the system level with actors appearing to developers very much like the familiar model of interacting objects}~\cite{bernstein:orleans}.
 
   Various programming languages and libraries implement the actor model and provide the corresponding functionality:
@@ -34,7 +34,7 @@
   The virtual actor model was introduced with the Orleans framework for .NET by Microsoft Research~\cite{bernstein:orleans}.
   In Orleans, actors (virtually) exist at any time.
   There is no possibility to create an actor explicitly.
-  Instead, this task is handled by the language runtime which instantiates actors on demand.
+  Instead, this task is handled by the language runtime, which instantiates actors on demand.
   The runtime's resource management deals with unused actors and reclaims their space automatically.
   The Orleans runtime guarantees that actors are always available.
   This means, that in the view of an application developer an actor can never fail.
@@ -44,7 +44,7 @@
   In Orbit, a virtual actor can be active or inactive.
   But those two states are transparent to the application developer.
   Similar to Orleans, messages to an inactive actor in Orbit will activate it, so the actor can receive the sent message.
-  Actor state in Orbit is usually stored in a database which allows for activation and deactivation of actors at runtime.
+  Actor state in Orbit is usually stored in a database, which allows for activation and deactivation of actors at runtime.
   During activation of an actor, the state is recovered from persistent database storage..
   Before the actor is deactivated, its state is written back to the database.
 
@@ -71,9 +71,9 @@
   Despite its popularity for application development, the actor programming model and actor programming frameworks lack state management capabilities, specifically for data-centric applications.
   The developer has to decide how to handle state persistence and how to satisfy the failure and consistency requirements of the application, because actor model implementations do no provide atomicity or consistency guarantees for state across actors.
   \citeauthor{manifesto}~\cite{manifesto} find a need for state management guarantees in actor systems and propose to integrate actor-based programming models in database management systems.
-  The authors postulate that \textit{Actor database systems} should be designed as a logical distributed runtime with state management guarantees.
+  The authors postulate that \textit{Actor Database Systems} should be designed as a logical distributed runtime with state management guarantees.
   They should allow for and encourage the design of modular, scalable and cloud-ready applications.
-  \citeauthor{manifesto} outline four tenets that identify an actor database system and specify needed features in their manifesto~\cite{manifesto}:
+  \citeauthor{manifesto} outline four tenets that identify an \textit{Actor Database System} and specify needed features in their manifesto~\cite{manifesto}:
   \begin{description}
     \item[Tenet 1] Modularity and encapsulation by a logical actor construct
     \item[Tenet 2] Asynchronous, nested function shipping
@@ -84,11 +84,11 @@
   Practical work on actor database systems has been done using the Orleans framework.
   \citeauthor{Shah:reactdb} tightly follow the propositions of the manifesto and present \reactdb{},
   an in-memory OLTP database system that is programmed via application-defined actors with relational semantics, called reactors~\cite{Shah:reactdb}.
-  A reactor is a logical actor encapsulating state as relations, with asynchronous function processing capability, which typically represent application-level scaling units.
+  A reactor is a logical entity encapsulating state as relations, with
+  asynchronous function processing capability, which typically represents a application-level scaling units.
   Within individual reactors classic declarative querying can be used, but across actors explicit asynchronous function calls must be defined.
   \citeauthor{Shah:reactdb} show that transactions across reactors can have serializability guarantees.
   \citeauthor{Eldeeb:transactions}~\cite{Eldeeb:transactions} introduce a new transaction protocol for distributed actors improving the throughput compared to the two-phase commit protocol.
-  They implement their system using the Orleans framework and provision it on Microsoft Azure for evaluation. % sentence is candidate for removal
   \citeauthor{Bernstein:indexing}~\cite{Bernstein:indexing} explore indexing mechanisms in an actor database system.
   They propose a new indexing architecture based on the Orleans framework that is fault-tolerant and eventually-consistent.
 
@@ -101,7 +101,7 @@
   Most practical research in the field of actor database systems has been presented in conjunction with the Orleans framework and the Erlang programming language.
   The open-source project \textit{Actorbase} by \citeauthor{actorbase} constitutes a key-value store implementation utilizing Akka actors for horizontal scaling and partitioning~\cite{actorbase}.
   In this research database system, partitions are managed by storekeeper actors while inter-partition lookup and indexing is managed by so-called storefinder actors.
-  This approach is limited key-value store function set and does not provide functionality corresponding to the relational features discussed earlier.
+  This approach is limited to a key-value store function set and does not provide functionality corresponding to the relational features discussed earlier.
   
   % I think this will most certainly become concept
   We base our work on the concept of actor database systems as introduced by~\citeauthor{manifesto}~\cite{manifesto}.
