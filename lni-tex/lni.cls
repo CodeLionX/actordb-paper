@@ -13,7 +13,7 @@
 %%     See:| http://www.latex-project.org/lppl.txt
 %% 
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
-\ProvidesClass{lni}
+\ProvidesClass{lni-tex/lni}
     [2017/07/26 v1.4BETA Official class for submissions to the ``Lecture Notes
     in Informatics'']
 \def\@clearglobaloption#1{%
