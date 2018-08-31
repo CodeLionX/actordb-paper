@@ -2,22 +2,19 @@
 % !TeX encoding = UTF-8
 % !TeX spellcheck = en_US
 
-\section{Related Work}
+\section{Related Work}\label{sec:related_work}
+
+  The Actor model, as described in the previous section, denotes a mathematical concept for concurrent computation which dates back to the early 1970's.
+  It has gained popularity and been implemented anew as language extensions or frameworks for existing object-oriented and functional languages, such as C\#, Java, and Scala, in the mid-2000's.
+  In this sections we give an outline of the recent history of Actor model implementations,
+  discuss differences of the conventional actor model and the virtual actor model used in the Orleans framework,
+  and elaborate on the notion of \textit{Actor Database Systems} and their requirements.
 
   \subsection{Actor Model}
   % https://www.brianstorti.com/the-actor-model/
   % https://en.wikipedia.org/wiki/Actor_model
   % https://doc.akka.io/docs/akka/2.5.3/scala/guide/actors-intro.html
   % https://link.springer.com/content/pdf/10.1007%2F978-3-642-39038-8.pdf#page=318 (page 302)
-  The Actor model denotes a mathematical concept for concurrent computation which dates back to the early 1970's.
-  The core primitive in this model are actors, which are objects comprised of state and behaviour that execute computational tasks concurrently.
-  Individual actors communicate with each other exclusively via asynchronous message passing.
-  Incoming messages are stored in a mailbox allowing for the separate and independent processing of each message.
-  On receiving a message an actor can modify its state, send a finite amount of messages to other actors, and create new actors.
-  An actor's internal state is only available to said actor which encourages a shared-nothing system architecture.
-  The self-contained nature of actors and the fact that, through asynchronous message passing, actors provide a lock-free concurrency model, allows for naturally scaling out applications and systems~\cite{vernon2015reactive}.
-  % \enquote{The actor model brings OOP back to the system level with actors appearing to developers very much like the familiar model of interacting objects}~\cite{bernstein:orleans}.
-
   Various programming languages and libraries implement the actor model and provide the corresponding functionality:
   The Erlang programming language supports concurrency using the actor programming model and is designed for distributed and highly available systems in the telecommunication sector~\cite{armstrong:erlang}.
   The Scala programming language's standard library included an actor model implementation for concurrent computation starting in 2006, which has now been deprecated for the Akka library~\cite{Haller:2012}.
