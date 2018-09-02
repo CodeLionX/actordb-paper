@@ -32,8 +32,10 @@
   \subsection{Communication between Domain Actors}
     Not all computation can be done with the information residing in a single \gls{dactor}.
     Communication between \glspl{dactor} and other actors is required.
-    As already mentioned, this inter-actor communication is realized via asynchronous message passing.
+    As already mentioned, this inter-actor communication is realized via explicit asynchronous message passing.
     \dots
+
+    % benefits, drawbacks?
 
     There are different message patterns possible:
     \begin{enumerate}
@@ -43,6 +45,7 @@
     \end{enumerate}
 
     Introducing functors for \ref{enum:comp_pattern_2} and \ref{enum:comp_pattern_3} \dots
+    % cameo pattern: http://blog.simplex.software/the-cameo-pattern
 
 
   \subsection{Domain Actor Database System}\label{sec:domain_actor_database}
