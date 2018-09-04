@@ -44,3 +44,4 @@ fp
 tracklang
 pgf
 pgf-umlsd
+standalone
