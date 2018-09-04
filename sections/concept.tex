@@ -33,16 +33,36 @@
     Not all computation can be done with the information residing in a single \gls{dactor}.
     Communication between \glspl{dactor} and other actors is required.
     As already mentioned, this inter-actor communication is realized via explicit asynchronous message passing.
-    \dots
+    This allows application developers to chose the right messaging pattern for their use case.
+    The choice is heavily influenced by the data layout used for the \glspl{dactor} and sets the level of parallelization and the load on the network of this computation.
 
-    % benefits, drawbacks?
-
-    There are different message patterns possible:
+    The following messaging patterns are considered in our concept:
     \begin{enumerate}
       \item\label{enum:comp_pattern_1} \textbf{Cascading Computation} \dots
       \item\label{enum:comp_pattern_2} \textbf{Sequential Computation} \dots
       \item\label{enum:comp_pattern_3} \textbf{Concurrent Computation} \dots
     \end{enumerate}
+  
+    \begin{figure}
+      \centering
+      \includestandalone{pictures/tikz/cascading_computation}
+      \caption{Cascading Computation}
+      \label{fig:comp_pattern_1}
+    \end{figure}
+  
+    \begin{figure}
+      \centering
+      \includestandalone{pictures/tikz/sequential_computation}
+      \caption{Sequential Computation}
+      \label{fig:comp_pattern_2}
+    \end{figure}
+  
+    \begin{figure}
+      \centering
+      \includestandalone{pictures/tikz/concurrent_computation}
+      \caption{Concurrent Computation}
+      \label{fig:comp_pattern_3}
+    \end{figure}
 
     Introducing functors for \ref{enum:comp_pattern_2} and \ref{enum:comp_pattern_3} \dots
     % cameo pattern: http://blog.simplex.software/the-cameo-pattern

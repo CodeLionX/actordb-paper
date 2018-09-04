@@ -11,6 +11,25 @@
 \usepackage{booktabs}
 
 
+%% Begin: Drawings
+% use standalone and tikz for high-fid. drawings
+
+% standalone package and config
+\usepackage{standalone} % For pre-compiled pictures
+\standaloneconfig{mode=buildnew} % only build image if source file is newer
+
+% tikz package and config
+\usepackage{tikz} % For Tikz pictures
+\usetikzlibrary{
+  positioning,
+  fit,
+  arrows,
+  calc,
+  backgrounds
+}
+\usepackage{pgf-umlsd} % UML sequence diagrams
+%% End: Drawings
+
 %% Begin: Biblatex
 
 %for easy quotations: \enquote{text}, also required by biblatex
