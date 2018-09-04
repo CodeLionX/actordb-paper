@@ -42,4 +42,5 @@ datatool
 substr
 fp
 tracklang
+pgf
 pgf-umlsd
