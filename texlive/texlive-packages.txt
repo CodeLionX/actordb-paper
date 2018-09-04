@@ -45,3 +45,4 @@ tracklang
 pgf
 pgf-umlsd
 standalone
+currfile
