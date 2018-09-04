@@ -46,3 +46,4 @@ pgf
 pgf-umlsd
 standalone
 currfile
+filehook
