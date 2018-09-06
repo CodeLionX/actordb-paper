@@ -52,3 +52,5 @@ gincltex
 glossaries-english
 glossaries-german
 adjustbox
+svn-prov
+collectbox
