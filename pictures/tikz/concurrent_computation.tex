@@ -22,7 +22,7 @@
 \begin{sequencediagram}
   
   % entities
-  \newthread{service}{Service}{}
+  \newinst{service}{Service}{}
   \newinst[1]{f}{ConFunctor}{}
   \newinst[1]{a}{Dactor A}{}
   \newinst{b}{Dactor B}{}
@@ -31,6 +31,7 @@
   % messages
   
   \mess[1]{service}{<<create>>}{f}
+  \coordinate (s0) at (mess from);
   \coordinate (f0) at (mess to);
   
     % requests
@@ -62,8 +63,10 @@
   
   \mess[1]{f}{result}{service}
   \coordinate (f5) at (mess from);
+  \coordinate (s1) at (mess to);
   
   % bars
+  \draw[fill=black!20] ($(s0)+(-0.1,-0.05)$) rectangle ($(s0)+(0.1,0.55)$);
   \drawbar{a0}{a1}
   \drawbar{b0}{b1}
   \drawbar{c0}{c1}
@@ -71,6 +74,7 @@
   \drawbarlength{f2}{0.4}
   \drawbarlength{f3}{0.4}
   \drawbar{f4}{f5}
+  \drawbarlength{s1}{0.25}
   
 \end{sequencediagram}
 

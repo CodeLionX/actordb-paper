@@ -10,7 +10,11 @@
 \usepackage{pgf-umlsd}
 
 \begin{document}
-  
+ 
+\newcommand{\drawbarlength}[2]{% from_coord, length
+  \draw[fill=black!20] ($(#1)+(-0.1,0.05)$) rectangle ($(#1)+(0.1,-0.05)+(0,-#2)$);
+}
+
 \newcommand{\drawbar}[2]{% from_coord, to_coord
   \draw[fill=black!20] ($(#1)+(-0.1,0.05)$) rectangle ($(#2)+(0.1,-0.05)$);
 }
@@ -19,7 +23,7 @@
 \begin{sequencediagram}
   
   % entities
-  \newthread{service}{Service}{}
+  \newinst{service}{Service}{}
   \newinst[1]{f}{SeqFunctor}{}
   \newinst[1]{a}{Dactor A}{}
   \newinst{b}{Dactor B}{}
@@ -28,6 +32,7 @@
   % messages
   
   \mess[1]{service}{<<create>>}{f}
+  \coordinate (s0) at (mess from);
   \coordinate (f0) at (mess to);
   
     \mess[1]{f}{Request}{a}
@@ -60,8 +65,10 @@
   
   \mess[1]{f}{result}{service}
   \coordinate (f9) at (mess from);
+  \coordinate (s1) at (mess to);
   
   % bars
+  \draw[fill=black!20] ($(s0)+(-0.1,-0.05)$) rectangle ($(s0)+(0.1,0.55)$);
   \drawbar{a0}{a1}
   \drawbar{b0}{b1}
   \drawbar{b2}{b3}
@@ -71,6 +78,7 @@
   \drawbar{f4}{f5}
   \drawbar{f6}{f7}
   \drawbar{f8}{f9}
+  \draw[fill=black!20] ($(s1)+(-0.1,0.05)$) rectangle ($(s1)+(0.1,-0.3)$);
   
 \end{sequencediagram}
 
