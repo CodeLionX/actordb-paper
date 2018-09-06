@@ -10,7 +10,7 @@ After describing the general concept of an \textit{Actor Database System}, we pr
 The goal for this research implementation is a proof-of-concept framework which allows developers to declaratively define their application's data model
 and which automatically instantiates and provisions special-type actors, i.e. Dactors, corresponding to defined domain-object entities.
 These Dactors encapsulate the respective application data and provide a SQL-like interface for data access and manipulation internally, that is used to define actor behaviour and functionality.
-External functionality relying on data kept by multiple Dactor objects is defined explicitely using Functor objects which have been described conceptually in the former section \ref{sec:concept}.
+External functionality relying on data that is contained within multiple Dactor objects is defined explicitely using Functor objects which have been described conceptually in the former section \ref{sec:concept}.
 These Functors allow defining inter-Dactor functionality without breaking the strictly asynchronous communication between actors or halting an actors single-threaded computation process.
 
 % Tenets
