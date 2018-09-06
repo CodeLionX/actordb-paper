@@ -51,3 +51,4 @@ filemod
 gincltex
 glossaries-english
 glossaries-german
+adjustbox
