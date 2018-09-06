@@ -47,9 +47,27 @@
         As one can see in figure~\ref{fig:comp_pattern_1}, this pattern is comparable to function calls in \gls{oop}, but can lead to a growing cascade of messages sent and received.
         As each message can introduce network latency, it can take significantly more time to receive the top-level response compared to the situation when all computation is done in \gls{dactor} A.
         
+        - dactors need to hold state for pending responses for failure management and intermediate results, original requester
+        - makes writing code complex and error-prone
+        + similar to \gls{oop}
+        + high separation of concerns, when tell-don't-ask is used
         
-      \item\label{enum:comp_pattern_2} \textbf{Sequential Computation} \dots
-      \item\label{enum:comp_pattern_3} \textbf{Concurrent Computation} \dots
+        --> good when used sparsely, for small cascades
+        
+      \item\label{enum:comp_pattern_2} \textbf{Sequential Computation}
+        Figure~\ref{fig:comp_pattern_2}
+        - serialized computation chain (sometimes required by application)
+        - extra actor must be created for each top-level request (overhead can even be reduced with pools, (may already be used in Akka))
+        + intermediate state is managed in functor
+        + \gls{dactor} A does not need to retain pending responses, free for other requests
+        + simple logic in functor as it only processes one request chain, then dies
+        + simple logic in \gls{dactor} (only state changes and forwarding of computation to functor
+        
+      \item\label{enum:comp_pattern_3} \textbf{Concurrent Computation}
+        Figure~\ref{fig:comp_pattern_3}
+        pros / cons similar to \ref{enum:comp_pattern_2}
+        - none?
+        + highly parallelized computation
     \end{enumerate}
 
 
