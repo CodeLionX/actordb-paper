@@ -19,20 +19,11 @@
 \begin{sequencediagram}
   
   % entities
-  \newthread{service}{Service}{}
-  \newinst[1]{a}{Dactor A}{}
+  \newthread{service}{Dactor A}{}
   \newinst{b}{Dactor B}{}
   \newinst{c}{Dactor C}{}
   
   % messages
-  
-  \mess[1]{service}{}{a}
-  \coordinate (a0) at (mess to);
-  \mess[1]{a}{Response}{service}
-  \coordinate (a1) at (mess from);
-  
-  % start with first one
-  \prelevel\prelevel\prelevel\prelevel
   \mess[1]{service}{Requests}{b}
   \coordinate (b0) at (mess to);
   
@@ -45,7 +36,6 @@
   \coordinate (b1) at (mess from);
   
   % bars
-  \drawbar{a0}{a1}
   \drawbar{b0}{b1}
   \drawbar{c0}{c1}
   

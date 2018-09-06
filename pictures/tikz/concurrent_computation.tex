@@ -22,9 +22,8 @@
 \begin{sequencediagram}
   
   % entities
-  \newinst{service}{Service}{}
+  \newinst{service}{Dactor A}{}
   \newinst[1]{f}{ConFunctor}{}
-  \newinst[1]{a}{Dactor A}{}
   \newinst{b}{Dactor B}{}
   \newinst{c}{Dactor C}{}
   
@@ -35,12 +34,8 @@
   \coordinate (f0) at (mess to);
   
     % requests
-    \mess[1]{f}{}{a}
-    \coordinate (f1) at (mess from);
-    \coordinate (a0) at (mess to);
-    
-    \prelevel\prelevel
     \mess[1]{f}{}{b}
+    \coordinate (f1) at (mess from);
     \coordinate (b0) at (mess to);
     
     \prelevel\prelevel
@@ -48,32 +43,27 @@
     \coordinate (c0) at (mess to);
     
     % responses
-    \mess[1]{a}{Response}{f}
-    \coordinate (a1) at (mess from);
-    \coordinate (f2) at (mess to);
-    
-    \mess[1]{c}{Response}{f}
+    \mess[1]{c}{}{f}
     \coordinate (c1) at (mess from);
-    \coordinate (f3) at (mess to);
+    \coordinate (f2) at (mess to);
+    \node[anchor=south] (res) at ($(mess to.north)+(0.9,0.1)$) {Response};
     
     \mess[1]{b}{Response}{f}
     \coordinate (b1) at (mess from);
-    \coordinate (f4) at (mess to);
+    \coordinate (f3) at (mess to);
     
   
   \mess[1]{f}{result}{service}
-  \coordinate (f5) at (mess from);
+  \coordinate (f4) at (mess from);
   \coordinate (s1) at (mess to);
   
   % bars
   \draw[fill=black!20] ($(s0)+(-0.1,-0.05)$) rectangle ($(s0)+(0.1,0.55)$);
-  \drawbar{a0}{a1}
+  \drawbar{f0}{f1};
   \drawbar{b0}{b1}
   \drawbar{c0}{c1}
-  \drawbar{f0}{f1}
   \drawbarlength{f2}{0.4}
-  \drawbarlength{f3}{0.4}
-  \drawbar{f4}{f5}
+  \drawbar{f4}{f3}
   \drawbarlength{s1}{0.25}
   
 \end{sequencediagram}

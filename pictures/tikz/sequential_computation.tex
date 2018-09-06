@@ -23,9 +23,8 @@
 \begin{sequencediagram}
   
   % entities
-  \newinst{service}{Service}{}
+  \newinst{service}{Dactor A}{}
   \newinst[1]{f}{SeqFunctor}{}
-  \newinst[1]{a}{Dactor A}{}
   \newinst{b}{Dactor B}{}
   \newinst{c}{Dactor C}{}
   
@@ -34,14 +33,7 @@
   \mess[1]{service}{<<create>>}{f}
   \coordinate (s0) at (mess from);
   \coordinate (f0) at (mess to);
-  
-    \mess[1]{f}{Request}{a}
-    \coordinate (f1) at (mess from);
-    \coordinate (a0) at (mess to);
-    \mess[1]{a}{Response}{f}
-    \coordinate (a1) at (mess from);
-    \coordinate (f2) at (mess to);
-    
+      
     \mess[1]{f}{Request}{b}
     \coordinate (f3) at (mess from);
     \coordinate (b0) at (mess to);
@@ -69,12 +61,10 @@
   
   % bars
   \draw[fill=black!20] ($(s0)+(-0.1,-0.05)$) rectangle ($(s0)+(0.1,0.55)$);
-  \drawbar{a0}{a1}
   \drawbar{b0}{b1}
   \drawbar{b2}{b3}
   \drawbar{c0}{c1}
-  \drawbar{f0}{f1}
-  \drawbar{f2}{f3}
+  \drawbar{f0}{f3}
   \drawbar{f4}{f5}
   \drawbar{f6}{f7}
   \drawbar{f8}{f9}
