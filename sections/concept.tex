@@ -38,7 +38,7 @@
 
     We consider three main messaging patterns for inter-\gls{dactor} communication, which are shown in figure~\ref{fig:comp_patterns}: Cascading Computation, Sequential Computation, Concurrent Computation.
     They all assume a request-response messaging schema and take a high-level message to a \gls{dactor}, lets call it \gls{dactor} A, as starting point.
-    
+
     \begin{enumerate}
       \item\label{enum:comp_pattern_1} \textbf{Cascading Computation}
         A high-level message to \gls{dactor} A, will trigger successive messages to other \glspl{dactor}, which are hidden from the original requester.
@@ -46,30 +46,33 @@
         \gls{dactor} B can itself send messages to other \glspl{dactor} as well.
         As one can see in figure~\ref{fig:comp_pattern_1}, this pattern is comparable to function calls in \gls{oop}, but can lead to a growing cascade of messages sent and received.
         As each message can introduce network latency, it can take significantly more time to receive the top-level response compared to the situation when all computation is done in \gls{dactor} A.
-        
-        - dactors need to hold state for pending responses for failure management and intermediate results, original requester
-        - makes writing code complex and error-prone
-        + similar to \gls{oop}
-        + high separation of concerns, when tell-don't-ask is used
-        
-        --> good when used sparsely, for small cascades
-        
-      \item\label{enum:comp_pattern_2} \textbf{Sequential Computation}
-        Figure~\ref{fig:comp_pattern_2}
-        - serialized computation chain (sometimes required by application)
-        - extra actor must be created for each top-level request (overhead can even be reduced with pools, (may already be used in Akka))
-        + intermediate state is managed in functor
-        + \gls{dactor} A does not need to retain pending responses, free for other requests
-        + simple logic in functor as it only processes one request chain, then dies
-        + simple logic in \gls{dactor} (only state changes and forwarding of computation to functor
-        
-      \item\label{enum:comp_pattern_3} \textbf{Concurrent Computation}
-        Figure~\ref{fig:comp_pattern_3}
-        pros / cons similar to \ref{enum:comp_pattern_2}
-        - none?
-        + highly parallelized computation
-    \end{enumerate}
+        In addition to that, the requesting \gls{dactor} has to deal with the state for pending responses, such as actor references, intermediate results, or failure cases.
+        This clutters the domain logic in the \gls{dactor} and leads to complex and error-prone code.
+        If used sparsely, this pattern supports separation of concerns and the tell-don't-ask idea.
 
+      \item\label{enum:comp_pattern_2} \textbf{Sequential Computation}
+        Figure~\ref{fig:comp_pattern_2} shows the sequential computation pattern.
+        It is used for computations that consist of consecutive steps, where each step depends on the previous step's result, such as filter chains or \colorbox{red}{whatelse?}.
+
+        For this and the next messaging pattern we introduce the concept of actor-level \glspl{functor}.
+        \glspl{functor} encapsulate the processing of a high-level request in a new short-living actor.
+        They are able to communicate with other \glspl{dactor}, track the state of pending requests and handle failure cases.
+        Every actor can create a new \gls{functor} to encapsulate multiple depending requests to \glspl{dactor}.
+        The \gls{functor} handles the message processing and sends the final result or a failure message back to its parent actor before stopping itself.
+        This reduces the code complexity in \glspl{dactor} for handling such messages.
+        This message processing abstraction is also called cameo pattern\footnote{\url{http://blog.simplex.software/the-cameo-pattern}}.
+
+        Using a \gls{functor} to process the consecutive steps of the computational chain relieves \gls{dactor} A from dealing with intermediate state, because it is managed by the \gls{functor}.
+        Each \gls{functor} only has to deal with one request-response pair at a time, which leads to a simple state and processing logic for the \gls{functor} itself.
+        One drawback of this design is the need to create an extra actor for every top-level request that should be processed.
+
+      \item\label{enum:comp_pattern_3} \textbf{Concurrent Computation}
+        This messaging pattern also makes use of \glspl{functor} to encapsulate the processing of multiple request-response pairs.
+        This time, we want to send messages to several \glspl{dactor} concurrently and collect the results when they are finished.
+        An exemplary message flow is shown in figure~\ref{fig:comp_pattern_3}.
+        As this messaging pattern also relies on \glspl{functor}, it has similar advantages and drawbacks than~\ref{enum:comp_pattern_2}.
+        It allows for highly parallelized computation as all subtasks are started asynchronously at the beginning and the result is sent back as soon as all responses were received.
+    \end{enumerate}
 
     \begin{figure}
       \centering
@@ -91,10 +94,6 @@
       \caption{Inter-\gls{dactor}-communication patterns. Dotted lines show actor lifetime and gray bars indicate that an actor performs computation or holds state that is related to the showed message flow.}
       \label{fig:comp_patterns}
     \end{figure}
-
-
-    Introducing functors for \ref{enum:comp_pattern_2} and \ref{enum:comp_pattern_3} \dots
-    % cameo pattern: http://blog.simplex.software/the-cameo-pattern
 
 
   \subsection{Domain Actor Database System}\label{sec:domain_actor_database}
