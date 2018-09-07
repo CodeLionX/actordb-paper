@@ -8,28 +8,28 @@
 After describing the general concept of an \textit{Actor Database System}, we present the implementation of an application development framework which allows for the definition of an application's data model and the provisioning of corresponding Dactors as part of the application runtime.
 
 The goal for this research implementation is a proof-of-concept framework which allows developers to declaratively define their application's data model
-and which automatically instantiates and provisions special-type actors, i.e. Dactors, corresponding to defined domain-object entities.
+and which automatically instantiates special-type actors, i.e. Dactors, corresponding to defined domain-object entities.
 These Dactors encapsulate the respective application data and provide a SQL-like interface for data access and manipulation internally, that is used to define actor behaviour and functionality.
 External functionality relying on data that is contained within multiple Dactor objects is defined explicitely using Functor objects which have been described conceptually in the former section \ref{sec:concept}.
 These Functors allow defining inter-Dactor functionality without breaking the strictly asynchronous communication between actors or halting an actors single-threaded computation process.
 
 % Tenets
-This framework's feature set relates to three of the core four tenets that define an \textit{Actor Database System} according to \citeauthor{manifesto}'s manifesto \cite{manifesto}:
+This framework's feature set relates to three of the four core tenets that define an \textit{Actor Database System} according to \citeauthor{manifesto}'s manifesto \cite{manifesto}:
 \textbf{Tenet 1} calls for the use of actors to achieve a modular logical model for data encapsulation.
-Dactor instances are in-memory storekeepers for an application's data and provide an actor construct which encapsulate related data and logic.
-Furthermore, Dactors provide a model for concurrent computation of defined functionality using their data.
-This is part of the requirement described in \textbf{Tenet 2}.
-Functors allow for the definition of functionality using multiple actors data and are executed asynchronously in response to the individual actors messages.
+Dactor instances are in-memory storekeepers for an application's data and provide an actor construct which encapsulates related data and logic.
+Furthermore, Dactors provide a model for concurrent computation of defined functionality.
+This is part of the requirements described in \textbf{Tenet 2}.
+Functors allow for the definition of functionality using multiple actors's data and are excuted asynchronously.
 The possibility to predefine these Functors as well as Dactor behaviour relates to the second part of \textbf{Tenet 3}.
-Due to their single-threaded computation model, Dactors can be argued to enforce internally consistency by default.
-Functors, in principle, allow for the implementation of further transaction protocols to ensure cross-Dactor consistency guarantees.
-Since the requirements listed under \textbf{Tenet 4} relate mostly to production-ready database products, we do not implement and investigate them for this research project.
+Due to their single-threaded computation model, Dactors can be argued to enforce internal consistency by default.
+In principle, Functors allow for the implementation of further transaction protocols to ensure cross-Dactor consistency guarantees.
+Since the requirements listed under \textbf{Tenet 4} relate mostly to production-ready database products, we do not implement or investigate them in this research project.
 The functionality described by \citeauthor{manifesto} in tenets one through three allows for further investigation into the practical feasibility and implications of the actor database concept.
 
 % Tech
 The proof-of-concept framework has been developed using the Scala programming language and the Akka framework for actor programming.
 This implementation marks, to the best of our knowledge, the first practical examination of the actor database concept using Akka and the classical actor concept.
-While the Orleans framework, having been used in earlier related work, provides virtual actors with automatic lifecycle management, Akka allows for and requires direct control over an actors lifecycle, it's availability, and provisioning.
+While the Orleans framework, having been used in earlier related work, provides virtual actors with automatic lifecycle management, Akka allows for and requires direct control over an actors lifecycle.
 % As Dactors directly build on the provided Akka actor implementation, these considerations directly apply to them.
 These considerations directly apply to Dactors as they are built on top of the Akka actor implementation.
 % More Discussion of the implication that this allows for more detailed configuration and custom Dactor idle behaviour in Discussion
@@ -41,8 +41,9 @@ Relations contain a multiset of records or tuples which follow a pre-defined sch
 They provide a type-safe, SQL-like interface for querying and manipulating contained data.
 The features and interface they provide is inspired by SQL to allow for simple data manipulation using known and proven syntax and semantics when defining a Dactors behavior.
 
-A Relation, similarly to a table in the relational database model, is defined as a finite set of column definitions whereby every column is defined by a name and data type.
-All manipulation and query functionality provides compile-time safety based on these column data types.
+A relation, similarly to a table in the relational database model, is defined as a multiset of tuples following a predefined schema.
+This schema is comprised of column definitions whereby every column is defined by a name and data type.
+All manipulation and query functionality on a relation's data provide compile-time type safety based on these column's predefined data types.
 Due to the Dactor system sharing the application's runtime and programming environment, these data or object types are equal to the types handled in any application logic.
 Thus, this approach eliminates the impedance mismatch between application logic and data tier with regard to handled data types and object (de-)serialization.
 
@@ -50,9 +51,9 @@ Thus, this approach eliminates the impedance mismatch between application logic 
 Due to the similarities between relations and tables known from the relational database model, we want to discuss the conceptual differences between the two.
 While relations can be used to model much of the same information as is commonly represented using tables, the \textit{Actor Database System} and specifically the concept and framework we present relies on Dactors as models for application domain objects.
 
-When considering a web application with information on films and (real-life) actors similar to the imdb.com or rottentomatoes.com websites, a traditional data layout might be comprised of two tables containing information on films and actors, respectively.
-Using Dactors to represent discrete domain-level objects, a single Dactor of the type film represents a single specific film and encapsulates all corresponding data.
-This approach to layouting an application's data management results in much smaller relation sizes than typical table sizes and enables many application-logic--driven approaches to scaling, data partitioning, and caching, which are discussed in section \ref{subsec:discussion}.
+For clarification consider the following example of a web application with information on films and (real-life) actors similar to the imdb.com or rottentomatoes.com websites, a traditional data layout might be comprised of two tables containing information on films and actors, respectively.
+Using Dactors to represent discrete domain-level objects, a single Dactor of the type film represents a single, specific film and encapsulates all corresponding data.
+This approach to layouting an application's data results in much smaller relation sizes than typical table sizes and enables many business-logic--driven approaches to scaling, data partitioning, and caching, which are discussed in section \ref{subsec:discussion}.
 
 \subsection{Actor Design and Functionality}
 
