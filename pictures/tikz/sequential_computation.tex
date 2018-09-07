@@ -1,0 +1,75 @@
+% !TeX root = ../../paper.tex
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_US
+
+\documentclass[crop,tikz]{standalone}
+\usetikzlibrary{
+  arrows,
+  calc
+}
+\usepackage{pgf-umlsd}
+
+\begin{document}
+ 
+\newcommand{\drawbarlength}[2]{% from_coord, length
+  \draw[fill=black!20] ($(#1)+(-0.1,0.05)$) rectangle ($(#1)+(0.1,-0.05)+(0,-#2)$);
+}
+
+\newcommand{\drawbar}[2]{% from_coord, to_coord
+  \draw[fill=black!20] ($(#1)+(-0.1,0.05)$) rectangle ($(#2)+(0.1,-0.05)$);
+}
+
+% HoloClean Architecture
+\begin{sequencediagram}
+  
+  % entities
+  \newinst{service}{Dactor A}{}
+  \newinst[1]{f}{SeqFunctor}{}
+  \newinst{b}{Dactor B}{}
+  \newinst{c}{Dactor C}{}
+  
+  % messages
+  
+  \mess[1]{service}{<<create>>}{f}
+  \coordinate (s0) at (mess from);
+  \coordinate (f0) at (mess to);
+      
+    \mess[1]{f}{Request}{b}
+    \coordinate (f3) at (mess from);
+    \coordinate (b0) at (mess to);
+    \mess[1]{b}{Response}{f}
+    \coordinate (b1) at (mess from);
+    \coordinate (f4) at (mess to);
+    
+    \mess[1]{f}{Request}{c}
+    \coordinate (f5) at (mess from);
+    \coordinate (c0) at (mess to);
+    \mess[1]{c}{Response}{f}
+    \coordinate (c1) at (mess from);
+    \coordinate (f6) at (mess to);
+    
+    \mess[1]{f}{Requests}{b}
+    \coordinate (f7) at (mess from);
+    \coordinate (b2) at (mess to);
+    \mess[1]{b}{Response}{f}
+    \coordinate (b3) at (mess from);
+    \coordinate (f8) at (mess to);
+  
+  \mess[1]{f}{result}{service}
+  \coordinate (f9) at (mess from);
+  \coordinate (s1) at (mess to);
+  
+  % bars
+  \draw[fill=black!20] ($(s0)+(-0.1,-0.05)$) rectangle ($(s0)+(0.1,0.55)$);
+  \drawbar{b0}{b1}
+  \drawbar{b2}{b3}
+  \drawbar{c0}{c1}
+  \drawbar{f0}{f3}
+  \drawbar{f4}{f5}
+  \drawbar{f6}{f7}
+  \drawbar{f8}{f9}
+  \draw[fill=black!20] ($(s1)+(-0.1,0.05)$) rectangle ($(s1)+(0.1,-0.3)$);
+  
+\end{sequencediagram}
+
+\end{document}

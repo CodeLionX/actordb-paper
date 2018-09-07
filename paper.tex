@@ -6,20 +6,36 @@
 \RequirePackage[l2tabu, orthodox]{nag}
 
 %German: remove "english"
-\documentclass[english,utf8]{lni-tex/lni}
+\documentclass[english,utf8,biblatex,hyperref]{lni-tex/lni}
 % Nice tables using \toprule, \midrule, \bottomrule
 \usepackage{booktabs}
+% subfigures and subcaptions
+\usepackage{subcaption}
 
+%% Begin: Drawings
+% use standalone and tikz for high-fid. drawings
+
+% standalone package and config
+\usepackage{standalone} % For pre-compiled pictures
+\standaloneconfig{mode=buildnew} % only build image if source file is newer
+
+% tikz package and config
+\usepackage{tikz} % For Tikz pictures
+\usetikzlibrary{
+  positioning,
+  fit,
+  arrows,
+  calc,
+  backgrounds
+}
+\usepackage{pgf-umlsd} % UML sequence diagrams
+%% End: Drawings
 
 %% Begin: Biblatex
 
 %for easy quotations: \enquote{text}, also required by biblatex
 \usepackage{csquotes}
-\usepackage[
-  backend=biber, %  UTF-8 support
-  style=LNI,     % The GI style - see https://www.ctan.org/pkg/biblatex-lni
-  natbib=true    % Requried for \Citet
-]{biblatex}[2016-09-15] %at least version 3.6 of biblatex is required.
+% biblatex is included with LNI-class option: `biblatex`, only set bibliography-file:
 \bibliography{paper}
 
 % Enable hyperlinked authors when using \citeauthor
@@ -97,14 +113,17 @@
 
 %% Begin: Acronyms
 \usepackage[acronym]{glossaries}
+\glsdisablehyper
 
 % define acronyms here:
 \newacronym{jvm}{JVM}{Java Virtual Machine}
 \newacronym{rdbms}{RDBMS}{relational database management system}
 \newacronym{orm}{ORM}{object-relational mapping}
+\newacronym{oop}{OOP}{Object-oriented Programming}
 
 % define special names here (we do not create a glossary, so no descriptions are required)
 \newglossaryentry{dactor}{name={Dactor},plural={Dactors},description={}}
+\newglossaryentry{functor}{name={Functor},plural={Functors},description={}}
 %% End: Acronyms
 
 
@@ -125,8 +144,8 @@
 % -----------------------
 
 \author[Frederic Schneider \and Sebastian Schmidl]{%
-Frederic Schneider\footnote{Hasso-Plattner-Institut, University of Potsdam, Prof.-Dr.-Helmert-Str. 2-3, 14482 Potsdam, \email{frederic.schneider@student.hpi.de}} \and
-Sebastian Schmidl\footnote{Hasso-Plattner-Institut, University of Potsdam, Prof.-Dr.-Helmert-Str. 2-3, 14482 Potsdam, \email{sebastian.schmidl@student.hpi.de}}
+Frederic Schneider \and
+Sebastian Schmidl\footnote{Hasso-Plattner-Institut, University of Potsdam, Prof.-Dr.-Helmert-Str. 2-3, 14482 Potsdam, \email{{frederic.schneider,sebastian.schmidl}@student.hpi.de}}
 }
 \title[An Actor Database System for Akka]{An Actor Database System for Akka}
 
@@ -143,7 +162,7 @@ Abstract goes here
 \end{abstract}
 
 \begin{keywords}
-Actor Database System \and Akka \and Scala \and Domain Driven Design
+Actor Database System \and Akka \and Scala
 \end{keywords}
 
 % Contents
