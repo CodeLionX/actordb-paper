@@ -9,22 +9,23 @@ After describing the general concept of an \textit{Actor Database System}, we pr
 
 The goal for this research implementation is a proof-of-concept framework which allows developers to declaratively define their application's data model
 and which automatically instantiates special-type actors, i.e. Dactors, corresponding to defined domain-object entities.
-These Dactors encapsulate the respective application data and provide a SQL-like interface for data access and manipulation internally, that is used to define actor behaviour and functionality.
-External functionality relying on data that is contained within multiple Dactor objects is defined explicitely using Functor objects which have been described conceptually in the former section \ref{sec:concept}.
-These Functors allow defining inter-Dactor functionality without breaking the strictly asynchronous communication between actors or halting an actors single-threaded computation process.
+These Dactors encapsulate the respective application data and provide a SQL-like interface for data access and manipulation internally.
+This interface is used to define actor behaviour and functionality.
+Functionality that relies on data contained within multiple Dactor objects is defined explicitely using Functor objects which have been described conceptually in the former section \ref{sec:concept}.
+These Functors allow to define inter-Dactor functionality without breaking the strictly asynchronous communication between actors or halting an actors single-threaded computation process.
 
 % Tenets
 This framework's feature set relates to three of the four core tenets that define an \textit{Actor Database System} according to \citeauthor{manifesto}'s manifesto \cite{manifesto}:
 \textbf{Tenet 1} calls for the use of actors to achieve a modular logical model for data encapsulation.
-Dactor instances are in-memory storekeepers for an application's data and provide an actor construct which encapsulates related data and logic.
-Furthermore, Dactors provide a model for concurrent computation of defined functionality.
+Dactor instances are in-memory storekeepers for an application's data and provide an actor construct which encapsulates data.
+Furthermore, Dactors provide a model for concurrent computation of predefined functionality that processes a Dactor's data.
 This is part of the requirements described in \textbf{Tenet 2}.
 Functors allow for the definition of functionality using multiple actors's data and are excuted asynchronously.
 The possibility to predefine these Functors as well as Dactor behaviour relates to the second part of \textbf{Tenet 3}.
 Due to their single-threaded computation model, Dactors can be argued to enforce internal consistency by default.
 In principle, Functors allow for the implementation of further transaction protocols to ensure cross-Dactor consistency guarantees.
 Since the requirements listed under \textbf{Tenet 4} relate mostly to production-ready database products, we do not implement or investigate them in this research project.
-The functionality described by \citeauthor{manifesto} in tenets one through three allows for further investigation into the practical feasibility and implications of the actor database concept.
+The functionality described by \citeauthor{manifesto} in tenets one through three allows for investigation of the practical feasibility and implications of the actor database concept.
 
 % Tech
 The proof-of-concept framework has been developed using the Scala programming language and the Akka framework for actor programming.
@@ -55,14 +56,76 @@ For clarification consider the following example of a web application with infor
 Using Dactors to represent discrete domain-level objects, a single Dactor of the type film represents a single, specific film and encapsulates all corresponding data.
 This approach to layouting an application's data results in much smaller relation sizes than typical table sizes and enables many business-logic--driven approaches to scaling, data partitioning, and caching, which are discussed in section \ref{subsec:discussion}.
 
-\subsection{Actor Design and Functionality}
+\subsection{Domain Actor Design}\label{subsec:domain_actor_design}
 
-The framework provides domain actors, or Dactors, which can 
+The presented framework provides the abstract Dactor class which is extended by developers to model their application's domain object classes which encapsulate application data.
+Instances of such user-defined Dactor types are managed by the framework and are available for messaging in a consistent namespace.
+A Dactor type definition is comprised of the types internal data schema, i.e. relations, and it's functionality to process on said data.
+Note that, since Dactors can logically encapsulate multiple data sets and state information, they can and often do comprise multiple relations.
 
-Since, logically, Dactors can relate to multiple logical data, state, or information entities, they can also comprise multiple Relation instances.
+To illustrate, we present the Dactor definition in terms of data model and functionality using the presented framework with regard to the formerly considered example.
+This application in it's simplest form comprises two Dactor types modelling the concerns of the domain-specific object types of Film and Actor.
+We capitalize these Dactor types to eliminate the ambiguity of the Dactor type Actor and the general actor concept within the actor model.
 
-\subsection{Multi-Actor Queries}
+Film Dactor instances comprise information on a specific stored film, such as its title, release date, a description, and a unique id, but also information about its starring actors:
+The actor's (person) name, the name of the role they portray, as well as the corresponding Actor instance's id.
+The Actor instances comprise additional information on the person such as the date of birth, but also a list of films they starred in, including the name of the role they portray, the film's title, and the Film's id.
+The definition of the Film Dactor's data model is shown in listing \ref{lst:film_definition}.
 
-% Usage example?!
+\begin{lstlisting}[caption=Film Dactor type definition using the actordb framework, label=lst:film_definition, language=Scala]
+object Film {
+  /**
+   * Definitions of relations contained in Film type Dactors.
+   */
+  object Info extends RelationDef {
+    // column with name ``title'' and data-type String:
+    val title = ColumnDef[String](``title'')
+    val description = ColumnDef[String](``description'')
+    // rich datetime data-type column:
+    val release = ColumnDef[ZonedDateTime](``release'')
+  }
+
+  object Cast extends RelationDef {
+    // foreign key relating to an Actor type Dactor instance:
+    val actorId = ColumnDef[Id](``actor_id'')
+    val name = ColumnDef[String](``actor_name'')
+    val rolename = ColumnDef[String](``role_name'')
+  }
+} 
+
+/**
+ * Dactor type definition.
+ */
+class Film(id: Id) extends Dactor(id) {
+  override protected val relations = {
+    // special relation type ensuring domain-logic constraint
+    Film.Info -> SingleRowRelation(Film.Info),
+    Film.Cast -> RowRelation(Film.Cast)
+  }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Actor Dactor type definition using the actordb framework, label=lst:actor_definition, language=Scala]
+  
+\end{lstlisting}
+
+Note the partial denormalization of data on the respective domain objects into two Dactors.
+This enables the computation and response to common queries, such as requesting info on a film and their cast list, from a singular Dactor instance.
+More complex queries, e.g. finding out which films star the same actors as a given film, involve data and computation on multiple Dactor instances of both Dactor types.
+The tradeoff for this is that inserting new information about an actor (person) starring in a film becomes a functionality involving two Dactor instances and types.
+This tradeoff and implementation examples for this functionality are discussed in the following section \ref{subsec:multi_dactor_queries}.
+
+\subsection{Multi-Dactor Queries}\label{subsec:multi_dactor_queries}
+
+Explicit messaging and complementary actor behaviors are used to implement the cascading communication pattern described in section \ref{sec:concept}.
+Besides this, Functors are the framework's system which enables inter-Dactor communication and functionality.
+While the basic functionality of the two Functor types for sequential and concurrent computation is discussed in \ref{sec:concept}, this section focuses on the definition of a concrete function integrating data from multiple Dactors.
+We also discuss the implications of using the respective messaging patterns corresponding to these types of Functors on computational scalability.
+
+Returning to the web application example we can define simple functionality concerning instances of both Dactor types defined in section \ref{subsec:domain_actor_design}.
+Adding a new character role to a film, played by a specific actor involves changes to Dactor instances of the types Film and Actor.
+We describe the implementation of this functionality using all three of the introduced communication patterns.
+
+% Usage example: Functors
 
 \subsection{Discussion}\label{subsec:discussion}
