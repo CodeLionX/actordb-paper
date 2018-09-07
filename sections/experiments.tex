@@ -2,14 +2,14 @@
 % !TeX encoding = UTF-8
 % !TeX spellcheck = en_US
 
-\section{Experiments}\label{sec:experiments}
+\section{Actor Memory Overhead Experiments}\label{sec:experiments}
 
-\subsection{Actor Memory Overhead}
+  Our concept is based on the usage of hundreds of thousands of \glspl{dactor}, which all store only a small amount of data.
+  This raises the question of how much memory overhead is introduced for storing data split across a multitude of actors.
+  Therefore, we performed experiments comparing the memory usage of an exemplary actor database system with that of just loading the data into our data storage abstraction, called relations.
 
-\subsection{Query Performance}
-  % einfach mal testen wie schnell und skalierbar die Queries denn sind (auch im Vergleich zu anderen DBMSs)
+\subsection{Experiment Setup}
 
-\subsection{Query Optimization}
-  % welche techniken verbessern sie query beantwortung, welche verschlechtern sie; im detail untersuchen, wie queries denn nun gut in dem setup beantwortet werden können
+\subsection{Results}
 
 \subsection{Discussion}
