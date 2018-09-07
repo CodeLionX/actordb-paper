@@ -110,6 +110,7 @@ class Film(id: Id) extends Dactor(id) {
 % \end{lstlisting}
 
 Note the partial denormalization of data on the respective domain objects into two Dactors.
+Some information which relate directly to Actor instances is replicated in the Cast relation of Film type Dactors.
 This enables the computation and response to common queries, such as requesting info on a film and their cast list, from a singular Dactor instance.
 More complex queries, e.g. finding out which films star the same actors as a given film, involve data and computation on multiple Dactor instances of both Dactor types.
 The tradeoff for this is that inserting new information about an actor (person) starring in a film becomes a functionality involving two Dactor instances and types.
