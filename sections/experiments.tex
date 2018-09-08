@@ -35,10 +35,6 @@
           xlabel=MB on disk, ylabel=MB in memory,
           legend pos=south east
       ]
-        \addplot[mark={}, color=black] coordinates {
-          (1,1)
-          (200,200)
-        };
         \addplot[mark=*, color=blue] coordinates {
           (10,10.8)
           (25,17.8)
@@ -55,10 +51,10 @@
           (10,28.5)
           (25,44.3)
           (50,118.5)
-          (100,227.4)
+          (100,237.6)
         };
       
-      \legend{linear, as string, Relations, \glspl{dactor}}
+      \legend{as string, Relations, \glspl{dactor}}
       \end{axis}
     \end{tikzpicture}
     \caption{Comparison of different in-memory storing techniques}
@@ -73,7 +69,7 @@
           (829,28.5)
           (2578,44.3)
           (4373,118.5)
-          (8618,227.4)
+          (8746,237.0)
         };
       \end{axis}
     \end{tikzpicture}
@@ -90,7 +86,7 @@
           (829,436)
           (2578,1390)
           (4373,2325)
-          (8618,-5428)
+          (8746,4669)
         };
       \end{axis}
     \end{tikzpicture}
@@ -106,7 +102,7 @@
           (1714,28.1)
           (5250,43.0)
           (8935,116.3)
-          (17596,232.6)
+          (17870,232.6)
         };
       \end{axis}
     \end{tikzpicture}
