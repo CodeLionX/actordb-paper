@@ -60,13 +60,13 @@ This approach to layout an application's data results in much smaller relation s
 
 \subsection{Domain Actor Design}\label{subsec:domain_actor_design}
 
-Developers can model the application's domain object via extending the framework's abstract \code{Dactor} class.
+Developers can model the application's domain objects via extending the framework's abstract \code{Dactor} class.
 Instances of such user-defined \code{Dactor} types are managed by the framework and are available for messaging in a consistent namespace.
 A \code{Dactor} type definition is comprised of the types internal data schema, i.e. relations, and its functionality to process said data.
 Note that, since \glspl{dactor} can logically encapsulate multiple data sets and state information, they can and often do comprise multiple relations.
 
 To illustrate the definition of \code{Dactor}s we use the formerly introduced example.
-The application in its simplest form consists of two \code{Dactor} types modeling the domain entities \code{Film} and \code{Actor}.
+The application in its simplest form consists of two \code{Dactor} types modeling the domain entities: \code{Film} and \code{Actor}.
 
 \code{Film} \gls{dactor} instances store information about a specific film, such as its title, release date, a description, and a unique id, but also information about its starring actors:
 The actor's (person) name, the name of the role they portray, as well as the corresponding \gls{dactor} instance id.
@@ -75,9 +75,7 @@ The definition of the \code{Film}'s data model is shown in listing~\ref{lst:film
 
 \begin{lstlisting}[caption=Film Dactor type definition using the actordb framework, label=lst:film_definition, language=Scala]
 object Film {
-  /**
-   * Definitions of relations contained in Film type Dactors.
-   */
+  // Definitions of relations contained in Film type Dactors
   object Info extends RelationDef {
     // column with name "title" and data-type String:
     val title = ColumnDef[String]("title")
@@ -94,9 +92,7 @@ object Film {
   }
 } 
 
-/**
- * Dactor type definition.
- */
+// Dactor type definition.
 class Film(id: Id) extends Dactor(id) {
   override protected val relations = {
     // special relation type ensuring domain-logic constraint
@@ -106,7 +102,6 @@ class Film(id: Id) extends Dactor(id) {
   override def receive: Receive = ??? // Dactor behavior
 }
 \end{lstlisting}
-
 % \begin{lstlisting}[caption=Actor \code{Dactor} type definition using the actordb framework, label=lst:actor_definition, language=Scala]
 %
 % \end{lstlisting}
