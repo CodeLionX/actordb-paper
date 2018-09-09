@@ -60,19 +60,18 @@ This approach to layout an application's data results in much smaller relation s
 
 \subsection{Domain Actor Design}\label{subsec:domain_actor_design}
 
-The presented framework provides the abstract Dactor class which is extended by developers to model their application's domain object classes which encapsulate application data.
-Instances of such user-defined Dactor types are managed by the framework and are available for messaging in a consistent namespace.
-A Dactor type definition is comprised of the types internal data schema, i.e. relations, and it's functionality to process on said data.
+Developers can model the application's domain object via extending the framework's abstract \code{Dactor} class.
+Instances of such user-defined \code{Dactor} types are managed by the framework and are available for messaging in a consistent namespace.
+A Dactor type definition is comprised of the types internal data schema, i.e. relations, and its functionality to process said data.
 Note that, since Dactors can logically encapsulate multiple data sets and state information, they can and often do comprise multiple relations.
 
-To illustrate, we present the Dactor definition in terms of data model and functionality using the presented framework with regard to the formerly considered example.
-This application in it's simplest form comprises two Dactor types modelling the concerns of the domain-specific object types of Film and Actor.
-We capitalize these Dactor types to eliminate the ambiguity of the Dactor type Actor and the general actor concept within the actor model.
+To illustrate the definition of \code{Dactor}s we use the formerly introduced example.
+The application in its simplest form consists of two \code{Dactor} types modeling the domain entities \code{Film} and \code{Actor}.
 
-Film Dactor instances comprise information on a specific stored film, such as its title, release date, a description, and a unique id, but also information about its starring actors:
-The actor's (person) name, the name of the role they portray, as well as the corresponding Actor instance's id.
-The Actor instances comprise additional information on the person such as the date of birth, but also a list of films they starred in, including the name of the role they portray, the film's title, and the Film's id.
-The definition of the Film Dactor's data model is shown in listing \ref{lst:film_definition}.
+\code{Film} Dactor instances store information about a specific film, such as its title, release date, a description, and a unique id, but also information about its starring actors:
+The actor's (person) name, the name of the role they portray, as well as the corresponding Dactor instance id.
+The \code{Actor} instances comprise additional information on the person, such as the date of birth, but also a list of films they starred in, including the name of the role they portray, the film's title, and the id to the \code{Film} Dactor.
+The definition of the \code{Film}'s data model is shown in listing~\ref{lst:film_definition}.
 
 \begin{lstlisting}[caption=Film Dactor type definition using the actordb framework, label=lst:film_definition, language=Scala]
 object Film {
@@ -80,18 +79,18 @@ object Film {
    * Definitions of relations contained in Film type Dactors.
    */
   object Info extends RelationDef {
-    // column with name ``title'' and data-type String:
-    val title = ColumnDef[String](``title'')
-    val description = ColumnDef[String](``description'')
+    // column with name "title" and data-type String:
+    val title = ColumnDef[String]("title")
+    val description = ColumnDef[String]("description")
     // rich datetime data-type column:
-    val release = ColumnDef[ZonedDateTime](``release'')
+    val release = ColumnDef[ZonedDateTime]("release")
   }
 
   object Cast extends RelationDef {
     // foreign key relating to an Actor type Dactor instance:
-    val actorId = ColumnDef[Id](``actor_id'')
-    val name = ColumnDef[String](``actor_name'')
-    val rolename = ColumnDef[String](``role_name'')
+    val actorId = ColumnDef[Id]("actor_id")
+    val name = ColumnDef[String]("actor_name")
+    val rolename = ColumnDef[String]("role_name")
   }
 } 
 
@@ -104,6 +103,7 @@ class Film(id: Id) extends Dactor(id) {
     Film.Info -> SingleRowRelation(Film.Info),
     Film.Cast -> RowRelation(Film.Cast)
   }
+  override def receive: Receive = ??? // Dactor behavior
 }
 \end{lstlisting}
 
@@ -112,11 +112,11 @@ class Film(id: Id) extends Dactor(id) {
 % \end{lstlisting}
 
 Note the partial denormalization of data on the respective domain objects into two Dactors.
-Some information which relate directly to Actor instances is replicated in the Cast relation of Film type Dactors.
-This enables the computation and response to common queries, such as requesting info on a film and their cast list, from a singular Dactor instance.
-More complex queries, e.g. finding out which films star the same actors as a given film, involve data and computation on multiple Dactor instances of both Dactor types.
-The tradeoff for this is that inserting new information about an actor (person) starring in a film becomes a functionality involving two Dactor instances and types.
-This tradeoff and implementation examples for this functionality are discussed in the following section \ref{subsec:multi_dactor_queries}.
+Some information, which relates directly to \code{Actor} instances is replicated in the \code{Film.Cast} relation of \code{Film} type Dactors.
+This enables the computation and response to common queries, such as requesting info on a film and their cast list, from a single Dactor instance.
+More complex queries, e.g. finding out, which films star the same actors as a given film, involve data and computation on multiple Dactor instances of both Dactor types.
+The trade-off for this is that inserting new information about an actor (person) starring in a film becomes a functionality involving two Dactor instances and types.
+This trade-off and implementation examples for this functionality are discussed in the following section \ref{subsec:multi_dactor_queries}.
 
 
 \subsection{Multi-Dactor Queries}\label{subsec:multi_dactor_queries}
