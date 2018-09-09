@@ -11,7 +11,7 @@
 
   \subsection{Domain Actors}\label{sec:dactors}
     Similar to \citeauthor{Shah:reactdb}~\cite{Shah:reactdb}, we introduce a special type of actor, called Domain Actor (\gls{dactor} for short), that acts as an application-defined scaling unit.
-    \glspl{dactor} can be used to model application-domain objects and encapsulate the object's state and application logic in an actor.
+    \Glspl{dactor} can be used to model application-domain objects and encapsulate the object's state and application logic in an actor.
     Using actors for this enforces technical encapsulation of state access due to the purely private state in actors and the need of explicit asynchronous messaging between the actors.
     This makes it easier to reason about state changes, bugs and other failures, as only code within the \gls{dactor} can change the corresponding state.
 
@@ -36,7 +36,7 @@
       \item\label{enum:comp_pattern_1} \textbf{Cascading Computation}
         A high-level message to \gls{dactor} A, will trigger successive messages to other \glspl{dactor}, which are hidden from the original requester.
         Depending on the computation performed in \gls{dactor} A, it can send requests to another \gls{dactor} (e.\,g. \gls{dactor} B) and handle the result itself before returning the response to the caller.
-        \gls{dactor} B can itself send messages to other \glspl{dactor} as well.
+        \Gls{dactor} B can itself send messages to other \glspl{dactor} as well.
         
         As one can see in figure~\ref{fig:comp_pattern_1}, this pattern is comparable to function calls in \gls{oop}.
         But contrary to simple function calls, messages in this pattern are sent asynchronously.
@@ -50,7 +50,7 @@
         It is used for computations that consist of consecutive steps, where each step depends on the previous step's result, such as filter chains.
 
         For this and the next messaging pattern we introduce the concept of actor-level \glspl{functor}.
-        \glspl{functor} encapsulate the processing of a high-level request in a new short-living actor.
+        \Glspl{functor} encapsulate the processing of a high-level request in a new short-living actor.
         They are able to communicate with other \glspl{dactor}, track the state of pending requests and handle failure cases.
         Every actor can create a new \gls{functor} to encapsulate multiple depending requests to \glspl{dactor}.
         The \gls{functor} handles the message processing and sends the final result or a failure message back to its parent actor before stopping itself.
@@ -94,7 +94,7 @@
     The domain actor database system is a distributed runtime for persisting data and performing computations on it.
     Each \gls{dactor} must incarnate a specific \gls{dactor} type.
     This type is defined by application developers and determines the data schema encapsulated by the \gls{dactor} and the messages it can handle (its behavior).
-    \glspl{dactor} are the only place in the system that actually have persistent state.
+    \Glspl{dactor} are the only place in the system that actually have persistent state.
     Other actors are stateless or have non-durable state, such as intermediate results or actor references.
     These actors can interact with the \glspl{dactor} via the defined messages and represent application services or components of the infrastructure layer.
     
