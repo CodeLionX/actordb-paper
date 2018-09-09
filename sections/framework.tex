@@ -5,25 +5,25 @@
 \section{Domain Actor Database Framework}\label{sec:framework}
 % Describe implementation details and framework design
 
-After describing the general concept of an \textit{Actor Database System}, we present the implementation of an proof-of-concept application development framework, which allows for the definition of an application's data model and the provisioning of corresponding Dactors as part of the application runtime.
+After describing the general concept of an \textit{Actor Database System}, we present the implementation of an proof-of-concept application development framework, which allows for the definition of an application's data model and the provisioning of corresponding \glspl{dactor} as part of the application runtime.
 
-The framework allows developers to declaratively define their application's data model using Dactors, which correspond to domain entities.
-These Dactors provide a SQL-like interface for accessing and manipulating their internal data.
-Functionality that relies on data contained within multiple Dactor objects is defined using Functor objects, which have been described conceptually in the former section~\ref{sec:concept}.
-These Functors allow to define inter-Dactor functionality without breaking the strictly asynchronous communication between actors or halting an actor's single-threaded computation process.
+The framework allows developers to declaratively define their application's data model using \glspl{dactor}, which correspond to domain entities.
+These \glspl{dactor} provide a SQL-like interface for accessing and manipulating their internal data.
+Functionality that relies on data contained within multiple \gls{dactor} objects is defined using \gls{functor} objects, which have been described conceptually in the former section~\ref{sec:concept}.
+These \glspl{functor} allow to define inter-\gls{dactor} functionality without breaking the strictly asynchronous communication between actors or halting an actor's single-threaded computation process.
 
 % Tenets
 This framework's feature set relates to three of the four core tenets that define an \textit{Actor Database System} according to \citeauthor{manifesto}'s manifesto~\cite{manifesto}:
 \textbf{Tenet 1} calls for the use of actors to achieve a modular logical model for data encapsulation.
-Dactor instances are in-memory storekeepers for application data.
+\Gls{dactor} instances are in-memory storekeepers for application data.
 They satisfy the actor definition and support high modularity.
-Furthermore, Dactors provide a model for concurrent computation of predefined functionality that increases locality of data accesses.
+Furthermore, \glspl{dactor} provide a model for concurrent computation of predefined functionality that increases locality of data accesses.
 This is part of the requirements described in \textbf{Tenet 2}.
-All communication between Dactors is asynchronous to leverage the advantages of increasingly parallel hardware.
-Functors allow for the definition of functionality using multiple actors' data and are executed asynchronously as well.
-The possibility to define these Functors as well as Dactor behavior in a declarative way relates to the second part of \textbf{Tenet 3}.
-Due to their single-threaded computation model, Dactors can be argued to enforce internal consistency by default.
-In principle, Functors allow for the implementation of further transaction protocols to ensure inter-Dactor consistency guarantees.
+All communication between \glspl{dactor} is asynchronous to leverage the advantages of increasingly parallel hardware.
+\Glspl{functor} allow for the definition of functionality using multiple actors' data and are executed asynchronously as well.
+The possibility to define these \glspl{functor} as well as \gls{dactor} behavior in a declarative way relates to the second part of \textbf{Tenet 3}.
+Due to their single-threaded computation model, \glspl{dactor} can be argued to enforce internal consistency by default.
+In principle, \glspl{functor} allow for the implementation of further transaction protocols to ensure inter-\gls{dactor} consistency guarantees.
 Since the requirements listed under \textbf{Tenet 4} relate mostly to production-ready database products, we do not implement or investigate them in this research project.
 The functionality described by \citeauthor{manifesto} in tenets one through three suffices the investigation of the practical feasibility and implications of the actor database concept.
 
@@ -31,46 +31,46 @@ The functionality described by \citeauthor{manifesto} in tenets one through thre
 Our proof-of-concept framework is developed using the Scala programming language and the Akka framework.
 This implementation marks, to the best of our knowledge, the first practical examination of the actor database concept using Akka and the classical actor programming model.
 While the Orleans framework, having been used in earlier related work, provides virtual actors with automatic lifecycle management, Akka allows for and requires direct control over an actor's lifecycle.
-% As Dactors directly build on the provided Akka actor implementation, these considerations directly apply to them.
-These considerations directly apply to Dactors as they are built on top of the Akka actor implementation.
-% More Discussion of the implication that this allows for more detailed configuration and custom Dactor idle behavior in Discussion
+% As \glspl{dactor} directly build on the provided Akka actor implementation, these considerations directly apply to them.
+These considerations directly apply to \glspl{dactor} as they are built on top of the Akka actor implementation.
+% More Discussion of the implication that this allows for more detailed configuration and custom \gls{dactor} idle behavior in Discussion
 
 \subsection{Internal Data Management}
 
-In-memory data that is contained within a Dactor instance is managed in a data structure called relation.
+In-memory data that is contained within a \gls{dactor} instance is managed in a data structure called relation.
 % Relations contain a multiset of records or tuples which follow a pre-defined schema.
 A relation, similarly to a table in the relational database model, is defined as a multiset of tuples following a predefined schema.
 This schema is comprised of column definitions whereby every column is defined by a name and a data type.
 %They provide a type-safe, SQL-like interface for querying and manipulating contained data.
-%The features and interface they provide is inspired by SQL to allow for simple data manipulation using known and proven syntax and semantics when defining a Dactor's behavior.
+%The features and interface they provide is inspired by SQL to allow for simple data manipulation using known and proven syntax and semantics when defining a \gls{dactor}'s behavior.
 %All manipulation and query functionality on a relation's data provide compile-time type safety based on these column's predefined data types.
-Relations provide an SQL-like interface to query and manipulate the contained data, so known and proven syntax and semantics can be used to define Dactor-behavior.
+Relations provide an SQL-like interface to query and manipulate the contained data, so known and proven syntax and semantics can be used to define \gls{dactor}-behavior.
 Using the column's predefined data types, all functions support compile-time type-safety.
-Due to the Dactor system sharing the application's runtime and programming environment, these data or object types are equal to the types handled in any application logic.
+Due to the \gls{dactor} system sharing the application's runtime and programming environment, these data or object types are equal to the types handled in any application logic.
 Thus, this approach eliminates the impedance mismatch between application logic and data tier with regard to handled data types and object (de-)serialization.
 
 % This could be Usage / Discussion
 Due to the similarities between relations and tables known from the relational database model, we want to discuss the conceptual differences between the two.
-While relations can be used to model much of the same information as is commonly represented using tables, the \textit{Actor Database System} and specifically the concept and framework we present relies on Dactors as models for application domain objects.
+While relations can be used to model much of the same information as is commonly represented using tables, the \textit{Actor Database System} and specifically the concept and framework we present relies on \glspl{dactor} as models for application domain objects.
 
 For clarification consider the following example of a web application with information on films and (human) actors similar to the imdb.com or rottentomatoes.com websites.
 A traditional data layout might be comprised of two tables containing information on films and actors, respectively.
-Using Dactors to represent discrete domain-level objects, a single Dactor of the type film represents a single, specific film and encapsulates all corresponding data.
+Using \glspl{dactor} to represent discrete domain-level objects, a single \gls{dactor} of the type film represents a single, specific film and encapsulates all corresponding data.
 This approach to layout an application's data results in much smaller relation sizes than typical table sizes and enables many business-logic-driven approaches to scaling, data partitioning, and caching, which are discussed in section~\ref{subsec:discussion}.
 
 \subsection{Domain Actor Design}\label{subsec:domain_actor_design}
 
 Developers can model the application's domain object via extending the framework's abstract \code{Dactor} class.
 Instances of such user-defined \code{Dactor} types are managed by the framework and are available for messaging in a consistent namespace.
-A Dactor type definition is comprised of the types internal data schema, i.e. relations, and its functionality to process said data.
-Note that, since Dactors can logically encapsulate multiple data sets and state information, they can and often do comprise multiple relations.
+A \code{Dactor} type definition is comprised of the types internal data schema, i.e. relations, and its functionality to process said data.
+Note that, since \glspl{dactor} can logically encapsulate multiple data sets and state information, they can and often do comprise multiple relations.
 
 To illustrate the definition of \code{Dactor}s we use the formerly introduced example.
 The application in its simplest form consists of two \code{Dactor} types modeling the domain entities \code{Film} and \code{Actor}.
 
-\code{Film} Dactor instances store information about a specific film, such as its title, release date, a description, and a unique id, but also information about its starring actors:
-The actor's (person) name, the name of the role they portray, as well as the corresponding Dactor instance id.
-The \code{Actor} instances comprise additional information on the person, such as the date of birth, but also a list of films they starred in, including the name of the role they portray, the film's title, and the id to the \code{Film} Dactor.
+\code{Film} \gls{dactor} instances store information about a specific film, such as its title, release date, a description, and a unique id, but also information about its starring actors:
+The actor's (person) name, the name of the role they portray, as well as the corresponding \gls{dactor} instance id.
+The \code{Actor} instances comprise additional information on the person, such as the date of birth, but also a list of films they starred in, including the name of the role they portray, the film's title, and the id to the \code{Film} \gls{dactor}.
 The definition of the \code{Film}'s data model is shown in listing~\ref{lst:film_definition}.
 
 \begin{lstlisting}[caption=Film Dactor type definition using the actordb framework, label=lst:film_definition, language=Scala]
@@ -107,29 +107,29 @@ class Film(id: Id) extends Dactor(id) {
 }
 \end{lstlisting}
 
-% \begin{lstlisting}[caption=Actor Dactor type definition using the actordb framework, label=lst:actor_definition, language=Scala]
+% \begin{lstlisting}[caption=Actor \code{Dactor} type definition using the actordb framework, label=lst:actor_definition, language=Scala]
 %
 % \end{lstlisting}
 
-Note the partial denormalization of data on the respective domain objects into two Dactors.
-Some information, which relates directly to \code{Actor} instances is replicated in the \code{Film.Cast} relation of \code{Film} type Dactors.
-This enables the computation and response to common queries, such as requesting info on a film and their cast list, from a single Dactor instance.
-More complex queries, e.g. finding out, which films star the same actors as a given film, involve data and computation on multiple Dactor instances of both Dactor types.
-The trade-off for this is that inserting new information about an actor (person) starring in a film becomes a functionality involving two Dactor instances and types.
+Note the partial denormalization of data on the respective domain objects into two \glspl{dactor}.
+Some information, which relates directly to \code{Actor} instances is replicated in the \code{Film.Cast} relation of \code{Film} type \glspl{dactor}.
+This enables the computation and response to common queries, such as requesting info on a film and their cast list, from a single \gls{dactor} instance.
+More complex queries, e.g. finding out, which films star the same actors as a given film, involve data and computation on multiple \gls{dactor} instances of both \gls{dactor} types.
+The trade-off for this is that inserting new information about an actor (person) starring in a film becomes a functionality involving two \gls{dactor} instances and types.
 This trade-off and implementation examples for this functionality are discussed in the following section \ref{subsec:multi_dactor_queries}.
 
 
-\subsection{Multi-Dactor Queries}\label{subsec:multi_dactor_queries}
+\subsection[Multi-Dactor Queries]{Multi-\Gls{dactor} Queries}\label{subsec:multi_dactor_queries}
 
 Explicit messaging and complementary actor behavior are used to implement the cascading communication pattern described in section~\ref{sec:concept}.
-Besides this, Functors are the framework's system, which enable inter-Dactor communication and computations.
-While the basic functionality of the two Functor types for sequential and concurrent computation is discussed in Section~\ref{sec:concept}, this section focuses on the definition of a concrete function integrating data from multiple Dactors.
-We also discuss the implications of using the respective messaging patterns corresponding to these types of Functors on computational scalability.
+Besides this, \glspl{functor} are the framework's system, which enable inter-\gls{dactor} communication and computations.
+While the basic functionality of the two \gls{functor} types for sequential and concurrent computation is discussed in Section~\ref{sec:concept}, this section focuses on the definition of a concrete function integrating data from multiple \glspl{dactor}.
+We also discuss the implications of using the respective messaging patterns corresponding to these types of \glspl{functor} on computational scalability.
 
-Returning to the web application example, we can define simple functionality concerning instances of both Dactor types defined in section~\ref{subsec:domain_actor_design}.
+Returning to the web application example, we can define simple functionality concerning instances of both \gls{dactor} types defined in section~\ref{subsec:domain_actor_design}.
 Adding a new character role to a film, played by a specific actor involves changes to \code{Film} and \code{Actor} instances.
 We describe the implementation of this functionality using all three of the introduced communication patterns.
 
-% Usage example: Functors
+% Usage example: \glspl{functor}
 
 \subsection{Discussion}\label{subsec:discussion}
