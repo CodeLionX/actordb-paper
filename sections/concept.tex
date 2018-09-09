@@ -4,8 +4,6 @@
 
 \section{Domain Actor Database Concept}\label{sec:concept}
   Our concept is based on the idea of actor database systems as introduced by~\citeauthor{manifesto}~\cite{manifesto}.
-  Database systems should be a distributed runtime and provide the appropriate programming abstraction.
-  This is solved by actor database systems.
   The combination of application and data tier provides considerable advantages for data-centric systems.
   This architecture allows leveraging domain and application knowledge to dynamically model the data layout, especially concerning data partitioning and replication schemes.
   This makes the database system modular, cloud-ready and scalable.
@@ -19,12 +17,6 @@
 
     As \glspl{dactor} not only contain data, but also the corresponding domain logic, computation is executed concurrently.
     This supports designing a modular and extensible database system and improves scalability.
-    The system grows naturally based on the load.
-    Take an e-commerce application as an example for that:
-    If we have a customer entity for every customer in our system, then we can model each entity as a \gls{dactor}.
-    This allows our system to scale linearly with the number of customers using it, because each customer is represented with their own \gls{dactor}, which holds their information and performs computations.
-    This also illustrates that such a system tends to be more robust compared to monolithic systems, because if customer A's \gls{dactor} crashes for an unknown reason, all other customer \glspl{dactor} are unaffected.
-
     Actors provide single-threaded semantics, which makes enforcing constraints on data tied to one domain object stored inside \glspl{dactor} no issue.
     It is implemented via application logic within the \gls{dactor}.
     State querying and modification within \glspl{dactor} is possible in a declarative way, but communication across all kind of actors is explicitly defined via asynchronous messages and how the \glspl{dactor} handle the said messages.
@@ -37,22 +29,25 @@
     The choice is heavily influenced by the data layout used for the \glspl{dactor} and sets the level of parallelization and the network-load for the computation.
 
     We consider three main messaging patterns for inter-\gls{dactor} communication, which are shown in figure~\ref{fig:comp_patterns}: Cascading Computation, Sequential Computation, Concurrent Computation.
-    They all assume a request-response messaging schema and take a high-level message to a \gls{dactor}, lets call it \gls{dactor} A, as starting point.
+    They are messaging primitives and can be combined to create more complex message flows and computation models.
+    All three patterns assume a request-response messaging schema and take a high-level message to a \gls{dactor}, lets call it \gls{dactor} A, as starting point.
 
     \begin{enumerate}
       \item\label{enum:comp_pattern_1} \textbf{Cascading Computation}
         A high-level message to \gls{dactor} A, will trigger successive messages to other \glspl{dactor}, which are hidden from the original requester.
         Depending on the computation performed in \gls{dactor} A, it can send requests to another \gls{dactor} (e.\,g. \gls{dactor} B) and handle the result itself before returning the response to the caller.
         \gls{dactor} B can itself send messages to other \glspl{dactor} as well.
-        As one can see in figure~\ref{fig:comp_pattern_1}, this pattern is comparable to function calls in \gls{oop}, but can lead to a growing cascade of messages sent and received.
-        As each message can introduce network latency, it can take significantly more time to receive the top-level response compared to the situation when all computation is done in \gls{dactor} A.
-        In addition to that, the requesting \gls{dactor} has to deal with the state for pending responses, such as actor references, intermediate results, or failure cases.
+        
+        As one can see in figure~\ref{fig:comp_pattern_1}, this pattern is comparable to function calls in \gls{oop}.
+        But contrary to simple function calls, messages in this pattern are sent asynchronously.
+        This means that the requesting \gls{dactor} has to manage the state of pending responses, such as actor references and intermediate results, or failure cases.
         This clutters the domain logic in the \gls{dactor} and leads to complex and error-prone code.
-        If used sparsely, this pattern supports separation of concerns and the tell-don't-ask idea.
+        In addition, each message introduces network latency and can therefore increase the overall computation time compared to a single \gls{dactor} computing the response.
+        If used sparsely, this pattern supports separation of concerns and the tell-don't-ask paradigm.
 
       \item\label{enum:comp_pattern_2} \textbf{Sequential Computation}
         Figure~\ref{fig:comp_pattern_2} shows the sequential computation pattern.
-        It is used for computations that consist of consecutive steps, where each step depends on the previous step's result, such as filter chains or \colorbox{red}{whatelse?}.
+        It is used for computations that consist of consecutive steps, where each step depends on the previous step's result, such as filter chains.
 
         For this and the next messaging pattern we introduce the concept of actor-level \glspl{functor}.
         \glspl{functor} encapsulate the processing of a high-level request in a new short-living actor.
@@ -64,14 +59,12 @@
 
         Using a \gls{functor} to process the consecutive steps of the computational chain relieves \gls{dactor} A from dealing with intermediate state, because it is managed by the \gls{functor}.
         Each \gls{functor} only has to deal with one request-response pair at a time, which leads to a simple state and processing logic for the \gls{functor} itself.
-        One drawback of this design is the need to create an extra actor for every top-level request that should be processed.
 
       \item\label{enum:comp_pattern_3} \textbf{Concurrent Computation}
         This messaging pattern also makes use of \glspl{functor} to encapsulate the processing of multiple request-response pairs.
-        This time, we want to send messages to several \glspl{dactor} concurrently and collect the results when they are finished.
-        An exemplary message flow is shown in figure~\ref{fig:comp_pattern_3}.
-        As this messaging pattern also relies on \glspl{functor}, it has similar advantages and drawbacks than~\ref{enum:comp_pattern_2}.
-        It allows for highly parallelized computation as all subtasks are started asynchronously at the beginning and the result is sent back as soon as all responses were received.
+        The concurrent \gls{functor} sends messages to several \glspl{dactor} in parallel and collect the results when they are finished.
+        It allows for highly parallelized computation as all involved \glspl{dactor} are messaged at the same time and calculate their responses concurrently.
+        The \gls{functor} collects each individual response and returns the aggregated result to it's creator.
     \end{enumerate}
 
     \begin{figure}
@@ -94,9 +87,6 @@
       \caption{Inter-\gls{dactor}-communication patterns. Dotted lines show actor lifetime and gray bars indicate that an actor performs computation or holds state that is related to the showed message flow.}
       \label{fig:comp_patterns}
     \end{figure}
-  
-    % comparison of functors with stored procedures?
-    % doesn't really fit here...
 
 
   \subsection{Domain Actor Database System}\label{sec:domain_actor_database}
@@ -113,22 +103,4 @@
     During this process we have to keep our requirements regarding query patterns and scaling in mind.
     Those requirements will influence the domain decomposition and the messaging patterns used.
     The entry points to our application are stateless actors on top of the \glspl{dactor}, which provide high throughput and can be scaled out easily.
-    They act as routers for incoming requests and perform computations on a higher level.
-
-    \begin{itemize}
-      \item Consistency?
-      \item Transactional guarantees?
-    \end{itemize}
-
-    % akka: (i would put this in 4.)
-    % message-passing
-    % supervision
-
-    % im framework:
-    % beispiel
-
-
-    % how actors solve the impedance mismatch
-    % "passt auf, dass hier eure Idee im Vordergrund steht und ihr nicht auf andere Gebiete ausschweift"
-    % Computation parallelization on a domain-level object basis
-    % Modularity, Testability
+    They act as routers for incoming requests.
