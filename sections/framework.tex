@@ -121,13 +121,13 @@ This trade-off and implementation examples for this functionality are discussed 
 
 \subsection{Multi-Dactor Queries}\label{subsec:multi_dactor_queries}
 
-Explicit messaging and complementary actor behaviors are used to implement the cascading communication pattern described in section \ref{sec:concept}.
-Besides this, Functors are the framework's system which enables inter-Dactor communication and functionality.
-While the basic functionality of the two Functor types for sequential and concurrent computation is discussed in \ref{sec:concept}, this section focuses on the definition of a concrete function integrating data from multiple Dactors.
+Explicit messaging and complementary actor behavior are used to implement the cascading communication pattern described in section~\ref{sec:concept}.
+Besides this, Functors are the framework's system, which enable inter-Dactor communication and computations.
+While the basic functionality of the two Functor types for sequential and concurrent computation is discussed in Section~\ref{sec:concept}, this section focuses on the definition of a concrete function integrating data from multiple Dactors.
 We also discuss the implications of using the respective messaging patterns corresponding to these types of Functors on computational scalability.
 
-Returning to the web application example we can define simple functionality concerning instances of both Dactor types defined in section \ref{subsec:domain_actor_design}.
-Adding a new character role to a film, played by a specific actor involves changes to Dactor instances of the types Film and Actor.
+Returning to the web application example, we can define simple functionality concerning instances of both Dactor types defined in section~\ref{subsec:domain_actor_design}.
+Adding a new character role to a film, played by a specific actor involves changes to \code{Film} and \code{Actor} instances.
 We describe the implementation of this functionality using all three of the introduced communication patterns.
 
 % Usage example: Functors
