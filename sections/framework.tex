@@ -5,35 +5,35 @@
 \section{Domain Actor Database Framework}\label{sec:framework}
 % Describe implementation details and framework design
 
-After describing the general concept of an \textit{Actor Database System}, we present the implementation of an application development framework which allows for the definition of an application's data model and the provisioning of corresponding Dactors as part of the application runtime.
+After describing the general concept of an \textit{Actor Database System}, we present the implementation of an proof-of-concept application development framework, which allows for the definition of an application's data model and the provisioning of corresponding Dactors as part of the application runtime.
 
-The goal for this research implementation is a proof-of-concept framework which allows developers to declaratively define their application's data model
-and which automatically instantiates special-type actors, i.e. Dactors, corresponding to defined domain-object entities.
-These Dactors encapsulate the respective application data and provide a SQL-like interface for data access and manipulation internally.
-This interface is used to define actor behaviour and functionality.
-Functionality that relies on data contained within multiple Dactor objects is defined explicitely using Functor objects which have been described conceptually in the former section \ref{sec:concept}.
-These Functors allow to define inter-Dactor functionality without breaking the strictly asynchronous communication between actors or halting an actors single-threaded computation process.
+The framework allows developers to declaratively define their application's data model using Dactors, which correspond to domain entities.
+These Dactors provide a SQL-like interface for accessing and manipulating their internal data.
+Functionality that relies on data contained within multiple Dactor objects is defined using Functor objects, which have been described conceptually in the former section~\ref{sec:concept}.
+These Functors allow to define inter-Dactor functionality without breaking the strictly asynchronous communication between actors or halting an actor's single-threaded computation process.
 
 % Tenets
-This framework's feature set relates to three of the four core tenets that define an \textit{Actor Database System} according to \citeauthor{manifesto}'s manifesto \cite{manifesto}:
+This framework's feature set relates to three of the four core tenets that define an \textit{Actor Database System} according to \citeauthor{manifesto}'s manifesto~\cite{manifesto}:
 \textbf{Tenet 1} calls for the use of actors to achieve a modular logical model for data encapsulation.
-Dactor instances are in-memory storekeepers for an application's data and provide an actor construct which encapsulates data.
-Furthermore, Dactors provide a model for concurrent computation of predefined functionality that processes a Dactor's data.
+Dactor instances are in-memory storekeepers for application data.
+They satisfy the actor definition and support high modularity.
+Furthermore, Dactors provide a model for concurrent computation of predefined functionality that increases locality of data accesses.
 This is part of the requirements described in \textbf{Tenet 2}.
-Functors allow for the definition of functionality using multiple actors's data and are excuted asynchronously.
-The possibility to predefine these Functors as well as Dactor behaviour relates to the second part of \textbf{Tenet 3}.
+All communication between Dactors is asynchronous to leverage the advantages of increasingly parallel hardware.
+Functors allow for the definition of functionality using multiple actors' data and are executed asynchronously as well.
+The possibility to define these Functors as well as Dactor behavior in a declarative way relates to the second part of \textbf{Tenet 3}.
 Due to their single-threaded computation model, Dactors can be argued to enforce internal consistency by default.
-In principle, Functors allow for the implementation of further transaction protocols to ensure cross-Dactor consistency guarantees.
+In principle, Functors allow for the implementation of further transaction protocols to ensure inter-Dactor consistency guarantees.
 Since the requirements listed under \textbf{Tenet 4} relate mostly to production-ready database products, we do not implement or investigate them in this research project.
-The functionality described by \citeauthor{manifesto} in tenets one through three allows for investigation of the practical feasibility and implications of the actor database concept.
+The functionality described by \citeauthor{manifesto} in tenets one through three suffices the investigation of the practical feasibility and implications of the actor database concept.
 
 % Tech
-The proof-of-concept framework has been developed using the Scala programming language and the Akka framework for actor programming.
-This implementation marks, to the best of our knowledge, the first practical examination of the actor database concept using Akka and the classical actor concept.
-While the Orleans framework, having been used in earlier related work, provides virtual actors with automatic lifecycle management, Akka allows for and requires direct control over an actors lifecycle.
+Our proof-of-concept framework is developed using the Scala programming language and the Akka framework.
+This implementation marks, to the best of our knowledge, the first practical examination of the actor database concept using Akka and the classical actor programming model.
+While the Orleans framework, having been used in earlier related work, provides virtual actors with automatic lifecycle management, Akka allows for and requires direct control over an actor's lifecycle.
 % As Dactors directly build on the provided Akka actor implementation, these considerations directly apply to them.
 These considerations directly apply to Dactors as they are built on top of the Akka actor implementation.
-% More Discussion of the implication that this allows for more detailed configuration and custom Dactor idle behaviour in Discussion
+% More Discussion of the implication that this allows for more detailed configuration and custom Dactor idle behavior in Discussion
 
 \subsection{Internal Data Management}
 
