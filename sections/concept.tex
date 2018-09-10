@@ -3,14 +3,14 @@
 % !TeX spellcheck = en_US
 
 \section{Domain Actor Database Concept}\label{sec:concept}
-  Our concept is based on the idea of actor database systems as introduced by~\citeauthor{manifesto}~\cite{manifesto}.
+  Our concept is based on the idea of actor database systems as introduced by \citet{manifesto}.
   The combination of application and data tier provides considerable advantages for data-centric systems.
   This architecture allows leveraging domain and application knowledge to dynamically model the data layout, especially concerning data partitioning and replication schemes.
   This makes the database system modular, cloud-ready and scalable.
   % add here: why is it better to use domain knowledge to partition and distribute data?
 
   \subsection{Domain Actors}\label{sec:dactors}
-    Similar to \citeauthor{Shah:reactdb}~\cite{Shah:reactdb}, we introduce a special type of actor, called Domain Actor (\gls{dactor} for short), that acts as an application-defined scaling unit.
+    Similar to \citet{Shah:reactdb}, we introduce a special type of actor, called Domain Actor (\gls{dactor} for short), that acts as an application-defined scaling unit.
     \Glspl{dactor} can be used to model application-domain objects and encapsulate the object's state and application logic in an actor.
     Using actors for this enforces technical encapsulation of state access due to the purely private state in actors and the need of explicit asynchronous messaging between the actors.
     This makes it easier to reason about state changes, bugs and other failures, as only code within the \gls{dactor} can change the corresponding state.
@@ -28,7 +28,7 @@
     This allows application developers to chose the right messaging pattern for their use case.
     The choice is heavily influenced by the data layout used for the \glspl{dactor} and sets the level of parallelization and the network-load for the computation.
 
-    We consider three main messaging patterns for inter-\gls{dactor} communication, which are shown in figure~\ref{fig:comp_patterns}: Cascading Computation, Sequential Computation, Concurrent Computation.
+    We consider three main messaging patterns for inter-\gls{dactor} communication, which are shown in \cref{fig:comp_patterns}: Cascading Computation, Sequential Computation, Concurrent Computation.
     They are messaging primitives and can be combined to create more complex message flows and computation models.
     All three patterns assume a request-response messaging schema and take a high-level message to a \gls{dactor}, lets call it \gls{dactor} A, as starting point.
 
@@ -38,7 +38,7 @@
         Depending on the computation performed in \gls{dactor} A, it can send requests to another \gls{dactor} (e.\,g. \gls{dactor} B) and handle the result itself before returning the response to the caller.
         \Gls{dactor} B can itself send messages to other \glspl{dactor} as well.
         
-        As one can see in figure~\ref{fig:comp_pattern_1}, this pattern is comparable to function calls in \gls{oop}.
+        As one can see in \cref{fig:comp_pattern_1}, this pattern is comparable to function calls in \gls{oop}.
         But contrary to simple function calls, messages in this pattern are sent asynchronously.
         This means that the requesting \gls{dactor} has to manage the state of pending responses, such as actor references and intermediate results, or failure cases.
         This clutters the domain logic in the \gls{dactor} and leads to complex and error-prone code.
@@ -46,7 +46,7 @@
         If used sparsely, this pattern supports separation of concerns and the tell-don't-ask paradigm.
 
       \item\label{enum:comp_pattern_2} \textbf{Sequential Computation}
-        Figure~\ref{fig:comp_pattern_2} shows the sequential computation pattern.
+        \Cref{fig:comp_pattern_2} shows the sequential computation pattern.
         It is used for computations that consist of consecutive steps, where each step depends on the previous step's result, such as filter chains.
 
         For this and the next messaging pattern we introduce the concept of actor-level \glspl{functor}.
