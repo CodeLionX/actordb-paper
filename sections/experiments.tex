@@ -14,6 +14,7 @@
   We used a script to generate four different datasets emulating the scaling of the system by increasing the number of \gls{dactor}-instances in the system and keeping the data size stored in one \gls{dactor} nearly constant.
   The script creates various primitive data types, such as \code{String}, \code{Double}, and \code{Int}, as well as complex data types, such as \code{ZonedDateTime}, and distributes the data across \glspl{dactor} and relations.
   The data distribution across the \gls{dactor} types is reported in table~\ref{tab:datasets:size_distribution} and the key figures of the datasets are reported in table~\ref{tab:datasets:keyfigures}.
+  The data size stored in one \gls{dactor} and one relation is very small (in the kilobytes range), this will make the relative memory overhead more visible as we need thousands of \glspl{dactor} and relations to store our datasets in the heap.
   
   \begin{table}
     \centering
@@ -68,7 +69,18 @@
 
 \subsection{Results}
 
-
+  \cref{fig:exp:general} shows an overview about the measured heap size of the different tests over the four datasets.
+  If the data is loaded into memory as a single big \code{String} object, it takes up around the same amount of heap as the dataset is big.
+  Storing the data in \textit{Relations} introduces a overhead of about $150 \%$.
+  % relations - string / string = ratio
+  % 18162800 / 11315812 = 161%
+  % 26453405 / 18637898 = 142%
+  % 72695967 / 49246330 = 148%
+  % 145392010 / 98492584 = 148%
+  Even for the smallest dataset the data is split up across thousands of relations, which each use a two dimensional \code{Array} to store the individual values in a non-optimized way.
+  In addition to that, relations also store metadata about the contained data, such as column names and data types.
+  % show relations with more data stored than a couple kilobytes
+  
   \begin{figure}
     \centering
     \begin{tikzpicture}
@@ -95,6 +107,14 @@
     \label{fig:exp:general}
   \end{figure}
 
+  As we can see in \cref{fig:exp:general}, using the full framework with \glspl{dactor} does not introduce much additional memory overhead.
+  \Cref{tab:memory_overhead} compares the sizes of the \textit{Relations} and \textit{Framework} tests and lists the \gls{dactor} overhead for the datasets $D_1$ through $D_4$.
+  The memory overhead per \gls{dactor} is computed with the following equation:
+  \begin{equation}
+    \text{Overhead / \gls{dactor}} = \frac{\text{Size \textit{Framework}} - \text{Size \textit{Relations}}}{\text{\# \glspl{dactor}}}
+  \end{equation}
+  In average, using a \gls{dactor} only needs an additional 533~B more.
+
   \begin{table}
     \centering
     \begin{tabular}{crrrr}
@@ -112,9 +132,6 @@
     \label{tab:memory_overhead}
   \end{table}
 
-  \begin{equation}
-    \text{Overhead / \gls{dactor}} = \frac{\text{Size \textit{Framework}} - \text{Size \textit{Relations}}}{\text{\# \glspl{dactor}}}
-  \end{equation}
 
 \subsection{Discussion}\label{sec:exp:discussion}
 
