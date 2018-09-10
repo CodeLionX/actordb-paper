@@ -7,13 +7,15 @@
 
 After describing the general concept of an \textit{Actor Database System}, we present the implementation of an proof-of-concept application development framework, which allows for the definition of an application's data model and the provisioning of corresponding \glspl{dactor} as part of the application runtime.
 
-The framework allows developers to declaratively define their application's data model using \glspl{dactor}, which correspond to domain entities.
-These \glspl{dactor} provide a SQL-like interface for accessing and manipulating their internal data.
-Functionality that relies on data contained within multiple \gls{dactor} objects is defined using \gls{functor} objects, which have been described conceptually in the former section~\ref{sec:concept}.
-These \glspl{functor} allow to define inter-\gls{dactor} functionality without breaking the strictly asynchronous communication between actors or halting an actor's single-threaded computation process.
+The framework provides the aforementioned features for developers:
+\begin{itemize}
+  \item Declarative data model definition using \glspl{dactor}
+  \item SQL-like interface for accessing and manipulating internal data within \glspl{dactor}
+  \item \Gls{functor} objects for procedures, which rely on data contained in multiple \glspl{dactor}
+\end{itemize}
 
 % Tenets
-This framework's feature set relates to three of the four core tenets that define an \textit{Actor Database System} according to \citeauthor{manifesto}'s manifesto~\cite{manifesto}:
+These features relate to three of the four core tenets that define an \textit{Actor Database System} according to \citeauthor{manifesto}'s manifesto~\cite{manifesto}:
 \textbf{Tenet 1} calls for the use of actors to achieve a modular logical model for data encapsulation.
 \Gls{dactor} instances are in-memory storekeepers for application data.
 They satisfy the actor definition and support high modularity.
