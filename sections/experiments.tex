@@ -13,7 +13,7 @@
   The exemplary actor database system used for testing consists of four different \gls{dactor} types, each containing different number of relations and data sizes.
   We used a script to generate four different datasets emulating the scaling of the system by increasing the number of \gls{dactor}-instances in the system and keeping the data size stored in one \gls{dactor} nearly constant.
   The script creates various primitive data types, such as \code{String}, \code{Double}, and \code{Int}, as well as complex data types, such as \code{ZonedDateTime}, and distributes the data across \glspl{dactor} and relations.
-  The data distribution across the \gls{dactor} types is reported in table~\ref{tab:datasets:size_distribution} and the key figures of the datasets are reported in table~\ref{tab:datasets:keyfigures}.
+  The data distribution across the \gls{dactor} types is reported in \cref{tab:datasets:size_distribution} and the key figures of the datasets are reported in \cref{tab:datasets:keyfigures}.
   The data size stored in one \gls{dactor} and one relation is very small (in the kilobytes range), this will make the relative memory overhead more visible as we need thousands of \glspl{dactor} and relations to store our datasets in the heap.
   
   \begin{table}
@@ -22,7 +22,7 @@
       \centering
       \begin{tabular}{@{}crr@{}}
         \toprule
-        \textbf{\gls{dactor} type} & \textbf{Data size} & \textbf{\# Relations}\\
+        \textbf{\Gls{dactor} type} & \textbf{Data size} & \textbf{\# Relations}\\
         \midrule
         $X_1$ &   7~KB & 2 \\ % Cart
         $X_2$ &  22~KB & 3 \\ % Customer
@@ -30,14 +30,14 @@
         $X_4$ & 721~KB & 1 \\ % GroupManager
         \bottomrule
       \end{tabular}
-      \subcaption{\gls{dactor} types and their corresponding data sizes}
+      \subcaption{\Gls{dactor} types and their corresponding data sizes}
       \label{tab:datasets:size_distribution}
     \end{subtable}
     \begin{subtable}[t]{0.545\textwidth}
       \centering
       \begin{tabular}{@{}crrr@{}}
         \toprule
-        \textbf{Dataset} & \textbf{Size on disk} & \textbf{\# \glspl{dactor}} & \textbf{\# Relations}\\
+        \textbf{Dataset} & \textbf{Size on disk} & \textbf{\# \Glspl{dactor}} & \textbf{\# Relations}\\
         \midrule
         $D_1$ & 10~MB & 829 & 1~714 \\
         $D_2$ & 25~MB & 2~578 & 5~250 \\
@@ -69,7 +69,7 @@
 
 \subsection{Results}
 
-  \cref{fig:exp:general} shows an overview about the measured heap size of the different tests over the four datasets.
+  \Cref{fig:exp:general} shows an overview about the measured heap size of the different tests over the four datasets.
   If the data is loaded into memory as a single big \code{String} object, it takes up around the same amount of heap as the dataset is big.
   Storing the data in \textit{Relations} introduces a overhead of about $150 \%$.
   % relations - string / string = ratio
@@ -119,7 +119,7 @@
     \centering
     \begin{tabular}{crrrr}
       \toprule
-      \textbf{Dataset} & \textbf{\# \glspl{dactor}} & \textbf{Size \textit{Relations}} & \textbf{Size \textit{Framework}} & \textbf{Overhead / \gls{dactor}}\\
+      \textbf{Dataset} & \textbf{\# \Glspl{dactor}} & \textbf{Size \textit{Relations}} & \textbf{Size \textit{Framework}} & \textbf{Overhead / \gls{dactor}}\\
       \midrule
       $D_1$ & 829 & 28~788~KB & 29~213~KB & 526~B \\
       $D_2$ & 2~578 & 44~034~KB & 45~392~KB & 539~B \\
@@ -135,7 +135,7 @@
 
 \subsection{Discussion}\label{sec:exp:discussion}
 
-  \cref{tab:memory_overhead} clearly shows that using \glspl{dactor} only introduces a very small memory overhead.
+  \Cref{tab:memory_overhead} clearly shows that using \glspl{dactor} only introduces a very small memory overhead.
   \Glspl{dactor} have a constant overhead of about 550~B per instance.
   Our experiments show a worst case scenario, where each \gls{dactor} only stores 230~KB on average.
   
