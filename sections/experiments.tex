@@ -48,12 +48,12 @@
       \label{tab:datasets:keyfigures}
     \end{subtable}
     \caption{Datasets used for the memory overhead experiments}
-    \label{tab_datasets}
+    \label{tab:datasets}
   \end{table}
 
   For each dataset we performed three different tests:
   \begin{description}
-    \item[\textit{SingleString}] Convert all data into its \code{String} representation and load it as a single big \code{String} into memory.
+    \item[\textit{Single string}] Convert all data into its \code{String} representation and load it as a single big \code{String} into memory.
       This test serves as baseline for the other ones.
     \item[\textit{Relations}] Load the data into their respective \code{Relation}s, preserving the type information and using the in-memory data storage objects from our framework.
     \item[\textit{Framework}] Use the full-fledged framework to load the data into memory.
@@ -72,82 +72,48 @@
     \centering
     \begin{tikzpicture}
       \begin{axis}[
-          xlabel=dataset size in MB, ylabel=heap size in MB,
+          xlabel=dataset size in MB,
+          ylabel=heap size in MB,
           legend pos=north west
       ]
         \addplot[mark=*, color=blue] coordinates {
-          (10,10.8)
-          (25,17.8)
-          (50,47.0)
-          (100,93.9)
+          (10,10.8) (25,17.8) (50,47.0) (100,93.9)
         };
         \addplot[mark=*, color=green] coordinates {
-          (10,28.1)
-          (25,43.0)
-          (50,116.3)
-          (100,232.6)
+          (10,28.1) (25,43.0) (50,116.3) (100,232.6)
         };
         \addplot[mark=*, color=red] coordinates {
-          (10,28.5)
-          (25,44.3)
-          (50,118.5)
-          (100,237.6)
+          (10,28.5) (25,44.3) (50,118.5) (100,237.6)
         };
-      
-      \legend{\textit{SingleString}, \textit{Relations}, \textit{Framework}}
+        \legend{\textit{Single string}, \textit{Relations}, \textit{Framework}}
       \end{axis}
     \end{tikzpicture}
     \caption{Used heap size when loading the data into memory using the three different methods.}
     \label{fig:exp:general}
   \end{figure}
 
-  \begin{figure}
+  \begin{table}
     \centering
-    \begin{tikzpicture}
-      \begin{axis}[xlabel=number of \glspl{dactor},ylabel=MB in memory]
-        \addplot coordinates {
-          (829,28.5)
-          (2578,44.3)
-          (4373,118.5)
-          (8746,237.0)
-        };
-      \end{axis}
-    \end{tikzpicture}
-    \caption{Memory consumption as a function of the number of \glspl{dactor}}
-    \label{fig:exp:dactors}
-  \end{figure}
+    \begin{tabular}{crrrr}
+      \toprule
+      \textbf{Dataset} & \textbf{\# \glspl{dactor}} & \textbf{Size \textit{Relations}} & \textbf{Size \textit{Framework}} & \textbf{Overhead / \gls{dactor}}\\
+      \midrule
+      $D_1$ & 829 & 28~788~KB & 29~213~KB & 526~B \\
+      $D_2$ & 2~578 & 44~034~KB & 45~392~KB & 539~B \\
+      $D_3$ & 4~373 & 119~084~KB & 121~355~KB & 532~B \\
+      $D_4$ & 8~618 & 238~169~KB & 242~728~KB & 534~B \\
+      \bottomrule
+    \end{tabular}
+    \caption{Memory overhead of \glspl{dactor}}
+    \label{tab:memory_overhead}
+  \end{table}
 
-
-  \begin{figure}
-    \centering
-    \begin{tikzpicture}
-      \begin{axis}[xlabel=number of \glspl{dactor},ylabel=\gls{dactor} memory overhead compared to relations in KB]
-        \addplot coordinates {
-          (829,436)   % ratio: 0.526
-          (2578,1390) % ratio: 0.539
-          (4373,2325) % ratio: 0.532
-          (8746,4669) % ratio: 0.534
-        };
-      \end{axis}
-    \end{tikzpicture}
-    \caption{Memory overhead of \glspl{dactor} as a function of the number of \glspl{dactor}}
-    \label{fig:exp:dactoroverhead}
-  \end{figure}
-
-  \begin{figure}
-    \centering
-    \begin{tikzpicture}
-      \begin{axis}[xlabel=number of Relations,ylabel=Relation memory consumption in MB]
-        \addplot coordinates {
-          (1714,28.1)
-          (5250,43.0)
-          (8935,116.3)
-          (17870,232.6)
-        };
-      \end{axis}
-    \end{tikzpicture}
-    \caption{Memory overhead of Relations as a function of the number of Relations}
-    \label{fig:exp:relationoverhead}
-  \end{figure}
+  \begin{equation}
+    \text{Overhead / \gls{dactor}} = \frac{\text{Size \textit{Framework}} - \text{Size \textit{Relations}}}{\text{\# \glspl{dactor}}}
+  \end{equation}
 
 \subsection{Discussion}
+
+  - experiments at lower end (few KB / dactor) (worst case scenario)
+  - 2 gedankenexperimente (1Mb / dactor and 10MB / dactor)
+  - load times for \textit{Framework} multiple times faster through high parallelism
