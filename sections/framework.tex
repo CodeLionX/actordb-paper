@@ -62,10 +62,17 @@ While \glspl{relation} can be used to model much of the same information as is c
 We consider the following example of a web application with information on films and (human) actors similar to the imdb.com or rottentomatoes.com websites.
 A traditional data layout might be comprised of two tables containing information on films and actors, respectively.
 Using \glspl{dactor} to represent discrete domain-level objects, a single \gls{dactor} of the type film represents a single, specific film and encapsulates all corresponding data.
-This approach to layout an application's data results in much smaller \gls{relation} sizes than typical table sizes and enables many business-logic-driven approaches to scaling, data partitioning, and caching, which are discussed in section~\ref{subsec:discussion}.
+This approach to layout an application's data results in much smaller \gls{relation} sizes than typical table sizes and enables many business-logic-driven approaches to scaling, data partitioning, and caching.
 The tradeoff to take into account, however, is a large number of \gls{dactor} instances encapsulating the application's data.
 
 \subsection{Domain Actor Design}\label{subsec:domain_actor_design}
+
+\begin{figure}[t]
+  \centering
+  \includestandalone[width=\textwidth]{pictures/tikz/dactor_diagram}
+  \caption{Class diagram of the \texttt{Film} and \texttt{Actor} Dactor types defined in the example application. Both Dactor types contain two \glspl{relation}. Dactor id attributes in the relations are italised and realise a many-to-many relationship between the two Dactor types.}
+  \label{fig:dactor_diagram}
+\end{figure}
 
 Developers can model the application's domain objects via extending the framework's abstract \code{Dactor} class.
 Instances of such user-defined \code{Dactor} types are managed by the framework and are available for messaging in a consistent namespace.
@@ -75,17 +82,13 @@ Note that, since \glspl{dactor} can logically encapsulate multiple data sets and
 To illustrate the definition of \code{Dactor}s we use the formerly introduced example.
 The application in its simplest form consists of two \code{Dactor} types modeling the domain entities: \code{Film} and \code{Actor}.
 
-\code{Film} \gls{dactor} instances store information about a specific film, such as its title, release date, a description, and a unique id, but also information about its starring actors:
-The actor's (person) name, the name of the role they portray, as well as the corresponding \gls{dactor} instance id.
-The \code{Actor} instances comprise additional information on the person, such as the date of birth, but also a list of films they starred in, including the name of the role they portray, the film's title, and the id to the \code{Film} \gls{dactor}.
-The definition of the \code{Film}'s data model is shown in listing~\ref{lst:film_definition}.
+Both, \code{Film} and \code{Actor} \gls{dactor} instances contain two \glspl{relation} and store information about a specific film or actor, respectively.
+In addition, \code{Actor} instances keep some information on related \code{Film}s, i.e. those the \code{Actor} has starred in, including the \code{Film}'s \gls{dactor} id, and vice-versa.
+This realises a many-to-many relationship between both \gls{dactor} types.
+The data model is detailed in Figure~\ref{fig:dactor_diagram}.
+The definition of the \code{Film}'s data model is shown in Listing~\ref{lst:film_definition}.
 
-\begin{figure}\label{fig:dactor_diagram}
-  \centering
-  \includestandalone[width=0.9\textwidth]{pictures/tikz/dactor_diagram}
-  \caption{Class diagram of the \code{Film} and \code{Actor} Dactor types defined in the example application.}
-\end{figure}
-
+\begin{minipage}{1.0\linewidth}
 \begin{lstlisting}[caption=Film Dactor type definition using the actordb framework, label=lst:film_definition, language=Scala]
 object Film {
   // Definitions of relations contained in Film type Dactors
@@ -115,6 +118,7 @@ class Film(id: Id) extends Dactor(id) {
   override def receive: Receive = ??? // Dactor behavior
 }
 \end{lstlisting}
+\end{minipage}
 % \begin{lstlisting}[caption=Actor \code{Dactor} type definition using the actordb framework, label=lst:actor_definition, language=Scala]
 %
 % \end{lstlisting}
@@ -124,12 +128,12 @@ Some information, which relates directly to \code{Actor} instances is replicated
 This enables the computation and response to common queries, such as requesting info on a film and their cast list, from a single \gls{dactor} instance.
 More complex queries, e.g. finding out, which films star the same actors as a given film, involve data and computation on multiple \gls{dactor} instances of both \gls{dactor} types.
 The trade-off for this is that inserting new information about an actor (person) starring in a film becomes a functionality involving two \gls{dactor} instances and types.
-This trade-off and implementation examples for this functionality are discussed in the following section \ref{subsec:multi_dactor_queries}.
+This trade-off and implementation examples for this functionality are discussed in the following Section~\ref{subsec:multi_dactor_queries}.
 
 
 \subsection[Multi-Dactor Queries]{Multi-\Gls{dactor} Queries}\label{subsec:multi_dactor_queries}
 
-Explicit messaging and complementary actor behavior are used to implement the cascading communication pattern described in section~\ref{sec:concept}.
+Explicit messaging and complementary actor behavior are used to implement the cascading communication pattern described in Section~\ref{sec:concept}.
 Besides this, \glspl{functor} are the framework's system, which enable inter-\gls{dactor} communication and computations.
 While the basic functionality of the two \gls{functor} types for sequential and concurrent computation is discussed in Section~\ref{sec:concept}, this section focuses on the definition of a concrete function integrating data from multiple \glspl{dactor}.
 We also discuss the implications of using the respective messaging patterns corresponding to these types of \glspl{functor} on computational scalability.
@@ -139,7 +143,7 @@ They are instantiated once a defined Functor is called by a Dactor or other acto
 Functors are always called from an Akka actor as a child actor.
 This Akka-specific hierarchical relationship enables notifying the calling actor even in case of an unforseen crash of the Functor themselves which in turn allows to trigger error handling, e.g. retrying the Functor execution.
 
-Returning to the web application example, we can define simple functionality concerning instances of both \gls{dactor} types defined in section~\ref{subsec:domain_actor_design}.
+Returning to the web application example, we can define simple functionality concerning instances of both \gls{dactor} types defined in Section~\ref{subsec:domain_actor_design}.
 Adding a new character role to a film, played by a specific actor involves changes to \code{Film} and \code{Actor} instances.
 We describe the implementation of this functionality using all three of the introduced communication patterns.
 

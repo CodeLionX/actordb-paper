@@ -3,26 +3,6 @@
 % !TeX spellcheck = en_US
 
 \documentclass[crop,tikz]{standalone}
-\usetikzlibrary{
-  positioning
-}
-\usepackage[simplified,school]{pgf-umlcd}
-
-\renewcommand{\umldrawcolor}{black}
-\renewcommand{\umlfillcolor}{white}
-\tikzstyle{package}=[font=\bf]
-\newenvironment{dactor}[1]{
-  \def\umlcdDactorName{#1}
-  \def\umlcdPackageFit{}
-}{
-  \begin{pgfonlayer}{background}
-    \node[umlcd style, draw, inner sep=0.5cm, fit=\umlcdPackageFit] (\umlcdDactorName) {};
-    \node[umlcd style, draw, outer ysep=-0.5, anchor=south west] (\umlcdDactorName caption) at
-    (\umlcdDactorName.north west) {\bf\umlcdDactorName : Dactor};
-  \end{pgfonlayer}
-}
-
-
 
 \begin{document}
 \begin{tikzpicture}[auto,node distance=2cm]
@@ -35,22 +15,22 @@
     \end{object}
     \begin{object}[text width=5.5cm]{Cast}{0,-2.5}
       \instanceOf{Relation}
-      \attribute{actor\_id : DactorId}
+      \attribute{\textit{actor\_id : DactorId}}
       \attribute{actor\_name : String}
       \attribute{role\_name : String}
     \end{object}
   \end{dactor}
 
   \begin{dactor}{Actor}[right = of Film]
-    \begin{object}[text width=5.5cm]{ActorInfo}{10,0}
+    \begin{object}[text width=5.5cm]{ActorInfo}{9,0}
       \instanceOf{SingleRowRelation}
       \attribute{first\_name : String}
       \attribute{last\_name : String}
       \attribute{dob : ZonedDateTime}
     \end{object}
-    \begin{object}[text width=5.5cm]{Filmography}{10,-2.5}
+    \begin{object}[text width=5.5cm]{Filmography}{9,-2.5}
       \instanceOf{Relation}
-      \attribute{film\_id : DactorId}
+      \attribute{\textit{film\_id : DactorId}}
       \attribute{role\_name : String}
       \attribute{release\_date : ZonedDateTime}
     \end{object}
