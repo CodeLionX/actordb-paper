@@ -64,25 +64,28 @@
   After the data was completely loaded into memory, we triggered a garbage collection run and created a heap dump.
   VisualVM is able to compute the retained sizes of object hierarchies in those dumps.
   This allowed us to investigate the memory usage of selected objects and their members in detail.
-  We report and discuss the results of those experiments in the next section.
+  We report the results of those experiments in the next section and discuss them in \cref{sec:exp:discussion}.
 
 \subsection{Results}
+
 
   \begin{figure}
     \centering
     \begin{tikzpicture}
       \begin{axis}[
+      scale only axis,
           xlabel=dataset size in MB,
           ylabel=heap size in MB,
-          legend pos=north west
+          legend pos=north west,
+          legend cell align={left},
       ]
-        \addplot[mark=*, color=blue] coordinates {
+        \addplot coordinates {
           (10,10.8) (25,17.8) (50,47.0) (100,93.9)
         };
-        \addplot[mark=*, color=green] coordinates {
+        \addplot coordinates {
           (10,28.1) (25,43.0) (50,116.3) (100,232.6)
         };
-        \addplot[mark=*, color=red] coordinates {
+        \addplot+[mark=triangle*] coordinates {
           (10,28.5) (25,44.3) (50,118.5) (100,237.6)
         };
         \legend{\textit{Single string}, \textit{Relations}, \textit{Framework}}
@@ -102,6 +105,7 @@
       $D_2$ & 2~578 & 44~034~KB & 45~392~KB & 539~B \\
       $D_3$ & 4~373 & 119~084~KB & 121~355~KB & 532~B \\
       $D_4$ & 8~618 & 238~169~KB & 242~728~KB & 534~B \\
+      % Average overhead = 533B
       \bottomrule
     \end{tabular}
     \caption{Memory overhead of \glspl{dactor}}
@@ -112,7 +116,7 @@
     \text{Overhead / \gls{dactor}} = \frac{\text{Size \textit{Framework}} - \text{Size \textit{Relations}}}{\text{\# \glspl{dactor}}}
   \end{equation}
 
-\subsection{Discussion}
+\subsection{Discussion}\label{sec:exp:discussion}
 
   - experiments at lower end (few KB / dactor) (worst case scenario)
   - 2 gedankenexperimente (1Mb / dactor and 10MB / dactor)
