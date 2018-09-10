@@ -99,9 +99,3 @@
   The open-source project \textit{Actorbase} by \citeauthor{actorbase} constitutes a key-value store implementation utilizing Akka actors for horizontal scaling and partitioning~\cite{actorbase}.
   In this research database system, partitions are managed by storekeeper actors while inter-partition lookup and indexing is managed by so-called storefinder actors.
   This approach is limited to a key-value store function set and does not provide functionality corresponding to the relational features discussed earlier.
-  
-  % I think this will most certainly become concept
-  We base our work on the concept of actor database systems as introduced by~\citeauthor{manifesto}~\cite{manifesto}.
-  Similar as in~\cite{Shah:reactdb}, actors in our approach consist of state abstracted as relations and asynchronous function processing logic.
-  The application developer defines actors and the asynchronous functions.
-  Different to previous approaches, we use Scala as programming language and Akka as the reference actor model to implement an framework for actor database systems, which is explained in section~\ref{sec:framework}.
