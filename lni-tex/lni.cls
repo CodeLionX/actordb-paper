@@ -5,16 +5,16 @@
 %% The original source files were:
 %%
 %% lni.dtx  (with options: `class')
-%% -------:| -----------------------------------------------------------------
+%% --------| -----------------------------------------------------------------
 %%     lni:| A class for submissions to the ``Lecture Notes in Informatics''
 %%  Author:| Martin Sievers
 %%   Email:| martin.sievers@schoenerpublizieren.de
 %% License:| Released under the LaTeX Project Public License v1.3c or later
 %%     See:| http://www.latex-project.org/lppl.txt
-%% 
+%% --------| -----------------------------------------------------------------
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{lni-tex/lni}
-    [2017/07/26 v1.4BETA Official class for submissions to the ``Lecture Notes
+    [2018/01/15 v1.5BETA Official class for submissions to the ``Lecture Notes
     in Informatics'']
 \def\@clearglobaloption#1{%
   \def\@tempa{#1}%
@@ -126,14 +126,16 @@
 \fi%
 \ifoldfonts
    \RequirePackage{mathptmx}
-\else% nofonts activated
-   \ClassWarning{lni}{Option `nofonts' set! I will use standard fonts
-   \MessageBreak
-   instead of the New TX fonts. Your document will NOT look like the
-   \MessageBreak
-   final result for publication. This should only be used if you have
-   \MessageBreak
-   no possibility to install fonts or upgrade your TeX installation!}%
+\else%
+   \ifnofonts % nofonts activated
+      \ClassWarning{lni}{Option `nofonts' set! I will use standard fonts
+      \MessageBreak
+      instead of the New TX fonts. Your document will NOT look like the
+      \MessageBreak
+      final result for publication. This should only be used if you have
+      \MessageBreak
+      no possibility to install fonts or upgrade your TeX installation!}%
+   \fi%
 \fi%
 \ifPDFTeX
    \RequirePackage[%
@@ -216,6 +218,7 @@
    \setlength{\doihoffset}{4.2cm}
    \setlength{\doivoffset}{4.3cm}
 \fi%
+\let\oldsmall\small%
 \renewcommand\small{%
    \@setfontsize\small\@ixpt{10}%
    \abovedisplayskip 8.5\p@ \@plus3\p@ \@minus4\p@
@@ -227,7 +230,7 @@
                \itemsep \parsep}%
    \belowdisplayskip \abovedisplayskip
 }
-\renewcommand\Large{\@setfontsize\Large\@xivpt{17}}
+\renewcommand\Large{\@setfontsize\Large{14}{17}}
 \RequirePackage[autostyle]{csquotes}
 \ifusebiblatex
   \RequirePackage[%
@@ -253,6 +256,12 @@
 \RequirePackage{grffile}
 \RequirePackage{fancyhdr}
 \RequirePackage{listings}
+\lstset{%
+   basicstyle=\ttfamily,%
+   columns=fixed,%
+   basewidth=.5em,%
+   xleftmargin=0.5cm,%
+   captionpos=b}%
 \def\thisbottomragged{\def\@textbottom{\vskip\z@ plus.0001fil
 \global\let\@textbottom\relax}}
 \renewcommand\@pnumwidth{3em}
@@ -283,7 +292,7 @@
 \def\@@author[#1]#2{\gdef\@shortauthor{{\let\footnote\@gobble%
    \def\and{\unskip,\ }#1}}\gdef\@author{#2}}
 \newcommand{\authorrunning}[1]{%
-   \fancyhead[LE]{\hspace{0.05cm}\small\thepage\hspace{5pt}#1}}
+   \fancyhead[LE]{\hspace{0.05cm}\oldsmall\thepage\hspace{5pt}#1}}
 \newcommand*{\email}[1]{{\urlstyle{same}\protect\url{#1}}}
 \newcommand{\@lnidoi}{}
 \newcommand{\lnidoi}[1]{\gdef\@lnidoi{#1}}
@@ -347,9 +356,9 @@
   \AddToShipoutPictureBG*{\AtPageLowerLeft{%
     \put(\LenToUnit{\the\doihoffset},\LenToUnit{\the\doivoffset}){%
       \ifusehyperref
-        \href{https://creativecommons.org/licenses/by-nc/3.0/}{\ccbynceu}
+        \href{https://creativecommons.org/licenses/by-sa/4.0/}{\ccbysa}
       \else
-        \ccbynceu
+        \ccbysa
       \fi
       \ifdefempty{\@lnidoi}{}{
         \footnotesize
@@ -383,8 +392,10 @@
   {-16\p@ \@plus -4\p@ \@minus -4\p@}{8\p@ \@plus 4\p@ \@minus
   4\p@}{\normalsize\bfseries}}
 \RequirePackage{caption}
-\captionsetup[figure]{style=base,skip=4pt,font=small}
-\captionsetup[table]{style=base,skip=6pt,font=small}
+\DeclareCaptionFont{oldsmall}{\oldsmall}
+\captionsetup[figure]{style=base,skip=4pt,font=oldsmall}
+\captionsetup[table]{style=base,skip=6pt,font=oldsmall}
+\captionsetup[lstlisting]{style=base,skip=6pt,font=small}
 \setlength{\intextsep}{6pt}%Abstand nach der Grafik
 \def\fps@figure{htbp}
 \def\fnum@figure{\figurename~\thefigure}
@@ -493,10 +504,9 @@
 \g@addto@macro{\UrlBreaks}{\UrlOrds}
 \RequirePackage{xspace}
 \ifusehyperref
-   \RequirePackage[pdfusetitle]{hyperref}
+   \RequirePackage[pdfusetitle,bookmarks=false]{hyperref}
    \hypersetup{%
       pdfdisplaydoctitle,
-      bookmarks=false,%
       colorlinks=true,%
       allcolors=black,%
       %%%pdfpagelayout=TwoPageRight,%
@@ -574,7 +584,7 @@
 \vfuzz \hfuzz
 \raggedbottom
 %% 
-%% Copyright (C) 2016-2017 by Gesellschaft für Informatik e.V. (GI)
+%% Copyright (C) 2016-2018 by Gesellschaft für Informatik e.V. (GI)
 %% 
 %% This work may be distributed and/or modified under the
 %% conditions of the LaTeX Project Public License (LPPL), either
@@ -593,6 +603,8 @@
 %%           and the derived files lni.pdf
 %%                                 lni.cls
 %%                                 lni-author-template.tex
+%%                                 lni-paper-example-de.bib
+%%                                 lni-paper-example-de.tex
 %%                                 lni.bst
 %%                                 lnig.bst
 %%

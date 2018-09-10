@@ -1,0 +1,71 @@
+% !TeX root = ../../paper.tex
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_US
+
+\documentclass[crop,tikz]{standalone}
+\usetikzlibrary{
+  arrows,
+  calc
+}
+\usepackage{pgf-umlsd}
+
+\begin{document}
+
+\newcommand{\drawbarlength}[2]{% from_coord, length
+  \draw[fill=black!20] ($(#1)+(-0.1,0.05)$) rectangle ($(#1)+(0.1,-0.05)+(0,-#2)$);
+} 
+\newcommand{\drawbar}[2]{% from_coord, to_coord
+  \draw[fill=black!20] ($(#1)+(-0.1,0.05)$) rectangle ($(#2)+(0.1,-0.05)$);
+}
+
+% HoloClean Architecture
+\begin{sequencediagram}
+  
+  % entities
+  \newinst{service}{Dactor A}{}
+  \newinst[1]{f}{ConFunctor}{}
+  \newinst{b}{Dactor B}{}
+  \newinst{c}{Dactor C}{}
+  
+  % messages
+  
+  \mess[1]{service}{<<create>>}{f}
+  \coordinate (s0) at (mess from);
+  \coordinate (f0) at (mess to);
+  
+    % requests
+    \mess[1]{f}{}{b}
+    \coordinate (f1) at (mess from);
+    \coordinate (b0) at (mess to);
+    
+    \prelevel\prelevel
+    \mess[1]{f}{Requests}{c}
+    \coordinate (c0) at (mess to);
+    
+    % responses
+    \mess[1]{c}{}{f}
+    \coordinate (c1) at (mess from);
+    \coordinate (f2) at (mess to);
+    \node[anchor=south] (res) at ($(mess to.north)+(0.9,0.1)$) {Response};
+    
+    \mess[1]{b}{Response}{f}
+    \coordinate (b1) at (mess from);
+    \coordinate (f3) at (mess to);
+    
+  
+  \mess[1]{f}{result}{service}
+  \coordinate (f4) at (mess from);
+  \coordinate (s1) at (mess to);
+  
+  % bars
+  \draw[fill=black!20] ($(s0)+(-0.1,-0.05)$) rectangle ($(s0)+(0.1,0.55)$);
+  \drawbar{f0}{f1};
+  \drawbar{b0}{b1}
+  \drawbar{c0}{c1}
+  \drawbarlength{f2}{0.4}
+  \drawbar{f4}{f3}
+  \drawbarlength{s1}{0.25}
+  
+\end{sequencediagram}
+
+\end{document}

@@ -5,7 +5,15 @@
 %% The original source files were:
 %%
 %% lni.dtx  (with options: `bibtex,eng')
+%% lnig.bst
+%% Lecture Notes in Informatics Style File (english)
+%% Version 1.0 (2017/04/07)
 %% 
+%% The Style File is based on alpha.bst
+%% 
+%% This work may be freely used,
+%% distributed and modified.
+%% Modified files should be clearly indicated as such and renamed.
 ENTRY
   { address
     author
@@ -1277,7 +1285,7 @@ FUNCTION {end.bib}
 
 EXECUTE {end.bib}
 %% 
-%% Copyright (C) 2016-2017 by Gesellschaft für Informatik e.V. (GI)
+%% Copyright (C) 2016-2018 by Gesellschaft für Informatik e.V. (GI)
 %% 
 %% This work may be distributed and/or modified under the
 %% conditions of the LaTeX Project Public License (LPPL), either
@@ -1296,6 +1304,8 @@ EXECUTE {end.bib}
 %%           and the derived files lni.pdf
 %%                                 lni.cls
 %%                                 lni-author-template.tex
+%%                                 lni-paper-example-de.bib
+%%                                 lni-paper-example-de.tex
 %%                                 lni.bst
 %%                                 lnig.bst
 %%
