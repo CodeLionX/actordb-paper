@@ -42,3 +42,15 @@ datatool
 substr
 fp
 tracklang
+pgf
+pgf-umlsd
+standalone
+currfile
+filehook
+filemod
+gincltex
+glossaries-english
+glossaries-german
+adjustbox
+svn-prov
+collectbox

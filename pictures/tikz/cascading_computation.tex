@@ -1,0 +1,44 @@
+% !TeX root = ../../paper.tex
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_US
+
+\documentclass[crop,tikz]{standalone}
+\usetikzlibrary{
+  arrows,
+  calc
+}
+\usepackage{pgf-umlsd}
+
+\begin{document}
+  
+\newcommand{\drawbar}[2]{% from_coord, to_coord
+  \draw[fill=black!20] ($(#1)+(-0.1,0.05)$) rectangle ($(#2)+(0.1,-0.05)$);
+}
+
+% HoloClean Architecture
+\begin{sequencediagram}
+  
+  % entities
+  \newthread{service}{Dactor A}{}
+  \newinst{b}{Dactor B}{}
+  \newinst{c}{Dactor C}{}
+  
+  % messages
+  \mess[1]{service}{Requests}{b}
+  \coordinate (b0) at (mess to);
+  
+    \mess[1]{b}{Request}{c}
+    \coordinate (c0) at (mess to);
+    \mess[1]{c}{Response}{b}
+    \coordinate (c1) at (mess from);
+
+  \mess[1]{b}{Response}{service}
+  \coordinate (b1) at (mess from);
+  
+  % bars
+  \drawbar{b0}{b1}
+  \drawbar{c0}{c1}
+  
+\end{sequencediagram}
+
+\end{document}
