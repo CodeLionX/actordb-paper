@@ -10,11 +10,13 @@ echo "Checking file existance for ${pdfName}"
 [ -f "${pdfName}" ] && rm "${pdfName}" && echo "removed already existing PDF"
 
 # test if pdf still exists
-[ -f "${pdfName}" ] && echo "PDF is still there! Exiting test!" && exit 1
+[ -f "${pdfName}" ] && echo "PDF is still there! Failing build!" && exit 1
 
 
 # build pdf
+echo ""
 echo "Building PDF using pdflatex and biber on ${mainFile}.tex"
+pdflatex -synctex=1 -interaction=nonstopmode -shell-escape "${mainFile}.tex"
 pdflatex -synctex=1 -interaction=nonstopmode -shell-escape "${mainFile}.tex"
 biber "${mainFile}"
 pdflatex -synctex=1 -interaction=nonstopmode -shell-escape "${mainFile}.tex"

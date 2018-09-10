@@ -3,13 +3,104 @@
 % !TeX spellcheck = en_US
 
 \section{Domain Actor Database Concept}\label{sec:concept}
+  Our concept is based on the idea of actor database systems as introduced by~\citeauthor{manifesto}~\cite{manifesto}.
+  The combination of application and data tier provides considerable advantages for data-centric systems.
+  This architecture allows leveraging domain and application knowledge to dynamically model the data layout, especially concerning data partitioning and replication schemes.
+  This makes the database system modular, cloud-ready and scalable.
+  % add here: why is it better to use domain knowledge to partition and distribute data?
 
   \subsection{Domain Actors}\label{sec:dactors}
-    % intro to actors
-    % models domain object
+    Similar to \citeauthor{Shah:reactdb}~\cite{Shah:reactdb}, we introduce a special type of actor, called Domain Actor (\gls{dactor} for short), that acts as an application-defined scaling unit.
+    \Glspl{dactor} can be used to model application-domain objects and encapsulate the object's state and application logic in an actor.
+    Using actors for this enforces technical encapsulation of state access due to the purely private state in actors and the need of explicit asynchronous messaging between the actors.
+    This makes it easier to reason about state changes, bugs and other failures, as only code within the \gls{dactor} can change the corresponding state.
 
-  \subsection{Actor Database Systems}\label{sec:actor_database_systems}
-    % how actors solve the impedance mismatch
-    % "passt auf, dass hier eure Idee im Vordergrund steht und ihr nicht auf andere Gebiete ausschweift"
-    % Computation parallelization on a domain-level object basis
-    % Modularity, Testability
+    As \glspl{dactor} not only contain data, but also the corresponding domain logic, computation is executed concurrently.
+    This supports designing a modular and extensible database system and improves scalability.
+    Actors provide single-threaded semantics, which makes enforcing constraints on data tied to one domain object stored inside \glspl{dactor} no issue.
+    It is implemented via application logic within the \gls{dactor}.
+    State querying and modification within \glspl{dactor} is possible in a declarative way, but communication across all kind of actors is explicitly defined via asynchronous messages and how the \glspl{dactor} handle the said messages.
+
+  \subsection{Communication between Domain Actors}
+    Not all computation can be done with the information residing in a single \gls{dactor}.
+    Communication between \glspl{dactor} is required.
+    As already mentioned, inter-\gls{dactor} communication is realized via explicit asynchronous message passing.
+    This allows application developers to chose the right messaging pattern for their use case.
+    The choice is heavily influenced by the data layout used for the \glspl{dactor} and sets the level of parallelization and the network-load for the computation.
+
+    We consider three main messaging patterns for inter-\gls{dactor} communication, which are shown in figure~\ref{fig:comp_patterns}: Cascading Computation, Sequential Computation, Concurrent Computation.
+    They are messaging primitives and can be combined to create more complex message flows and computation models.
+    All three patterns assume a request-response messaging schema and take a high-level message to a \gls{dactor}, lets call it \gls{dactor} A, as starting point.
+
+    \begin{enumerate}
+      \item\label{enum:comp_pattern_1} \textbf{Cascading Computation}
+        A high-level message to \gls{dactor} A, will trigger successive messages to other \glspl{dactor}, which are hidden from the original requester.
+        Depending on the computation performed in \gls{dactor} A, it can send requests to another \gls{dactor} (e.\,g. \gls{dactor} B) and handle the result itself before returning the response to the caller.
+        \Gls{dactor} B can itself send messages to other \glspl{dactor} as well.
+        
+        As one can see in figure~\ref{fig:comp_pattern_1}, this pattern is comparable to function calls in \gls{oop}.
+        But contrary to simple function calls, messages in this pattern are sent asynchronously.
+        This means that the requesting \gls{dactor} has to manage the state of pending responses, such as actor references and intermediate results, or failure cases.
+        This clutters the domain logic in the \gls{dactor} and leads to complex and error-prone code.
+        In addition, each message introduces network latency and can therefore increase the overall computation time compared to a single \gls{dactor} computing the response.
+        If used sparsely, this pattern supports separation of concerns and the tell-don't-ask paradigm.
+
+      \item\label{enum:comp_pattern_2} \textbf{Sequential Computation}
+        Figure~\ref{fig:comp_pattern_2} shows the sequential computation pattern.
+        It is used for computations that consist of consecutive steps, where each step depends on the previous step's result, such as filter chains.
+
+        For this and the next messaging pattern we introduce the concept of actor-level \glspl{functor}.
+        \Glspl{functor} encapsulate the processing of a high-level request in a new short-living actor.
+        They are able to communicate with other \glspl{dactor}, track the state of pending requests and handle failure cases.
+        Every actor can create a new \gls{functor} to encapsulate multiple depending requests to \glspl{dactor}.
+        The \gls{functor} handles the message processing and sends the final result or a failure message back to its parent actor before stopping itself.
+        This reduces the code complexity in \glspl{dactor} for handling such messages.
+        This message processing abstraction is also called cameo pattern\footnote{\url{http://blog.simplex.software/the-cameo-pattern}}.
+
+        Using a \gls{functor} to process the consecutive steps of the computational chain relieves \gls{dactor} A from dealing with intermediate state, because it is managed by the \gls{functor}.
+        Each \gls{functor} only has to deal with one request-response pair at a time, which leads to a simple state and processing logic for the \gls{functor} itself.
+
+      \item\label{enum:comp_pattern_3} \textbf{Concurrent Computation}
+        This messaging pattern also makes use of \glspl{functor} to encapsulate the processing of multiple request-response pairs.
+        The concurrent \gls{functor} sends messages to several \glspl{dactor} in parallel and collect the results when they are finished.
+        It allows for highly parallelized computation as all involved \glspl{dactor} are messaged at the same time and calculate their responses concurrently.
+        The \gls{functor} collects each individual response and returns the aggregated result to it's creator.
+    \end{enumerate}
+
+    \begin{figure}
+      \centering
+
+      \begin{subfigure}[c]{0.49\textwidth}
+        \includestandalone[width=\textwidth]{pictures/tikz/cascading_computation}
+        \subcaption{Cascading Computation}
+        \label{fig:comp_pattern_1}
+        \hfill\\
+        \includestandalone[width=\textwidth]{pictures/tikz/concurrent_computation}
+        \subcaption{Concurrent Computation}
+        \label{fig:comp_pattern_3}
+      \end{subfigure}
+      \begin{subfigure}[c]{0.5\textwidth}
+        \includestandalone[width=\textwidth]{pictures/tikz/sequential_computation}
+        \subcaption{Sequential Computation}
+        \label{fig:comp_pattern_2}
+      \end{subfigure}
+      \caption{Inter-\gls{dactor}-communication patterns. Dotted lines show actor lifetime and gray bars indicate that an actor performs computation or holds state that is related to the showed message flow.}
+      \label{fig:comp_patterns}
+    \end{figure}
+
+
+  \subsection{Domain Actor Database System}\label{sec:domain_actor_database}
+    A domain actor database system is the combination of \glspl{dactor} and other types of actors, which together offer an interface to other applications or clients.
+    The domain actor database system is a distributed runtime for persisting data and performing computations on it.
+    Each \gls{dactor} must incarnate a specific \gls{dactor} type.
+    This type is defined by application developers and determines the data schema encapsulated by the \gls{dactor} and the messages it can handle (its behavior).
+    \Glspl{dactor} are the only place in the system that actually have persistent state.
+    Other actors are stateless or have non-durable state, such as intermediate results or actor references.
+    These actors can interact with the \glspl{dactor} via the defined messages and represent application services or components of the infrastructure layer.
+    
+    To develop such a system, we can decompose our application domain into encapsulated entity types.
+    Those types can be modeled as \glspl{dactor} and consist of a data schema and behavior.
+    During this process we have to keep our requirements regarding query patterns and scaling in mind.
+    Those requirements will influence the domain decomposition and the messaging patterns used.
+    The entry points to our application are stateless actors on top of the \glspl{dactor}, which provide high throughput and can be scaled out easily.
+    They act as routers for incoming requests and orchestrate computations.
