@@ -121,10 +121,25 @@ Besides this, \glspl{functor} are the framework's system, which enable inter-\gl
 While the basic functionality of the two \gls{functor} types for sequential and concurrent computation is discussed in Section~\ref{sec:concept}, this section focuses on the definition of a concrete function integrating data from multiple \glspl{dactor}.
 We also discuss the implications of using the respective messaging patterns corresponding to these types of \glspl{functor} on computational scalability.
 
+Functors are actors with a limited lifetime.
+They are instantiated once a defined Functor is called by a Dactor or other actor and deleted once they return the final response or encounter a failure.
+Functors are always called from an Akka actor as a child actor.
+This Akka-specific hierarchical relationship enables notifying the calling actor even in case of an unforseen crash of the Functor themselves which in turn allows to trigger error handling, e.g. retrying the Functor execution.
+
 Returning to the web application example, we can define simple functionality concerning instances of both \gls{dactor} types defined in section~\ref{subsec:domain_actor_design}.
 Adding a new character role to a film, played by a specific actor involves changes to \code{Film} and \code{Actor} instances.
 We describe the implementation of this functionality using all three of the introduced communication patterns.
 
-% Usage example: \glspl{functor}
+To provide a top-level function call that takes only an Actor instance's id, a Film instance's id, as well a rolename and adds the corresponding Actor information to the identified Film instance's cast list and vice versa, this example utilizes a concurrent Functor wrapping two sequential Functors.
+Both sequential Functors are comprised of two subsequent steps:
+The first one queries information from the Film Dactor instance which is needed to add the film to the Actor Dactor's filmography relation, i.e. the films title.
+Then it sends a message to the Actor Dactor containing said data to trigger the insertion of the film.
+The second sequential Functor queries the Actor instance's data which is necessary to add them to the Film's cast relation, i.e. their name. Using this data and their rolename the Functor then sends another message to the Film Dactor to trigger an insert into it's cast relation.
+Both sequential Functors are executed in parallel using a concurrent Functor which only sends a success-response message to it's caller after both sequential Functor's have sent their responses to the concurrent Functor.
+Using the parent-child relationship between calling actors and Functors enables a framework-level supervision of ongoing Functors.
+Figure \ref{fig:functor_example} displays the message-flow between the involved Dactors and Functors, as well as their supervision relations.
 
-\subsection{Discussion}\label{subsec:discussion}
+% TODO figure
+
+% Discussion
+
