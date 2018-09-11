@@ -54,3 +54,4 @@ glossaries-german
 adjustbox
 svn-prov
 collectbox
+pgfplots
