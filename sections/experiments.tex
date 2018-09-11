@@ -2,7 +2,7 @@
 % !TeX encoding = UTF-8
 % !TeX spellcheck = en_US
 
-\section{Actor Memory Overhead Experiments}\label{sec:experiments}
+\section[Dactor Memory Overhead Experiments]{\Gls{dactor} Memory Overhead Experiments}\label{sec:experiments}
 
   Our concept is based on the usage of hundreds of thousands of \glspl{dactor}, which all store only a small amount of data.
   This raises the question of how much memory overhead is introduced for storing data split across a multitude of actors.
@@ -67,7 +67,7 @@
   This allowed us to investigate the memory usage of selected objects and their members in detail.
   We report the results of those experiments in the next section and discuss them in \cref{sec:exp:discussion}.
 
-\subsection{Results}
+\subsection[Dactor Memory Overhead]{\Gls{dactor} Memory Overhead}
 
   \Cref{fig:exp:general} shows an overview about the measured heap size of the different tests over the four datasets.
   If the data is loaded into memory as a single big \code{String} object, it takes up around the same amount of heap as the dataset is big.

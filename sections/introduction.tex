@@ -51,7 +51,7 @@
   The use of \gls{orm} tools, such as Hibernate for Java or Active Record for Ruby on Rails, is one approach to provide a middle tier for mapping between the data formats of the application and data tier.
   % However, shortcoming of this approach
 
-  \Citeauthor{manifesto} call for a new paradigm for designing a scalable data storage solution using the Actor model \cite{manifesto}.
+  \Citet{manifesto} call for a new paradigm for designing a scalable data storage solution using the Actor model.
   The core primitive in this model are actors, which are objects comprised of state and behaviour that execute computational tasks concurrently.
   Individual actors communicate with each other exclusively via asynchronous message passing.
   Incoming messages are stored in a mailbox allowing for the separate and independent processing of each message.
@@ -68,11 +68,11 @@
   Since these actors are not part of a dedicated database runtime, but are defined and instantiated using the application framework, this approach dissipates the strict line between data and application tier.
   It allows for utilizing and interacting with data objects in the same representation throughout business logic and data storage.
 
-  To our knowledge, we present the first partial implementation of this concept using the Akka framework.
+  To our knowledge, we present the first implementation of this concept using the Akka framework.
   Comparable, existing work has been presented using the virtual actor concept provided by the Orleans framework for Microsoft .NET.
   Therefore, we discuss the differences of the two concepts, such as the need for explicit actor creation, and manual actor lifecycle management in \cref{sec:related_work}.
   In this section, we also give an outline of the history of Actor model implementations as well as the characteristics of \textit{Actor Database Systems} as proposed by \citeauthor{manifesto}.
-  In \cref{sec:concept} we outline our approach conceptually in more detail,
+  In \cref{sec:concept}, we outline our approach conceptually in more detail,
   before explicitly describing the implementation of our proof-of-concept framework, as well as some examples for usage patterns in \cref{sec:framework}.
   We present setup and evaluation of experiments on the memory overhead introduced by the use of actors for data storage using our framework in \cref{sec:experiments},
   and offer a concluding statement about this and future work in \cref{sec:conclusion}.
