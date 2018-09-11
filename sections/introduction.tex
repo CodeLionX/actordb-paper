@@ -68,9 +68,15 @@
   Since these actors are not part of a dedicated database runtime, but are defined and instantiated using the application framework, this approach dissipates the strict line between data and application tier.
   It allows for utilizing and interacting with data objects in the same representation throughout business logic and data storage.
 
+  With this framework we make the following contributions:
+  We introduce domain actors (\glspl{dactor}) to model data-centric applications' data and act as an application-defined scaling unit.
+  \Glspl{dactor} encapsulate application data and logic, therefore bridging the aforementioned impedance mismatch between data and the application logic tier.
+  We implement a SQL-like data interface for defining internal \gls{dactor} logic, and provide Functors to allow users to define application logic relying on data contained within multiple \glspl{dactor}.
+  We also present experimental results on the memory overhead introduced by using Akka actors for data management in this manner to demonstrate the feasibility of this approach.
+
   To our knowledge, we present the first implementation of this concept using the Akka framework.
   Comparable, existing work has been presented using the virtual actor concept provided by the Orleans framework for Microsoft .NET.
-  Therefore, we discuss the differences of the two concepts, such as the need for explicit actor creation, and manual actor lifecycle management in \cref{sec:related_work}.
+  Therefore, we discuss differences between the classical notion of actors and the virtual actor concept in \cref{sec:related_work}.
   In this section, we also give an outline of the history of Actor model implementations as well as the characteristics of \textit{Actor Database Systems} as proposed by \citeauthor{manifesto}.
   In \cref{sec:concept}, we outline our approach conceptually in more detail,
   before explicitly describing the implementation of our proof-of-concept framework, as well as some examples for usage patterns in \cref{sec:framework}.

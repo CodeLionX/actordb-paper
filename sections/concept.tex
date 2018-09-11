@@ -10,7 +10,7 @@
   % add here: why is it better to use domain knowledge to partition and distribute data?
 
   \subsection{Domain Actors}\label{sec:dactors}
-    Similar to \citet{Shah:reactdb}, we introduce a special type of actor, called Domain Actor (\gls{dactor} for short), that acts as an application-defined scaling unit.
+    Similar to \citet{Shah:reactdb}, we introduce a special type of actor, called \gls{dactor}, that acts as an application-defined scaling unit.
     \Glspl{dactor} can be used to model application-domain objects and encapsulate the object's state and application logic in an actor.
     Using actors for this enforces technical encapsulation of state access due to the purely private state in actors and the need of explicit asynchronous messaging between the actors.
     This makes it easier to reason about state changes, bugs and other failures, as only code within the \gls{dactor} can change the corresponding state.
