@@ -15,11 +15,32 @@
     Using actors for this enforces technical encapsulation of state access due to the purely private state in actors and the need of explicit asynchronous messaging between the actors.
     This makes it easier to reason about state changes, bugs and other failures, as only code within the \gls{dactor} can change the corresponding state.
 
+    % internal data management with relations
+    In-memory data contained within a \gls{dactor} instance is managed in a data structure called \gls{relation}.
+    A \gls{relation}, similarly to a table in the relational database model, is defined as a multiset of tuples following a predefined schema specifying the metadata.
+    Due to the similarities between \glspl{relation} and tables known from the relational database model, we want to discuss the conceptual differences between the two.
+    While \glspl{relation} can be used to model much of the same information as is commonly represented using tables, the \textit{Actor Database System} and specifically the concept and framework we present relies on \glspl{dactor} as models for application domain objects.
+
+    We consider the following example of a web application with information on films and (human) actors similar to the imdb.com or rottentomatoes.com websites.
+    A traditional data layout might be comprised of two tables containing information on films and actors, respectively.
+    In contrast to the relational model, our model, shown in \cref{fig:dactor_diagram}, is denormalized and distributed across two different \gls{dactor} types.
+    Using \glspl{dactor} to represent discrete domain-level objects, a single \gls{dactor} instance of the type film represents a single, specific film and encapsulates all corresponding data.
+    This approach to layout an application's data results in much smaller \gls{relation} sizes than typical table sizes and enables many business-logic-driven approaches to scaling, data partitioning, and caching.
+    The tradeoff to take into account, however, is a large number of \gls{dactor} instances encapsulating the application's data and a denormalized schema.
+
+    \begin{figure}
+      \centering
+      \includestandalone[width=\textwidth]{pictures/tikz/dactor_diagram}
+      \caption{Class diagram of the \texttt{Film} and \texttt{Actor} Dactor types defined in the example application. Both Dactor types contain two \glspl{relation}. Dactor id attributes in the relations are italised and realise a many-to-many relationship between the two Dactor types.}
+      \label{fig:dactor_diagram}
+    \end{figure}
+
+    % logic and processing capabilities
     As \glspl{dactor} not only contain data, but also the corresponding domain logic, computation is executed concurrently.
     This supports designing a modular and extensible database system and improves scalability.
     Actors provide single-threaded semantics, which makes enforcing constraints on data tied to one domain object stored inside \glspl{dactor} no issue.
-    It is implemented via application logic within the \gls{dactor}.
-    State querying and modification within \glspl{dactor} is possible in a declarative way, but communication across all kind of actors is explicitly defined via asynchronous messages and how the \glspl{dactor} handle the said messages.
+    \Glspl{relation} provide an SQL-like interface to query and manipulate the contained data, so known and proven syntax and semantics can be used to define \gls{dactor}-behavior.
+    While state querying and modification within \glspl{dactor} is possible in a declarative way, communication across all kind of actors is explicitly defined via asynchronous messages and how the \glspl{dactor} handle the said messages.
 
   \subsection{Communication between Domain Actors}
     Not all computation can be done with the information residing in a single \gls{dactor}.

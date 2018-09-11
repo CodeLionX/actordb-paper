@@ -41,38 +41,16 @@ The direct control of the \glspl{dactor} lifecycles, in principle, enables close
 Frequently accessed \glspl{dactor} can be kept in memory while ones, which haven't been involved in recent computational effort, could be temporarily persisted to disk.
 The virtual actor system implemented in the Orleans framework withdraws such control, making custom, database specific logic for configuring \gls{dactor} availability impossible.
 
-\subsection{Internal Data Management}
-
-In-memory data that is contained within a \gls{dactor} instance is managed in a data structure called \gls{relation}.
-% Relations contain a multiset of records or tuples which follow a pre-defined schema.
-A \gls{relation}, similarly to a table in the relational database model, is defined as a multiset of tuples following a predefined schema.
-This schema is comprised of column definitions whereby every column is defined by a name and a data type.
-%They provide a type-safe, SQL-like interface for querying and manipulating contained data.
-%The features and interface they provide is inspired by SQL to allow for simple data manipulation using known and proven syntax and semantics when defining a \gls{dactor}'s behavior.
-%All manipulation and query functionality on a relation's data provide compile-time type safety based on these column's predefined data types.
-\Glspl{relation} provide an SQL-like interface to query and manipulate the contained data, so known and proven syntax and semantics can be used to define \gls{dactor}-behavior.
-Using the column's predefined data types, all functions support compile-time type-safety.
-Due to the \gls{dactor} system sharing the application's runtime and programming environment, these data or object types are equal to the types handled in any application logic.
-Thus, this approach eliminates the impedance mismatch between application logic and data tier with regard to handled data types and object (de-)serialization.
-
-% This could be Usage / Discussion
-Due to the similarities between \glspl{relation} and tables known from the relational database model, we want to discuss the conceptual differences between the two.
-While \glspl{relation} can be used to model much of the same information as is commonly represented using tables, the \textit{Actor Database System} and specifically the concept and framework we present relies on \glspl{dactor} as models for application domain objects.
-
-We consider the following example of a web application with information on films and (human) actors similar to the imdb.com or rottentomatoes.com websites.
-A traditional data layout might be comprised of two tables containing information on films and actors, respectively.
-Using \glspl{dactor} to represent discrete domain-level objects, a single \gls{dactor} of the type film represents a single, specific film and encapsulates all corresponding data.
-This approach to layout an application's data results in much smaller \gls{relation} sizes than typical table sizes and enables many business-logic-driven approaches to scaling, data partitioning, and caching.
-The tradeoff to take into account, however, is a large number of \gls{dactor} instances encapsulating the application's data.
 
 \subsection{Domain Actor Design}\label{subsec:domain_actor_design}
 
-\begin{figure}[t]
-  \centering
-  \includestandalone[width=\textwidth]{pictures/tikz/dactor_diagram}
-  \caption{Class diagram of the \texttt{Film} and \texttt{Actor} Dactor types defined in the example application. Both Dactor types contain two \glspl{relation}. Dactor id attributes in the relations are italised and realise a many-to-many relationship between the two Dactor types.}
-  \label{fig:dactor_diagram}
-\end{figure}
+% remaining text from internal data management (not used in 4. concept): 
+% your references: section: \cref{sec:dactors} and class diagram: \cref{fig:dactor_diagram}
+This schema is comprised of column definitions whereby every column is defined by a name and a data type.
+Using the column's predefined data types, all functions support compile-time type-safety.
+Due to the \gls{dactor} system sharing the application's runtime and programming environment, these data or object types are equal to the types handled in any application logic.
+Thus, this approach eliminates the impedance mismatch between application logic and data tier with regard to handled data types and object (de-)serialization.
+% end
 
 Developers can model the application's domain objects via extending the framework's abstract \code{Dactor} class.
 Instances of such user-defined \code{Dactor} types are managed by the framework and are available for messaging in a consistent namespace.
