@@ -47,6 +47,7 @@
 }
 % pgfplots
 \usepackage{pgfplots}
+\pgfplotsset{compat=1.16} % set pgfplots compatibility to version 1.16
 %% End: Drawings
 
 %% Begin: Biblatex
@@ -55,19 +56,6 @@
 \usepackage{csquotes}
 % biblatex is included with LNI-class option: `biblatex`, only set bibliography-file:
 \bibliography{paper}
-
-% Enable hyperlinked authors when using \citeauthor
-% Source: http://tex.stackexchange.com/a/75916/9075
-\DeclareCiteCommand{\citeauthor}
-  {\boolfalse{citetracker}%
-   \boolfalse{pagetracker}%
-   \usebibmacro{prenote}}
-  {\ifciteindex
-     {\indexnames{labelname}}
-     {}%
-   \printtext[bibhyperref]{\printnames{labelname}}}
-  {\multicitedelim}
-  {\usebibmacro{postnote}}
 
 % Clear fields we do not need
 \iffalse
