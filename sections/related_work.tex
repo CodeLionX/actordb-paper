@@ -67,10 +67,10 @@
   
   Despite its popularity for application development, the actor programming model and actor programming frameworks lack state management capabilities, specifically for data-centric applications.
   The developer has to decide how to handle state persistence and how to satisfy the failure and consistency requirements of the application, because actor model implementations do no provide atomicity or consistency guarantees for state across actors.
-  \citeauthor{manifesto}~\cite{manifesto} find a need for state management guarantees in actor systems and propose to integrate actor-based programming models in database management systems.
+  \Citet{manifesto} find a need for state management guarantees in actor systems and propose to integrate actor-based programming models in database management systems.
   The authors postulate that \textit{Actor Database Systems} should be designed as a logical distributed runtime with state management guarantees.
   They should allow for and encourage the design of modular, scalable and cloud-ready applications.
-  \citeauthor{manifesto} outline four tenets that identify an \textit{Actor Database System} and specify needed features in their manifesto~\cite{manifesto}:
+  \Citet{manifesto} outline four tenets that identify an \textit{Actor Database System} and specify needed features in their manifesto:
   \begin{description}
     \item[Tenet 1] Modularity and encapsulation by a logical actor construct
     \item[Tenet 2] Asynchronous, nested function shipping
@@ -79,23 +79,23 @@
   \end{description}
 
   Practical work on actor database systems has been done using the Orleans framework.
-  \citeauthor{Shah:reactdb} tightly follow the propositions of the manifesto and present \reactdb{},
-  an in-memory OLTP database system that is programmed via application-defined actors with relational semantics, called reactors~\cite{Shah:reactdb}.
+  \Citet{Shah:reactdb} tightly follow the propositions of the manifesto and present \reactdb{},
+  an in-memory OLTP database system that is programmed via application-defined actors with relational semantics, called reactors.
   A reactor is a logical entity encapsulating state as relations, with
   asynchronous function processing capability, which typically represents a application-level scaling units.
   Within individual reactors classic declarative querying can be used, but across actors explicit asynchronous function calls must be defined.
   \citeauthor{Shah:reactdb} show that transactions across reactors can have serializability guarantees.
-  \citeauthor{Eldeeb:transactions}~\cite{Eldeeb:transactions} introduce a new transaction protocol for distributed actors improving the throughput compared to the two-phase commit protocol.
-  \citeauthor{Bernstein:indexing}~\cite{Bernstein:indexing} explore indexing mechanisms in an actor database system.
+  \Citet{Eldeeb:transactions} introduce a new transaction protocol for distributed actors improving the throughput compared to the two-phase commit protocol.
+  \Citet{Bernstein:indexing} explore indexing mechanisms in an actor database system.
   They propose a new indexing architecture based on the Orleans framework that is fault-tolerant and eventually-consistent.
 
-  \citeauthor{biokoda:actordb} takes a different approach to combine actor programming models and relational database systems.
+  \Citet{biokoda:actordb} takes a different approach to combine actor programming models and relational database systems.
   In their development actorDB, an actor encapsulates a full relational SQL database using the SQLite database engine\footnote{\url{https://www.sqlite.org/about.html}}.
   Actors can be deployed in an distributed cloud environment and communicate asynchronously.
   The database is ACID-conform and enforces consistency across actors with the Raft consensus protocol~\cite{raft}.
   The database can used via the MySQL-protocol.
 
   Most practical research in the field of actor database systems has been presented in conjunction with the Orleans framework and the Erlang programming language.
-  The open-source project \textit{Actorbase} by \citeauthor{actorbase} constitutes a key-value store implementation utilizing Akka actors for horizontal scaling and partitioning~\cite{actorbase}.
+  The open-source project \textit{Actorbase} by \citet{actorbase} constitutes a key-value store implementation utilizing Akka actors for horizontal scaling and partitioning.
   In this research database system, partitions are managed by storekeeper actors while inter-partition lookup and indexing is managed by so-called storefinder actors.
   This approach is limited to a key-value store function set and does not provide functionality corresponding to the relational features discussed earlier.
