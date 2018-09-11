@@ -1,0 +1,41 @@
+% !TeX root = ../../paper.tex
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_US
+
+\documentclass[crop,tikz]{standalone}
+
+\begin{document}
+\begin{tikzpicture}[auto,node distance=2cm]
+  \begin{dactor}{Film}
+    \begin{object}[text width=5.5cm]{FilmInfo}{0,0}
+      \instanceOf{SingleRowRelation}
+      \attribute{title : String}
+      \attribute{description : String}
+      \attribute{release\_date : ZonedDateTime}
+    \end{object}
+    \begin{object}[text width=5.5cm]{Cast}{0,-2.5}
+      \instanceOf{Relation}
+      \attribute{\textit{actor\_id : DactorId}}
+      \attribute{actor\_name : String}
+      \attribute{role\_name : String}
+    \end{object}
+  \end{dactor}
+
+  \begin{dactor}{Actor}[right = of Film]
+    \begin{object}[text width=5.5cm]{ActorInfo}{9,0}
+      \instanceOf{SingleRowRelation}
+      \attribute{first\_name : String}
+      \attribute{last\_name : String}
+      \attribute{dob : ZonedDateTime}
+    \end{object}
+    \begin{object}[text width=5.5cm]{Filmography}{9,-2.5}
+      \instanceOf{Relation}
+      \attribute{\textit{film\_id : DactorId}}
+      \attribute{role\_name : String}
+      \attribute{release\_date : ZonedDateTime}
+    \end{object}
+  \end{dactor}
+
+  \association{Film}{plays\_in}{0..*}{Actor}{0..*}{stars}
+\end{tikzpicture}
+\end{document}

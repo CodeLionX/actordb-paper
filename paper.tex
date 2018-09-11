@@ -29,6 +29,23 @@
   backgrounds
 }
 \usepackage{pgf-umlsd} % UML sequence diagrams
+\usepackage[simplified,school]{pgf-umlcd} % UML class diagrams
+% UML class diagram overrides
+\renewcommand{\umldrawcolor}{black}
+\renewcommand{\umlfillcolor}{white}
+\tikzstyle{package}=[font=\bf]
+% UML class diagram dactor env
+\newenvironment{dactor}[1]{
+  \def\umlcdDactorName{#1}
+  \def\umlcdPackageFit{}
+}{
+  \begin{pgfonlayer}{background}
+    \node[umlcd style, draw, inner sep=0.5cm, fit=\umlcdPackageFit] (\umlcdDactorName) {};
+    \node[umlcd style, draw, outer ysep=-0.5, anchor=south west] (\umlcdDactorName caption) at
+    (\umlcdDactorName.north west) {\bf\umlcdDactorName : Dactor};
+  \end{pgfonlayer}
+}
+% pgfplots
 \usepackage{pgfplots}
 %% End: Drawings
 
@@ -125,6 +142,7 @@
 % define special names here (we do not create a glossary, so no descriptions are required)
 \newglossaryentry{dactor}{name={Dactor},plural={Dactors},description={}}
 \newglossaryentry{functor}{name={Functor},plural={Functors},description={}}
+\newglossaryentry{relation}{name={relation},plural={relations},description={}}
 %% End: Acronyms
 
 
