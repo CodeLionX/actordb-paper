@@ -4,17 +4,18 @@
 
 \section{Conclusion}\label{sec:conclusion}
 
-This work presents the proof-of-concept implementation of an actor database system framework which enables developers to define a data model using \glspl{dactor}, which is an actor storing application data and modeled after an application domain entity.
-The framework provides a shared, distributed runtime for database functionality and application logic, mitigating the \textit{object-relational impedance mismatch} between data tier and business logic tier.
+This work presents the proof-of-concept implementation of an actor database framework, which enables developers to declaratively define a data model using \glspl{dactor}.
+\Glspl{dactor} model application-domain objects and encapsulate the object's sate and application logic in an actor.
+The framework provides a shared, distributed runtime for database functionality and application logic, mitigating the \textit{object-relational impedance mismatch} between data and business logic tier.
 
-We discuss challenges, specific to a database system in a distributed runtime, and how the proposed actor database framework solves these challenges.
-In particular, \glspl{dactor} constitute independent units which allow for flexible partitioning of application data based on application domain logic and concepts.
+We discuss challenges specific to a database system in a distributed runtime and how the proposed actor database framework solves these challenges.
+In particular, \glspl{dactor} constitute independent units, which allow for flexible partitioning of application data based on application domain logic and concepts.
 The use of the Akka framework enables efficient implementation of partition discovery and failure handling in this distributed setup.
-The introduced Functor concept, i.e. temporary actors managing data aggregation or computation based on data from multiple sources, i.e. \gls{dactor} instances, provide a transparent computation model and failure handling capabilities.
+The introduced Functor concept, i.e. temporary actors managing computations that involve data originating from multiple \gls{dactor} instances, provide a transparent computation model and failure handling capabilities.
 
-Finally we present an experimental evaluation of memory overhead introduced by using actors for data management.
-The results show that, due to the constant and low memory footprint of actors, the actor database system approach is feasible and lends itself especially when presented with large amounts of data and highly concurrent data manipulation.
+Finally, we present an experimental evaluation of memory overhead introduced by using actors for data management.
+The results show that, due to the constant and low memory footprint of actors, the actor database system approach is feasible and lends itself especially when presented with large amounts of data and highly concurrent data manipulation workload.
 
 The research implementation of the framework provides a platform for the integration of traditional database functionalities.
-Future work will comprise the implementation of inter-\gls{dactor} consistency guarantees by extending Functors with rollback and, e.g., a \textit{two-phase commit} protocol implementation,
-in addition to further testing of the research implementation's query execution latency and throughput performance.
+Future work will comprise the implementation of inter-\gls{dactor} consistency guarantees by extending Functors with rollback and, e.g., a \textit{two-phase commit} protocol implementation.
+In addition, further testing of this research implementation's query execution latency and throughput performance remains a topic of interest.
