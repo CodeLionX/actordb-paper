@@ -124,14 +124,37 @@ Returning to the web application example, we can define simple functionality con
 Adding a new character role to a film, played by a specific actor involves changes to \code{Film} and \code{Actor} instances.
 We describe the implementation of this functionality using all three of the introduced communication patterns.
 
+\cref{fig:functor_diagram} displays the message-flow between the involved \glspl{dactor} and Functors, as well as their supervision relations.
 To provide a top-level function call that takes only an Actor instance's id, a Film instance's id, as well a rolename and adds the corresponding Actor information to the identified Film instance's cast list and vice versa, this example utilizes a concurrent Functor wrapping two sequential Functors.
 Both sequential Functors are comprised of two subsequent steps:
-The first one queries information from the Film Dactor instance which is needed to add the film to the Actor Dactor's filmography \gls{relation}, i.e. the films title.
+The first sequential Functor queries information from the Film Dactor instance which is needed to add the film to the Actor Dactor's filmography \gls{relation}, i.e. the films title.
 Then it sends a message to the Actor Dactor containing said data to trigger the insertion of the film.
 The second sequential Functor queries the Actor instance's data which is necessary to add them to the Film's cast \gls{relation}, i.e. their name. Using this data and their rolename the Functor then sends another message to the Film Dactor to trigger an insert into it's cast \gls{relation}.
 Both sequential Functors are executed in parallel using a concurrent Functor which only sends a success-response message to it's caller after both sequential Functor's have sent their responses to the concurrent Functor.
-Using the parent-child relationship between calling actors and Functors enables a framework-level supervision of ongoing Functors.
-Figure \ref{fig:functor_diagram} displays the message-flow between the involved Dactors and Functors, as well as their supervision \glspl{relation}.
+
+Using the parent-child relationship between calling actors and Functors enables a framework-level supervision of Functors, which are currently computing or waiting on results from down-stream \glspl{dactor}.
+The supervision concept between parent and child actors in the Akka framework, termed parental supervision, enables passing back the control flow to the parent actor in case that a child actor, in this case a Functor, fails.
+The calling actor can then react to the failure by resume or restart the Functor, stop this computation, or escalate the failure to a up-stream actor.
+The correct course of action depends on the desired application behavior.
 
 % Discussion
+\subsection[Framework Discussion]{Framework Discussion}\label{subsec:framework_discussion}
 
+We presented an actor database framework and showcased some of it's functionality in detail.
+In particular, the described feature sets is aimed to alleviate some of the problems which arise from a distributed database system.
+In this section we discuss three core problems which are specific or pose additional challenges in a distributed setting:
+
+\textbf{Data partitioning} in an actor database system differs fundamentally from common partitioning techniques used in relational databases.
+While large tables are typically partitioned based on a specific column's value or the hash thereof, our framework provides \glspl{dactor} as entities for data encapsulation.
+Due to every \gls{dactor} being independent of other \gls{dactor} instances, only interacting with on another via messaging, \glspl{dactor} can be provisioned accross multiple virtual runtimes or physical machines.
+As such, they provide flexible data partitioning based by application-domain concepts.
+
+From the distributed setting of the database system arises the new problem of partition or \textbf{actor discovery}.
+The framework maintains a unified namespace in which each \gls{dactor} instance is identified by it's type and a unique id.
+In fact, querying a specific \gls{dactor} requires just obtaining the messaging address from the nameservice and sending a message to it.
+% TODO one line of code for this?
+
+Finally, \textbf{failure handling}, especially with regard to computations relying on multiple \glspl{dactor}' data, requires careful monitoring due to \gls{dactor} distribution.
+Building on the Akka frameworks parent-child supervision concept, our framework allows for transparent failure handling configurations.
+Failures can be handled within \glspl{dactor} if appropriate.
+In case of multi-\gls{dactor} queries a fail-fast approach is chosen to allow calling actors or \glspl{dactor} to react to exceptions in a timely manner.
