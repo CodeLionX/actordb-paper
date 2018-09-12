@@ -47,7 +47,7 @@ Developers can model the application's domain objects by defining \gls{dactor} t
 Instances of such user-defined \gls{dactor} types are managed by the framework and are available for messaging in a consistent namespace.
 A \gls{dactor} type definition is comprised of the types internal data layout, i.e. \glspl{relation}, and its functionality to process said data.
 In detail, a \gls{dactor} types internal data model definition consists of \glspl{relation} with unique schemas.
-A \gls{relation}'s schema is comprised of column definitions whereby every column is defined by a name and a data type.
+A \gls{relation}'s schema is comprised of column definitions, whereby every column is defined by a name and a data type.
 Using the column's predefined data types, all functions support compile-time type-safety.
 Due to the \gls{dactor} system sharing the application's runtime and programming environment, these data or object types are equal to the types handled in any application logic.
 Thus, this approach helps eliminate the impedance mismatch between application logic and data tier with regard to handled data types and object (de-)serialization.
@@ -124,17 +124,17 @@ Returning to the web application example, we can define simple functionality con
 Adding a new character role to a film, played by a specific actor involves changes to \code{Film} and \code{Actor} instances.
 We describe the implementation of this functionality using all three of the introduced communication patterns.
 
-\cref{fig:functor_diagram} displays the message-flow between the involved \glspl{dactor} and Functors, as well as their supervision relations.
-To provide a top-level function call that takes only an Actor instance's id, a Film instance's id, as well a rolename and adds the corresponding Actor information to the identified Film instance's cast list and vice versa, this example utilizes a concurrent Functor wrapping two sequential Functors.
+\Cref{fig:functor_diagram} displays the message-flow between the involved \glspl{dactor} and Functors, as well as their supervision relations.
+To provide a top-level function that takes only an \code{Actor} id, a \code{Film} id, as well as a rolename and adds the corresponding Actor information to the Film's cast list and vice versa, this example utilizes a concurrent Functor wrapping to sequential Functors.
 Both sequential Functors are comprised of two subsequent steps:
-The first sequential Functor queries information from the Film Dactor instance which is needed to add the film to the Actor Dactor's filmography \gls{relation}, i.e. the films title.
+The first sequential Functor queries information from the Film Dactor instance, which is needed to add the film to the Actor Dactor's filmography \gls{relation}, i.e. the film's title.
 Then it sends a message to the Actor Dactor containing said data to trigger the insertion of the film.
-The second sequential Functor queries the Actor instance's data which is necessary to add them to the Film's cast \gls{relation}, i.e. their name. Using this data and their rolename the Functor then sends another message to the Film Dactor to trigger an insert into it's cast \gls{relation}.
-Both sequential Functors are executed in parallel using a concurrent Functor which only sends a success-response message to it's caller after both sequential Functor's have sent their responses to the concurrent Functor.
+The second sequential Functor queries the Actor instance's data, which is necessary to add them to the Film's cast \gls{relation}, i.e. their name. Using this data and their rolename the Functor then sends another message to the Film Dactor to trigger an insert into its cast \gls{relation}.
+Both sequential Functors are executed in parallel using a concurrent Functor, which only sends a successful response to its caller after both sequential Functors have sent their responses to the concurrent Functor.
 
 Using the parent-child relationship between calling actors and Functors enables a framework-level supervision of Functors, which are currently computing or waiting on results from down-stream \glspl{dactor}.
 The supervision concept between parent and child actors in the Akka framework, termed parental supervision, enables passing back the control flow to the parent actor in case that a child actor, in this case a Functor, fails.
-The calling actor can then react to the failure by resume or restart the Functor, stop this computation, or escalate the failure to a up-stream actor.
+The calling actor can then react to the failure by resuming or restarting the Functor, stopping this computation, or escalating the failure to its own parent.
 The correct course of action depends on the desired application behavior.
 
 % Discussion
@@ -150,11 +150,11 @@ Due to every \gls{dactor} being independent of other \gls{dactor} instances, onl
 As such, they provide flexible data partitioning based by application-domain concepts.
 
 From the distributed setting of the database system arises the new problem of partition or \textbf{actor discovery}.
-The framework maintains a unified namespace in which each \gls{dactor} instance is identified by it's type and a unique id.
-In fact, querying a specific \gls{dactor} requires just obtaining the messaging address from the nameservice and sending a message to it.
+The framework maintains a unified namespace, in which each \gls{dactor} instance is identified by its \gls{dactor} type and a unique id.
+In fact, querying a specific \gls{dactor} just requires obtaining the messaging address from the nameservice and sending a message to it.
 % TODO one line of code for this?
 
 Finally, \textbf{failure handling}, especially with regard to computations relying on multiple \glspl{dactor}' data, requires careful monitoring due to \gls{dactor} distribution.
-Building on the Akka frameworks parent-child supervision concept, our framework allows for transparent failure handling configurations.
+Building on the Akka framework's parent-child supervision concept, our framework allows for transparent failure handling configurations.
 Failures can be handled within \glspl{dactor} if appropriate.
 In case of multi-\gls{dactor} queries a fail-fast approach is chosen to allow calling actors or \glspl{dactor} to react to exceptions in a timely manner.
