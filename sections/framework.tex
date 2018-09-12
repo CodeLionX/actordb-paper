@@ -143,8 +143,8 @@ In particular, the described feature sets is aimed to alleviate some of the prob
 In this section we discuss three core problems which are specific or pose additional challenges in a distributed setting:
 
 \textbf{Data partitioning} in an actor database system differs fundamentally from common partitioning techniques used in relational databases.
-While large tables are typically partitioned based on a specific column's value or the hash thereof, our framework provides \glspl{dactor} as entities for data encapsulation.
-Due to every \gls{dactor} being independent of other \gls{dactor} instances, only interacting with on another via messaging, \glspl{dactor} can be provisioned accross multiple virtual runtimes or physical machines.
+While large tables are typically partitioned based on a specific column's value or the hash thereof, our framework provides \glspl{dactor} as entities for data encapsulation and partitioning.
+\Glspl{dactor} can be provisioned across multiple virtual runtimes and physical machines, because every \gls{dactor} instance is independent of the others and the only mean of communication is possible through message passing. As such, they provide flexible, fine-grained data partitioning based on application needs.
 As such, they provide flexible data partitioning based by application-domain concepts.
 
 From the distributed setting of the database system arises the new problem of partition or \textbf{actor discovery}.
