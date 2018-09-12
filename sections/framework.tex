@@ -57,7 +57,7 @@ To illustrate the definition of \code{Dactor}s we use the example introduced in 
 The corresponding definition of the \code{Film}'s data model is shown in \cref{lst:film_definition}.
 
 \begin{minipage}{1.0\linewidth}
-\begin{lstlisting}[caption=Film Dactor type definition using the actordb framework, label=lst:film_definition, language=Scala]
+\begin{lstlisting}[caption=Film Dactor type definition using the presented framework., label=lst:film_definition, language=Scala]
 object Film {
   // Definitions of relations contained in Film type Dactors
   object Info extends RelationDef {
@@ -150,8 +150,14 @@ As such, they provide flexible data partitioning based by application-domain con
 
 From the distributed setting of the database system arises the new problem of partition or \textbf{actor discovery}.
 The framework maintains a unified namespace, in which each \gls{dactor} instance is identified by its \gls{dactor} type and a unique id.
-In fact, querying a specific \gls{dactor} just requires obtaining the messaging address from the nameservice and sending a message to it.
-% TODO one line of code for this?
+In fact, querying a specific \gls{dactor} just requires obtaining the messaging address from the nameservice and sending a message to it as shown in \cref{lst:dactor_lookup}.
+
+\begin{minipage}{1.0\linewidth}
+\begin{lstlisting}[caption=Lookup of and querying from a Film dactor instance., label=lst:dactor_lookup, language=Scala]
+val ref = Dactor.dactorSelection(classOf[Film], filmId)
+ref ! SelectAllFromRelation.Request("film_info")
+\end{lstlisting}
+\end{minipage}
 
 Finally, \textbf{failure handling}, especially with regard to computations relying on multiple \glspl{dactor}' data, requires careful monitoring due to \gls{dactor} distribution.
 Building on the Akka framework's parent-child supervision concept, our framework allows for transparent failure handling configurations.
