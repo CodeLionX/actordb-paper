@@ -106,7 +106,6 @@ This trade-off and implementation examples for this functionality are discussed 
 Explicit messaging and complementary actor behavior are used to implement the cascading communication pattern described in Section~\ref{sec:concept}.
 Besides this, \glspl{functor} are the framework's system, which enable inter-\gls{dactor} communication and computations.
 While the basic functionality of the two \gls{functor} types for sequential and concurrent computation is discussed in Section~\ref{sec:concept}, this section focuses on the definition of a concrete function integrating data from multiple \glspl{dactor}.
-We also discuss the implications of using the respective messaging patterns corresponding to these types of \glspl{functor} on computational scalability.
 
 Functors are actors with a limited lifetime.
 They are instantiated once a defined Functor is called by a Dactor or other actor and deleted once they return the final response or encounter a failure.
