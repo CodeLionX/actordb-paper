@@ -5,7 +5,7 @@
 \section{Domain Actor Database Framework}\label{sec:framework}
 % Describe implementation details and framework design
 
-After describing the general concept of an \textit{Actor Database System}, we present the implementation of an proof-of-concept application development framework, which allows for the definition of an application's data model and the provisioning of corresponding \glspl{dactor} as part of the application runtime.
+After describing the general concept of an \textit{Actor Database System}, we present the implementation of a proof-of-concept application development framework, which allows for the definition of an application's data model and the provisioning of corresponding \glspl{dactor} as part of the application runtime.
 
 The framework provides the aforementioned features for developers:
 \begin{itemize}
@@ -96,7 +96,7 @@ class Film(id: Id) extends Dactor(id) {
 % They are defined much like regular class member functions or methods, but provide full access to the \gls{dactor}'s internal state including a SQL-like interface for it's \glspl{relation}' contents.
 % Example: collecting all names of films played by an actor (person) released after 1980 (functionality on actor (person)).
 
-The partial denormalization of information, which relates directly to \code{Actor} instances, into the \code{Film.Cast} \gls{relation} of \code{Film} type \glspl{dactor},
+The partial denormalization of information, which relates to \code{Actor} instances, into the \code{Film.Cast} \gls{relation} of \code{Film} type \glspl{dactor},
 enables the computation of and response to common queries, such as requesting info on a film and their cast list, from within a single \gls{dactor} instance.
 The trade-off for this is that inserting new information about an actor (person) starring in a film becomes a functionality involving two \gls{dactor} instances.
 This trade-off and implementation examples for this functionality are discussed in the following Section~\ref{subsec:multi_dactor_queries}.
