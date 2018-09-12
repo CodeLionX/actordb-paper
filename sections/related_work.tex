@@ -62,7 +62,7 @@
 
 
   \subsection{Actor Database Systems}
-  The actor and virtual actor programming model is increasingly used to build soft caching layers and cloud applications for various purposes~\cite{erlang_uses,akka_uses,orleans_uses}.
+  The actor and virtual actor programming model is increasingly been used to build soft caching layers and cloud applications for various purposes~\cite{erlang_uses,akka_uses,orleans_uses}.
   This shows the appeal of the programming model that allows developers to easily develop modular and scalable software, which can be deployed in the heterogenous parallel cloud computing infrastructure.
   
   Despite its popularity for application development, the actor programming model and actor programming frameworks lack state management capabilities, specifically for data-centric applications.
@@ -93,7 +93,7 @@
   In their development actorDB, an actor encapsulates a full relational SQL database using the SQLite database engine\footnote{\url{https://www.sqlite.org/about.html}}.
   Actors can be deployed in an distributed cloud environment and communicate asynchronously.
   The database is ACID-conform and enforces consistency across actors with the Raft consensus protocol~\cite{raft}.
-  The database can used via the MySQL-protocol.
+  The database can be used via the MySQL-protocol.
 
   Most practical research in the field of actor database systems has been presented in conjunction with the Orleans framework and the Erlang programming language.
   The open-source project \textit{Actorbase} by \citet{actorbase} constitutes a key-value store implementation utilizing Akka actors for horizontal scaling and partitioning.
