@@ -45,15 +45,15 @@ The virtual actor system implemented in the Orleans framework withdraws such con
 
 Developers can model the application's domain objects by defining \gls{dactor} types as subclasses of the framework-provided \code{Dactor} class.
 Instances of such user-defined \gls{dactor} types are managed by the framework and are available for messaging in a consistent namespace.
-A \gls{dactor} type definition is comprised of the types internal data layout, i.e. \glspl{relation}, and its functionality to process said data.
-In detail, a \gls{dactor} types internal data model definition consists of \glspl{relation} with unique schemas.
+A \gls{dactor} type definition is comprised of the type's internal data layout, i.e. \glspl{relation}, and its functionality to process said data.
+In detail, a \gls{dactor} type's data model definition consists of \glspl{relation} with unique schemas.
 A \gls{relation}'s schema is comprised of column definitions, whereby every column is defined by a name and a data type.
 Using the column's predefined data types, all functions support compile-time type-safety.
 Due to the \gls{dactor} system sharing the application's runtime and programming environment, these data or object types are equal to the types handled in any application logic.
 Thus, this approach helps eliminate the impedance mismatch between application logic and data tier with regard to handled data types and object (de-)serialization.
 Note that, since \glspl{dactor} can logically encapsulate multiple data sets and state information, they can and often do comprise multiple \glspl{relation}.
 
-To illustrate the definition of \code{Dactor}s we use the example introduced in \cref{sec:dactors} which is schematically depicted in \cref{fig:dactor_diagram}.
+To illustrate the definition of \code{Dactor}s we use the example introduced in \cref{sec:dactors}, which is schematically depicted in \cref{fig:dactor_diagram}.
 The corresponding definition of the \code{Film}'s data model is shown in \cref{lst:film_definition}.
 
 \begin{minipage}{1.0\linewidth}
@@ -120,15 +120,16 @@ This Akka-specific hierarchical relationship enables notifying the calling actor
 \end{figure}
 
 Returning to the web application example, we can define simple functionality concerning instances of both \gls{dactor} types defined in Section~\ref{subsec:domain_actor_design}.
-Adding a new character role to a film, played by a specific actor involves changes to \code{Film} and \code{Actor} instances.
-We describe the implementation of this functionality using all three of the introduced communication patterns.
+Adding a new character role to a film, played by a specific actor, involves changes to \code{Film} and \code{Actor} instances.
+We describe the implementation of this functionality using the concurrent and sequential computation patterns, introduced in \cref{subsec:dactor_comm}.
 
 \Cref{fig:functor_diagram} displays the message-flow between the involved \glspl{dactor} and Functors, as well as their supervision relations.
 To provide a top-level function that takes only an \code{Actor} id, a \code{Film} id, as well as a rolename and adds the corresponding Actor information to the Film's cast list and vice versa, this example utilizes a concurrent Functor wrapping to sequential Functors.
 Both sequential Functors are comprised of two subsequent steps:
 The first sequential Functor queries information from the Film Dactor instance, which is needed to add the film to the Actor Dactor's filmography \gls{relation}, i.e. the film's title.
 Then it sends a message to the Actor Dactor containing said data to trigger the insertion of the film.
-The second sequential Functor queries the Actor instance's data, which is necessary to add them to the Film's cast \gls{relation}, i.e. their name. Using this data and their rolename the Functor then sends another message to the Film Dactor to trigger an insert into its cast \gls{relation}.
+The second sequential Functor queries the Actor instance's data, which is necessary to add them to the Film's cast \gls{relation}, i.e. their name.
+Using this data and their rolename the Functor then sends another message to the Film Dactor to trigger an insertion into its cast \gls{relation}.
 Both sequential Functors are executed in parallel using a concurrent Functor, which only sends a successful response to its caller after both sequential Functors have sent their responses to the concurrent Functor.
 
 Using the parent-child relationship between calling actors and Functors enables a framework-level supervision of Functors, which are currently computing or waiting on results from down-stream \glspl{dactor}.
@@ -139,12 +140,13 @@ The correct course of action depends on the desired application behavior.
 \subsection[Framework Discussion]{Framework Discussion}\label{subsec:framework_discussion}
 
 We presented an actor database framework and showcased some of it's functionality in detail.
-In particular, the described feature sets is aimed to alleviate some of the problems which arise from a distributed database system.
-In this section we discuss three core problems which are specific or pose additional challenges in a distributed setting:
+In particular, the described feature sets is aimed to alleviate some of the problems, which arise from a distributed database system.
+In this section we discuss three core problems, which are specific or pose additional challenges in a distributed setting:
 
 \textbf{Data partitioning} in an actor database system differs fundamentally from common partitioning techniques used in relational databases.
 While large tables are typically partitioned based on a specific column's value or the hash thereof, our framework provides \glspl{dactor} as entities for data encapsulation and partitioning.
-\Glspl{dactor} can be provisioned across multiple virtual runtimes and physical machines, because every \gls{dactor} instance is independent of the others and the only mean of communication is possible through message passing. As such, they provide flexible, fine-grained data partitioning based on application needs.
+\Glspl{dactor} can be provisioned across multiple virtual runtimes and physical machines, because every \gls{dactor} instance is independent of the others and the only mean of communication is message passing.
+As such, they provide flexible, fine-grained data partitioning based on application needs.
 As such, they provide flexible data partitioning based by application-domain concepts.
 
 From the distributed setting of the database system arises the new problem of partition or \textbf{actor discovery}.
