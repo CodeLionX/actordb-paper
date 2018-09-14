@@ -31,7 +31,6 @@ The functionality described by \citeauthor{manifesto} in tenets one through thre
 
 % Tech
 Our proof-of-concept framework is developed using the Scala programming language and the Akka framework.
-This implementation marks, to the best of our knowledge, the first practical examination of the actor database concept using Akka and the classical actor programming model.
 While the Orleans framework, which has been used in earlier related work, provides virtual actors with automatic lifecycle management, Akka allows for and requires direct control over an actor's lifecycle.
 % As \glspl{dactor} directly build on the provided Akka actor implementation, these considerations directly apply to them.
 These considerations directly apply to \glspl{dactor} as they are built on top of the Akka actor implementation.
@@ -43,21 +42,9 @@ The virtual actor system implemented in the Orleans framework withdraws such con
 
 \subsection{Domain Actor Design}\label{subsec:domain_actor_design}
 
-Developers can model the application's domain objects by defining \gls{dactor} types as subclasses of the framework-provided \code{Dactor} class.
-Instances of such user-defined \gls{dactor} types are managed by the framework and are available for messaging in a consistent namespace.
-A \gls{dactor} type definition is comprised of the type's internal data layout, i.e. \glspl{relation}, and its functionality to process said data.
-In detail, a \gls{dactor} type's data model definition consists of \glspl{relation} with unique schemas.
-A \gls{relation}'s schema is comprised of column definitions, whereby every column is defined by a name and a data type.
-Using the column's predefined data types, all functions support compile-time type-safety.
-Due to the \gls{dactor} system sharing the application's runtime and programming environment, these data or object types are equal to the types handled in any application logic.
-Thus, this approach helps eliminate the impedance mismatch between application logic and data tier with regard to handled data types and object (de-)serialization.
-Note that, since \glspl{dactor} can logically encapsulate multiple data sets and state information, they can and often do comprise multiple \glspl{relation}.
-
 To illustrate the definition of \code{Dactor}s we use the example introduced in \cref{sec:dactors}, which is schematically depicted in \cref{fig:dactor_diagram}.
 The corresponding definition of the \code{Film}'s data model is shown in \cref{lst:film_definition}.
-
-\begin{minipage}{1.0\linewidth}
-\begin{lstlisting}[caption=Film Dactor type definition using the presented framework., label=lst:film_definition, language=Scala]
+\begin{lstlisting}[float, caption={Film Dactor type definition using the presented framework.}, label={lst:film_definition}, language=Scala]
 object Film {
   // Definitions of relations contained in Film type Dactors
   object Info extends RelationDef {
@@ -86,20 +73,21 @@ class Film(id: Id) extends Dactor(id) {
   override def receive: Receive = ??? // Dactor behavior
 }
 \end{lstlisting}
-\end{minipage}
-% \begin{lstlisting}[caption=Actor \code{Dactor} type definition using the actordb framework, label=lst:actor_definition, language=Scala]
-%
-% \end{lstlisting}
 
-% Dactor behavior 'showcase?!'
-% \Gls{dactor} behavior, much like regular actor behavior, is used to define interfaces to functionality and computations related to only the data that an instance of this \gls{dactor} type stores.
-% They are defined much like regular class member functions or methods, but provide full access to the \gls{dactor}'s internal state including a SQL-like interface for it's \glspl{relation}' contents.
-% Example: collecting all names of films played by an actor (person) released after 1980 (functionality on actor (person)).
+Developers can model the application's domain objects by defining \gls{dactor} types as subclasses of the framework-provided \code{Dactor} class.
+Instances of such user-defined \gls{dactor} types are managed by the framework and are available for messaging in a consistent namespace.
+A \gls{dactor} type definition is comprised of the type's internal data layout, i.e. \glspl{relation}, and its functionality to process said data.
+In detail, a \gls{dactor} type's data model definition consists of \glspl{relation} with unique schemas.
+A \gls{relation}'s schema is comprised of column definitions, whereby every column is defined by a name and a data type.
+Using the column's predefined data types, all functions support compile-time type-safety.
+Due to the \gls{dactor} system sharing the application's runtime and programming environment, these data or object types are equal to the types handled in any application logic.
+Thus, this approach helps eliminate the impedance mismatch between application logic and data tier with regard to handled data types and object (de-)serialization.
+Note that, since \glspl{dactor} can logically encapsulate multiple data sets and state information, they can and often do comprise multiple \glspl{relation}.
 
 The partial denormalization of information, which relates to \code{Actor} instances, into the \code{Film.Cast} \gls{relation} of \code{Film} type \glspl{dactor},
 enables the computation of and response to common queries, such as requesting info on a film and their cast list, from within a single \gls{dactor} instance.
 The trade-off for this is that inserting new information about an actor (person) starring in a film becomes a functionality involving two \gls{dactor} instances.
-This trade-off and implementation examples for this functionality are discussed in the following Section~\ref{subsec:multi_dactor_queries}.
+Implementation examples for this functionality and the trade-off are discussed in the following Section~\ref{subsec:multi_dactor_queries}.
 
 \subsection[Multi-Dactor Queries]{Multi-\Gls{dactor} Queries}\label{subsec:multi_dactor_queries}
 
@@ -121,10 +109,10 @@ This Akka-specific hierarchical relationship enables notifying the calling actor
 
 Returning to the web application example, we can define simple functionality concerning instances of both \gls{dactor} types defined in Section~\ref{subsec:domain_actor_design}.
 Adding a new character role to a film, played by a specific actor, involves changes to \code{Film} and \code{Actor} instances.
-We describe the implementation of this functionality using the concurrent and sequential computation patterns, introduced in \cref{subsec:dactor_comm}.
+We describe the implementation of this functionality using the concurrent and sequential computation patterns, introduced in \cref{sec:dactor_comm}.
 
 \Cref{fig:functor_diagram} displays the message-flow between the involved \glspl{dactor} and Functors, as well as their supervision relations.
-To provide a top-level function that takes only an \code{Actor} id, a \code{Film} id, as well as a rolename and adds the corresponding Actor information to the Film's cast list and vice versa, this example utilizes a concurrent Functor wrapping to sequential Functors.
+To provide a top-level function that takes only an \code{Actor} id, a \code{Film} id, as well as a rolename and adds the corresponding Actor information to the Film's cast list and vice versa, this example utilizes a concurrent Functor wrapping two sequential Functors.
 Both sequential Functors are comprised of two subsequent steps:
 The first sequential Functor queries information from the Film Dactor instance, which is needed to add the film to the Actor Dactor's filmography \gls{relation}, i.e. the film's title.
 Then it sends a message to the Actor Dactor containing said data to trigger the insertion of the film.
@@ -140,25 +128,22 @@ The correct course of action depends on the desired application behavior.
 \subsection[Framework Discussion]{Framework Discussion}\label{subsec:framework_discussion}
 
 We presented an actor database framework and showcased some of its functionality in detail.
-In particular, the described feature sets is aimed to alleviate some of the problems, which arise from a distributed database system.
+In particular, the described feature set is aimed to alleviate some of the problems, which arise from a distributed database system.
 In this section we discuss three core problems, which are specific or pose additional challenges in a distributed setting:
 
 \textbf{Data partitioning} in an actor database system differs fundamentally from common partitioning techniques used in relational databases.
 While large tables are typically partitioned based on a specific column's value or the hash thereof, our framework provides \glspl{dactor} as entities for data encapsulation and partitioning.
 \Glspl{dactor} can be provisioned across multiple virtual runtimes and physical machines, because every \gls{dactor} instance is independent of the others and the only mean of communication is message passing.
 As such, they provide flexible, fine-grained data partitioning based on application needs.
-As such, they provide flexible data partitioning based by application-domain concepts.
 
-From the distributed setting of the database system arises the new problem of partition or \textbf{actor discovery}.
+From the distributed setting of the database system the new problem of partition or \textbf{actor discovery} arises.
 The framework maintains a unified namespace, in which each \gls{dactor} instance is identified by its \gls{dactor} type and a unique id.
 In fact, querying a specific \gls{dactor} just requires obtaining the messaging address from the nameservice and sending a message to it as shown in \cref{lst:dactor_lookup}.
-
-\begin{minipage}{1.0\linewidth}
-\begin{lstlisting}[caption=Lookup of and querying from a Film dactor instance., label=lst:dactor_lookup, language=Scala]
+In the case of a multi-node deployment, this is complemented by the functionality of Akka Cluster Sharding~\cite{akka:clustersharding}, which routes the messages to the right physical host.
+\begin{lstlisting}[float,caption={Lookup of and querying from a Film dactor instance.}, label={lst:dactor_lookup}, language=Scala]
 val ref = Dactor.dactorSelection(classOf[Film], filmId)
 ref ! SelectAllFromRelation.Request("film_info")
 \end{lstlisting}
-\end{minipage}
 
 Finally, \textbf{failure handling}, especially with regard to computations relying on multiple \glspl{dactor}' data, requires careful monitoring due to \gls{dactor} distribution.
 Building on the Akka framework's parent-child supervision concept, our framework allows for transparent failure handling configurations.

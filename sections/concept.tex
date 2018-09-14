@@ -46,21 +46,21 @@
     \Glspl{relation} provide an SQL-like interface to query and manipulate the contained data, so known and proven syntax and semantics can be used to define \gls{dactor}-behavior.
     While state querying and modification within \glspl{dactor} is possible in a declarative way, communication across all kind of actors is explicitly defined via asynchronous messages and how the \glspl{dactor} handle the said messages.
 
-  \subsection{Communication between Domain Actors}
+  \subsection{Communication between Domain Actors}\label{sec:dactor_comm}
     Not all computation can be done with the information residing in a single \gls{dactor}.
     Communication between \glspl{dactor} is required.
     As already mentioned, inter-\gls{dactor} communication is realized via explicit asynchronous message passing.
     This allows application developers to chose the right messaging pattern for their use case.
     The choice is heavily influenced by the data layout used for the \glspl{dactor} and sets the level of parallelization and the network-load for the computation.
 
-    We consider three main messaging patterns for inter-\gls{dactor} communication, which are shown in \cref{fig:comp_patterns}: Cascading Computation, Sequential Computation, Concurrent Computation.
+    We consider three main messaging patterns for inter-\gls{dactor} communication, which are shown in \cref{fig:comp_patterns}: Cascading Computation, Sequential Computation, and Concurrent Computation.
     They are messaging primitives and can be combined to create more complex message flows and computation models.
     All three patterns assume a request-response messaging schema and take a high-level message to a \gls{dactor}, lets call it \gls{dactor} A, as starting point.
 
     \begin{enumerate}
       \item\label{enum:comp_pattern_1} \textbf{Cascading Computation}
         A high-level message to \gls{dactor} A, will trigger successive messages to other \glspl{dactor}, which are hidden from the original requester.
-        Depending on the computation performed in \gls{dactor} A, it can send requests to another \gls{dactor} (e.\,g. \gls{dactor} B) and handle the result itself before returning the response to the caller.
+        Depending on the computation performed in \gls{dactor} A, it can send requests to another \gls{dactor} (e.\,g. \gls{dactor} B) and handle the result itself before returning the response to the initial requester.
         \Gls{dactor} B can itself send messages to other \glspl{dactor} as well.
         
         As one can see in \cref{fig:comp_pattern_1}, this pattern is comparable to function calls in \gls{oop}.
@@ -88,8 +88,8 @@
       \item\label{enum:comp_pattern_3} \textbf{Concurrent Computation}
         This messaging pattern also makes use of \glspl{functor} to encapsulate the processing of multiple request-response pairs.
         The concurrent \gls{functor} sends messages to several \glspl{dactor} in parallel and collect the results when they are finished.
-        It allows for highly parallelized computation as all involved \glspl{dactor} are messaged at the same time and calculate their responses concurrently.
-        The \gls{functor} collects each individual response and returns the aggregated result to it's creator.
+        It allows for highly parallelized computations as all involved \glspl{dactor} are messaged at the same time and calculate their responses concurrently.
+        The \gls{functor} collects each individual response and returns the aggregated result to its creator.
     \end{enumerate}
 
     \begin{figure}
@@ -109,7 +109,7 @@
         \subcaption{Sequential Computation}
         \label{fig:comp_pattern_2}
       \end{subfigure}
-      \caption{Inter-\gls{dactor}-communication patterns. Dotted lines show actor lifetime and gray bars indicate that an actor performs computation or holds state that is related to the showed message flow.}
+      \caption{Inter-\gls{dactor} communication patterns. Dotted lines show actor lifetime and gray bars indicate that an actor performs computation or holds state that is related to the showed message flow.}
       \label{fig:comp_patterns}
     \end{figure}
 
@@ -123,8 +123,9 @@
     Other actors are stateless or have non-durable state, such as intermediate results or actor references.
     These actors can interact with the \glspl{dactor} via the defined messages and represent application services or components of the infrastructure layer.
     
-    To develop such a system, we can decompose our application domain into encapsulated entity types.
-    Those types can be modeled as \glspl{dactor} and consist of a data schema and behavior.
+    To develop such a system, we can decompose our application into encapsulated domain objects.
+    In contrast to traditional entities in the relational model domain objects consider the most common queries loads to encapsulate the needed information. 
+    Those domain objects can be modeled as \glspl{dactor} and consist of a data schema and behavior.
     During this process we have to keep our requirements regarding query patterns and scaling in mind.
     Those requirements will influence the domain decomposition and the messaging patterns used.
     The entry points to our application are stateless actors on top of the \glspl{dactor}, which provide high throughput and can be scaled out easily.

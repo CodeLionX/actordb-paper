@@ -32,8 +32,8 @@
   Data management systems, however, are at risk of becoming the bottleneck in data-centric software systems.
   Such applications create an increasing demand for scalable data storage solutions, that are capable of fulfilling real-time requirements for OLTP workloads at low latency. % too long, use system instead of 'applications', maybe lose the OLTP
 
-  Traditionally, systems' architectures for these types of software is comprised in two tiers:
-  An application logic tier containing the bulk of the business logic, as well as a data tier, which stores the application's data.
+  Traditionally, system architectures for these types of software are comprised in two tiers:
+  An application tier containing the bulk of the business logic, as well as a data tier, storing the application's data.
   The separation of concerns within this design in terms of concrete functionality depends on the choice of data storage solution.
   A \gls{rdbms} enables data manipulation and the execution of most data-related computation in the data tier, by using e.g. stored procedures and a complex, declarative query language.
   However, the monolithic design of conventional \glspl{rdbms} proves a hurdle for scalability and reduces modularity, which has a negative impact on code maintainability. % todo source (maybe from manifesto/reactors
@@ -52,11 +52,11 @@
   % However, shortcoming of this approach
 
   \Citet{manifesto} call for a new paradigm for designing a scalable data storage solution using the Actor model.
-  The core primitive in this model are actors, which are objects comprised of state and behaviour that execute computational tasks concurrently.
+  The core primitive in this model are actors, which are objects comprised of state and behavior that execute computational tasks concurrently.
   Individual actors communicate with each other exclusively via asynchronous message passing.
   Incoming messages are stored in a mailbox allowing for the separate and independent processing of each message.
   When receiving a message an actor can modify its state, send a finite amount of messages to other actors, and create new actors.
-  An actor's internal state is only available to said actor which encourages a shared-nothing system architecture.
+  An actor's internal state is only available to said actor, which encourages a shared-nothing system architecture.
   The self-contained nature of actors and the fact that, through asynchronous message passing, actors provide a lock-free concurrency model, allows for naturally scaling out applications and systems~\cite{vernon2015reactive}.
   % \enquote{The actor model brings OOP back to the system level with actors appearing to developers very much like the familiar model of interacting objects}~\cite{bernstein:orleans}.
   \Citeauthor{manifesto} propose an implementation of the data tier using the actor model as a logically distributed runtime.
@@ -69,7 +69,7 @@
   It allows for utilizing and interacting with data objects in the same representation throughout business logic and data storage.
 
   With this framework we make the following contributions:
-  We introduce domain actors (\glspl{dactor}) to model data-centric applications' data and act as an application-defined scaling unit.
+  We introduce domain actors (\glspl{dactor}) to model application data in an Akka-based actor database system, similarly to the work of \citeauthor{Shah:reactdb} on reactors \cite{Shah:reactdb}.
   \Glspl{dactor} encapsulate application data and logic, therefore bridging the aforementioned impedance mismatch between data and the application logic tier.
   We implement a SQL-like data interface for defining internal \gls{dactor} logic, and provide Functors to allow users to define application logic relying on data contained within multiple \glspl{dactor}.
   We also present experimental results on the memory overhead introduced by using Akka actors for data management in this manner to demonstrate the feasibility of this approach.
