@@ -46,7 +46,7 @@
     \Glspl{relation} provide an SQL-like interface to query and manipulate the contained data, so known and proven syntax and semantics can be used to define \gls{dactor}-behavior.
     While state querying and modification within \glspl{dactor} is possible in a declarative way, communication across all kind of actors is explicitly defined via asynchronous messages and how the \glspl{dactor} handle the said messages.
 
-  \subsection{Communication between Domain Actors}
+  \subsection{Communication between Domain Actors}\label{sec:dactor_comm}
     Not all computation can be done with the information residing in a single \gls{dactor}.
     Communication between \glspl{dactor} is required.
     As already mentioned, inter-\gls{dactor} communication is realized via explicit asynchronous message passing.
