@@ -151,8 +151,7 @@
 % -----------------------
 
 \author[Frederic Schneider \and Sebastian Schmidl]{%
-Frederic Schneider \and
-Sebastian Schmidl\footnote{Hasso-Plattner-Institut, University of Potsdam, Prof.-Dr.-Helmert-Str. 2-3, 14482 Potsdam, \email{{frederic.schneider,sebastian.schmidl}@student.hpi.de}}
+Frederic Schneider, Sebastian Schmidl\footnote{Hasso-Plattner-Institut, University of Potsdam, Prof.-Dr.-Helmert-Str. 2-3, 14482 Potsdam, \email{{frederic.schneider,sebastian.schmidl}@student.hpi.de}}
 }
 \title[An Actor Database System for Akka]{An Actor Database System for Akka}
 
@@ -165,7 +164,15 @@ Sebastian Schmidl\footnote{Hasso-Plattner-Institut, University of Potsdam, Prof.
 \setcounter{footnote}{2}
 
 \begin{abstract}
-Abstract goes here.
+  System architectures for data-centric applications are commonly comprised of two tiers:
+  An application tier and a data tier.
+  The fact that these tiers do not typically share a common format for data is referred to as \textit{object-relational impedance mismatch}.
+  To mitigate this, we implement a proof-of-concept actor database framework, which enables the definition of application logic as part of the data storage runtime.
+  This approach is based on the concept of actor database systems introduced by \citet{manifesto}, who propose using the actor programming model to build a distributed database runtime.
+  Our framework's domain actors provide a typesafe, SQL-like interface to develop actor-internal functionality.
+  Additionally, we present the Functor concept to enable queries spanning data contained in multiple actor instances.
+  Our experiments demonstrate the feasibility of domain actors by evaluating their memory overhead.
+  We also discuss challenges that arise from the distributed database concept and how the actor model lends itself to implement solutions for data partitioning and failure handling for distributed, concurrent query processing.
 \end{abstract}
 
 \begin{keywords}

@@ -36,7 +36,7 @@
   An application tier containing the bulk of the business logic, as well as a data tier, storing the application's data.
   The separation of concerns within this design in terms of concrete functionality depends on the choice of data storage solution.
   A \gls{rdbms} enables data manipulation and the execution of most data-related computation in the data tier by using e.g. stored procedures and a complex, declarative query language.
-  However, the monolithic design of conventional \glspl{rdbms} proves a hurdle for scalability and reduces modularity, which has a negative impact on code maintainability. % todo source (maybe from manifesto/reactors)$
+  However, the monolithic design of conventional \glspl{rdbms} proves a hurdle for scalability and reduces modularity, which has a negative impact on code maintainability. % todo source (maybe from manifesto/reactors)
   More recently key-value storage solutions have gained popularity especially for highly scalable online applications.
   This is due to the fact that their less rigid schema guarantees allow for improved scalability. % source
   The trade-off of this solution is having to offload much of the data-handling logic into the application tier, thereby increasing load on the application as well as not keeping true to the separation of concerns.
@@ -77,7 +77,7 @@
   To our knowledge, we present the first implementation of this concept using the Akka framework.
   Comparable, existing work has been presented using the virtual actor concept provided by the Orleans framework for Microsoft .NET.
   Therefore, we discuss differences between the classical notion of actors and the virtual actor concept in \cref{sec:related_work}.
-  In this section, we also give an outline of the history of Actor model implementations as well as the characteristics of \textit{Actor Database Systems} as proposed by \citeauthor{manifesto}.
+  In this section, we also give an outline of the history of actor model implementations as well as the characteristics of \textit{Actor Database Systems} as proposed by \citeauthor{manifesto}.
   In \cref{sec:concept}, we outline our approach conceptually in more detail,
   before explicitly describing the implementation of our proof-of-concept framework, as well as some examples for usage patterns in \cref{sec:framework}.
   We present setup and evaluation of experiments on the memory overhead introduced by the use of actors for data storage using our framework in \cref{sec:experiments},

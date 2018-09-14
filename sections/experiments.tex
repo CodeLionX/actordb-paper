@@ -113,7 +113,14 @@
   \begin{equation}
     \text{Overhead / \gls{dactor}} = \frac{\text{Size \textit{Framework}} - \text{Size \textit{Relations}}}{\text{\# \glspl{dactor}}}
   \end{equation}
-  In average, using a \gls{dactor} only needs an additional 533~B more.
+  On average, using a \gls{dactor} only needs an additional 533~B more.
+
+
+\subsection{Discussion}\label{sec:exp:discussion}
+
+  \Cref{tab:memory_overhead} clearly shows that using \glspl{dactor} only introduces a very small memory overhead.
+  \Glspl{dactor} have a constant overhead of about 550~B per instance.
+  Our experiments show a worst case scenario, where each \gls{dactor} only stores 230~KB on average.
 
   \begin{table}
     \centering
@@ -131,13 +138,6 @@
     \caption{Memory overhead of \glspl{dactor}}
     \label{tab:memory_overhead}
   \end{table}
-
-
-\subsection{Discussion}\label{sec:exp:discussion}
-
-  \Cref{tab:memory_overhead} clearly shows that using \glspl{dactor} only introduces a very small memory overhead.
-  \Glspl{dactor} have a constant overhead of about 550~B per instance.
-  Our experiments show a worst case scenario, where each \gls{dactor} only stores 230~KB on average.
   
   Lets assume, we have a 1~TB database and we chose to store 1~MB per \gls{dactor}.
   This requires the actor database to instantiate about one million \glspl{dactor}.

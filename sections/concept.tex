@@ -57,6 +57,27 @@
     They are messaging primitives and can be combined to create more complex message flows and computation models.
     All three patterns assume a request-response messaging schema and take a high-level message to a \gls{dactor}, lets call it \gls{dactor} A, as starting point.
 
+    \begin{figure}
+      \centering
+
+      \begin{subfigure}[c]{0.49\textwidth}
+        \includestandalone[width=\textwidth]{pictures/tikz/cascading_computation}
+        \subcaption{Cascading Computation}
+        \label{fig:comp_pattern_1}
+        \hfill\\
+        \includestandalone[width=\textwidth]{pictures/tikz/concurrent_computation}
+        \subcaption{Concurrent Computation}
+        \label{fig:comp_pattern_3}
+      \end{subfigure}
+      \begin{subfigure}[c]{0.5\textwidth}
+        \includestandalone[width=\textwidth]{pictures/tikz/sequential_computation}
+        \subcaption{Sequential Computation}
+        \label{fig:comp_pattern_2}
+      \end{subfigure}
+      \caption{Inter-\gls{dactor} communication patterns. Dotted lines show actor lifetime and gray bars indicate that an actor performs computation or holds state that is related to the showed message flow.}
+      \label{fig:comp_patterns}
+    \end{figure}
+
     \begin{enumerate}
       \item\label{enum:comp_pattern_1} \textbf{Cascading Computation}
         A high-level message to \gls{dactor} A, will trigger successive messages to other \glspl{dactor}, which are hidden from the original requester.
@@ -91,27 +112,6 @@
         It allows for highly parallelized computations as all involved \glspl{dactor} are messaged at the same time and calculate their responses concurrently.
         The \gls{functor} collects each individual response and returns the aggregated result to its creator.
     \end{enumerate}
-
-    \begin{figure}
-      \centering
-
-      \begin{subfigure}[c]{0.49\textwidth}
-        \includestandalone[width=\textwidth]{pictures/tikz/cascading_computation}
-        \subcaption{Cascading Computation}
-        \label{fig:comp_pattern_1}
-        \hfill\\
-        \includestandalone[width=\textwidth]{pictures/tikz/concurrent_computation}
-        \subcaption{Concurrent Computation}
-        \label{fig:comp_pattern_3}
-      \end{subfigure}
-      \begin{subfigure}[c]{0.5\textwidth}
-        \includestandalone[width=\textwidth]{pictures/tikz/sequential_computation}
-        \subcaption{Sequential Computation}
-        \label{fig:comp_pattern_2}
-      \end{subfigure}
-      \caption{Inter-\gls{dactor} communication patterns. Dotted lines show actor lifetime and gray bars indicate that an actor performs computation or holds state that is related to the showed message flow.}
-      \label{fig:comp_patterns}
-    \end{figure}
 
 
   \subsection{Domain Actor Database System}\label{sec:domain_actor_database}
