@@ -164,7 +164,20 @@ Frederic Schneider, Sebastian Schmidl\footnote{Hasso-Plattner-Institut, Universi
 \setcounter{footnote}{2}
 
 \begin{abstract}
-Abstract goes here.
+  System architectures for data-centric applications is commonly comprised of two tiers:
+  An application logic tier containing the bulk of the business logic, as well as a data tier, which stores the application's data.
+  The fact that these tiers do not typically share a format or representation for data and state information and the resulting mapping issues are commonly referred to as \textit{object-relational impedance mismatch}. % Maybe ORM -> less transparency?
+
+  We build on the concept of an actor database system as proposed by \citet{Shah:reactdb}, which uses actors, as found in the Actor programming model, for data storage.
+  Actors are strongly encapsuled objects comprised of state and behavior, which is used to execute concurrent computations.
+  The actor database system utilizes the actors as a logically distributed runtime for data storage, as well as query execution.
+
+  We implement a proof-of-concept actor database application framework which enables the definition of application logic as part of shared data storage and application runtime to eliminate the aforementioned impedance mismatch.
+  We implement domain actors which provide a typesafe, sql-like data interface for internal behavior definition,
+  and present the Functor concept to enable queries and functionality spanning data contained in multiple actor instances.
+
+  We demonstrate the feasibility of the approach, which entails partitioning application data into a large number of actor instances, by evaluating the introduced memory overhead.
+  We also discuss challenges that arise from the distributed database concept and how the actor model lends itself to implement solutions for data partitioning and failure handling for distributed, concurrent functionality.
 \end{abstract}
 
 \begin{keywords}
