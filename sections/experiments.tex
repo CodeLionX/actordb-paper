@@ -45,7 +45,7 @@
         $D_4$ & 100~MB & 8~618 & 17~596 \\
         \bottomrule
       \end{tabular}
-      \subcaption{Datasets sizes and key figures}
+      \subcaption{Dataset sizes and key figures}
       \label{tab:datasets:keyfigures}
     \end{subtable}
     \caption{Datasets used for the memory overhead experiments}
@@ -55,7 +55,7 @@
   For each dataset we performed three different tests:
   \begin{description}
     \item[\textit{Single string}] Convert all data into its \code{String} representation and load it as a single big \code{String} into memory.
-      This test serves as baseline for the other ones.
+      This test serves as baseline for the other tests.
     \item[\textit{Relations}] Load the data into their respective \code{Relation}s, preserving the type information and using the in-memory data storage objects from our framework.
     \item[\textit{Framework}] Use the full-fledged framework to load the data into memory.
       This approach stores the data distributed across \glspl{dactor} in \code{Relation} objects.
