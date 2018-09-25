@@ -1,190 +1,229 @@
 % Encoding: UTF-8
 
+%% macros
+@STRING{AAAI = {Proceedings of the National Conference on Artificial Intelligence (AAAI)}}
+@STRING{AAW = {Reading, MA, USA}}
+@STRING{ACMCOMPSURV = {ACM Computing Surveys}}
+@STRING{ADBIS = {Advances in Databases and Information Systems (ADBIS)}}
+@STRING{ADDR-MITPRESS = {Cambridge, MA, USA}}
+@STRING{AI = {Artificial Intelligence}}
+@STRING{AIMAG = {AI Magazine}}
+@STRING{AMG = {New York, NY}}
+@STRING{AMK = {San Francisco, CA, USA}}
+@STRING{APH = {Englewood Cliffs, NJ, USA}}
+@STRING{ASP = {Berlin -- Heidelberg -- New York}}
+@STRING{AW = {Addison-Wesley}}
+@STRING{BTW = {Proceedings of the Conference Datenbanksysteme in Büro, Technik und Wissenschaft (BTW)}}
+@STRING{BTW2 = {Proceedings of the Conference Datenbanksysteme in Business, Technologie und Web Technik (BTW)}}
+@STRING{CACM = {Communications of the ACM}}
+@STRING{CAISE = {Proceedings of the Conference on Advanced Information Systems Engineering (CAiSE)}}
+@STRING{CIDR = {Proceedings of the Conference on Innovative Data Systems Research (CIDR)}}
+@STRING{CIKM = {Proceedings of the International Conference on Information and Knowledge Management (CIKM)}}
+@STRING{COMAD = {Proceedings of the International Conference on Management of Data (COMAD)}}
+@STRING{COOPIS = {Proceedings of the International Conference on Cooperative Information Systems (CoopIS)}}
+@STRING{DASFAA = {Proceedings of the International Conference on Database Systems for Advanced Applications (DASFAA)}}
+@STRING{DBISP2P = {Proceedings of the International Workshop on Databases, Information Systems and Peer-to-Peer Computing (DBISP2P)}}
+@STRING{DBPL = {Proceedings of the International Workshop on Database Programming Languages}}
+@STRING{DBSPEKTRUM = {Datenbank Spektrum}}
+@STRING{DE = {IEEE Data Engineering Bulletin}}
+@STRING{DEXA = {Proceedings of the International Conference on Database and Expert Systems Applications (DEXA)}}
+@STRING{DILS = {Proceedings of the International Workshop on Data Integration for the Life Sciences (DILS)}}
+@STRING{DKE = {Data and Knowledge Engineering (DKE)}}
+@STRING{DOOD = {Proceedings of the International Conference on Deductive and Object-Oriented Databases (DOOD)}}
+@STRING{DPUNKT = {dpunkt.verlag, Heidelberg}}
+@STRING{DQCIS = {Proceedings of the International Workshop on Data Quality in Cooperative Information Systsems (DQCIS)}}
+@STRING{EDBT = {Proceedings of the International Conference on Extending Database Technology (EDBT)}}
+@STRING{EFIS = {Proceedings of the International Workshop on Engineering Federated Information Systems (EFIS)}}
+@STRING{ER = {Proceedings of the International Conference on Conceptual Modeling (ER)}}
+@STRING{FDBS = {Proceedings of the Workshop Föderierte Datenbanken (FDBS)}}
+@STRING{FOCS = {Proceedings of the Symposium on Foundations of Computer Science}}
+@STRING{FQAS = {Proceedings of the International Conference on Flexible Query Answering Systems (FQAS)}}
+@STRING{ICDE = {Proceedings of the International Conference on Data Engineering (ICDE)}}
+@STRING{ICDT = {Proceedings of the International Conference on Database Theory (ICDT)}}
+@STRING{IDEAS = {Proceedings of the International Database Engineering and Applications Symposium (IDEAS)}}
+@STRING{IIWEB = {Proceedings of the International Workshop on Information Integration on the Web (IIWeb)}}
+@STRING{IJCAI = {Proceedings of the International Joint Conference on Artificial Intelligence (IJCAI)}}
+@STRING{IQ = {Proceedings of the International Conference on Information Quality (IQ)}}
+@STRING{IQIS = {Proceedings of the SIGMOD International Workshop on Information Quality for Information Systems (IQIS)}}
+@STRING{IS = {Information Systems (IS)}}
+@STRING{ISWC = {Proceedings of the International Semantic Web Conference (ISWC)}}
+@STRING{JACM = {Journal of the ACM}}
+@STRING{JDIGLIB = {Journal of Digital Libraries}}
+@STRING{JMOLBIOL = {Journal of Molecular Biology}}
+@STRING{KRDB = {Proceedings of the International Workshop on Knowledge Represenation Meets Databases (KRDB)}}
+@STRING{MG = {McGraw-Hill, Inc.}}
+@STRING{MIT = {MIT Press}}
+@STRING{MK = {Morgan Kaufmann}}
+@STRING{NTII = {Proceedings of the International Workshop on New Trends in Information Integration (NTII)}}
+@STRING{PDIS = {Proceeding of the IEEE International Conference on Parallel and Distributed Information Systems(PDIS)}}
+@STRING{PH = {Prentice-Hall}}
+@STRING{PKDD = {European Conference on Principles of Data Mining and Knowledge Discovery (PKDD)}}
+@STRING{PNAS = {Proceedings of the National Academy of Sciences (PNAS)}}
+@STRING{PODS = {Proceedings of the Symposium on Principles of Database Systems (PODS)}}
+@STRING{PVLDB = {Proceedings of the VLDB Endowment}}
+@STRING{QDB = {Proceedings of the International Workshop on Quality in Databases (QDB)}}
+@STRING{RIDE = {Proceedings of the International Workshop on Research Issues in Data Engineering (RIDE)}}
+@STRING{SCIENCE = {Science}}
+@STRING{SIAMJC = {SIAM Journal on Computing}}
+@STRING{SIGKDD = {Proceedings of the International Conference on Knowledge discovery and data mining (SIGKDD)}}
+@STRING{SIGMOD = {Proceedings of the International Conference on Management of Data (SIGMOD)}}
+@STRING{SIGMODREC = {SIGMOD Record}}
+@STRING{SP = {Springer Verlag}}
+@STRING{SSDBM = {Proceedings of the International Conference on Scientific and Statistical Database Management (SSDBM)}}
+@STRING{STOC = {Proceedings of the Symposium on Theory of Computing (STOC)}}
+@STRING{TAGT = {Proceedings of the International Workshop on Theory and Application of Graph Transformations (TAGT)}}
+@STRING{TKDD = {ACM Transactions on Knowledge Discovery from Data}}
+@STRING{TKDE = {IEEE Transactions on Knowledge and Data Engineering (TKDE)}}
+@STRING{TODS = {ACM Transactions on Database Systems (TODS)}}
+@STRING{TOIS = {ACM Transactions on Information Systems}}
+@STRING{VDB = {Proceedings of the International Conference on Visual Database Systems (VDB)}}
+@STRING{VLDB = {Proceedings of the International Conference on Very Large Databases (VLDB)}}
+@STRING{VLDBJ = {VLDB Journal}}
+@STRING{WEBDB = {Proceedings of the ACM Workshop on the Web and Databases (WebDB)}}
+@STRING{WISE = {Proceedings of the International Conference on Web Information Systems Engineering (WISE)}}
+@STRING{WITS = {Proceedings of the Workshop on Information Technologies and Systems (WITS)}}
+@STRING{WWW = {Proceedings of the International World Wide Web Conference (WWW)}}
+
+%% entries
+@book{vernon2015reactive,
+  title      = {Reactive Messaging Patterns with the Actor Model: Applications and Integration in Scala and Akka},
+  author     = {Vernon, V.},
+  year       = {2015},
+  publisher  = {Pearson Education},
+}
+
+% arXiv: https://arxiv.org/pdf/1707.06507.pdf (already v2 online)
 @article{manifesto,
-  author    = {Vivek Shah and Marcos Vaz Salles},
-  title     = {Actor Database Systems: {A} Manifesto},
-  journal   = {CoRR},
-  volume    = {abs/1707.06507},
-  year      = {2017}
+  author     = {Vivek Shah and Marcos Vaz Salles},
+  title      = {Actor Database Systems: {A} Manifesto},
+  year       = {2017},
+  journal    = {CoRR},
+  volume     = {abs/1707.06507},
+}
+
+@inproceedings{Shah:reactdb,
+  author     = {Shah, Vivek and Salles, Marcos Vaz},
+  title      = {Reactors: {A} Case for Predictable, Virtualized Actor Database Systems},
+  booktitle  = COMAD,
+  year       = {2017},
+  pages      = {259--274},
 }
 
 @inproceedings{armstrong:erlang,
-  author = {Armstrong, Joe},
-  title = {A History of Erlang},
-  booktitle = {Proceedings of the Third ACM SIGPLAN Conference on History of Programming Languages},
-  series = {HOPL III},
-  year = {2007},
-  isbn = {978-1-59593-766-7},
-  location = {San Diego, California},
-  pages = {6-1--6-26},
-  url = {http://doi.acm.org/10.1145/1238844.1238850},
-  doi = {10.1145/1238844.1238850},
-  acmid = {1238850},
-  publisher = {ACM},
-  address = {New York, NY, USA},
+  author     = {Armstrong, Joe},
+  title      = {A History of Erlang},
+  booktitle  = {Proceedings of the Third ACM SIGPLAN Conference on History of Programming Languages},
+  year       = {2007},
+  pages      = {6-1--6-26},
 }
 
-@online{akka,
-  author = {{Lightbend, Inc.}},
-  title = {Akka},
-  year = {2018},
-  url = {https://akka.io/},
-  urldate = {2018-08-15},
-}
-
-@online{akka.net,
-  author = {{Akka.NET project}},
-  title = {Akka.NET},
-  year = {2017},
-  url = {https://getakka.net/},
-  urldate = {2018-08-15},
-}
-
-@article{bernstein:orleans,
-  title={Orleans: Distributed virtual actors for programmability and scalability},
-  author={Bernstein, Philip A and Bykov, Sergey and Geller, Alan and Kliot, Gabriel and Thelin, Jorgen},
-  journal={MSR-TR-2014--41},
-  year={2014}
-}
-
-@online{orbit,
-  author = {{Electronic Arts Inc.}},
-  title = {What is Orbit?},
-  year = {2018},
-  url = {https://github.com/orbit/orbit/wiki},
-  urldate = {2018-08-15},
-}
-
-@online{akka:clustersharding,
-  author = {{Lightbend, Inc.}},
-  title = {Akka Documentation -- Cluster Sharding},
-  year = {2018},
-  url = {https://doc.akka.io/docs/akka/current/cluster-sharding.html?language=scala#cluster-sharding},
-  urldate = {2018-08-16},
-}
-
-@article{Shah:reactdb,
-  author    = {Shah, Vivek and Salles, Marcos Vaz},
-  title     = {Reactors: {A} Case for Predictable, Virtualized {OLTP} Actor Database Systems},
-  journal   = {CoRR},
-  volume    = {abs/1701.05397},
-  year      = {2017},
-}
-
-@online{biokoda:actordb,
-  author = {{Biokoda}},
-  title = {ActorDB -- 1. About},
-  year = {2018},
-  url = {http://www.actordb.com/docs-about.html},
-  urldate = {2018-08-16},
-}
-
-@online{akka_uses,
-  author ={{Lightbend, Inc.}},
-  title = {Lightbend Case Studies},
-  year = {2018},
-  url = {https://www.lightbend.com/case-studies#filter:akka},
-  urldate = {2018-08-17},
-}
-
-@online{erlang_uses,
-  author ={{Erlang Solutions Ltd }},
-  title = {Case Studies \& Insights},
-  year = {2018},
-  url = {https://www.erlang-solutions.com/resources/case-studies.html},
-  urldate = {2018-08-17},
-}
-
-@online{orleans_uses,
-  author ={{.NET Foundation}},
-  title = {Who Is Using Orleans?},
-  year = {2018},
-  url = {https://dotnet.github.io/orleans/Community/Who-Is-Using-Orleans.html},
-  urldate = {2018-08-17},
-}
-
-@inproceedings{Eldeeb:transactions,
-  title={Transactions for Distributed Actors in the Cloud},
-  author={Tamer Eldeeb and Philip A. Bernstein},
-  year={2016}
-}
-
+% no page numbers: https://dblp.org/rec/bibtex/conf/cidr/BernsteinDKM17
 @inproceedings{Bernstein:indexing,
-  title={Indexing in an Actor-Oriented Database.},
-  author={Bernstein, Philip A and Dashti, Mohammad and Kiefer, Tim and Maier, David},
-  booktitle={CIDR},
-  year={2017}
+  title      = {Indexing in an Actor-Oriented Database},
+  author     = {Bernstein, Philip A and Dashti, Mohammad and Kiefer, Tim and Maier, David},
+  booktitle  = CIDR,
+  year       = {2017},
 }
 
 @inproceedings{raft,
-  title={In search of an understandable consensus algorithm.},
-  author={Ongaro, Diego and Ousterhout, John K},
-  booktitle={USENIX Annual Technical Conference},
-  pages={305--319},
-  year={2014}
-}
-
-@online{actorbase,
-  author ={Cardin, Riccardo},
-  title = {Actorbase, or "the Persistence Chaos"},
-  year = {2017},
-  url = {https://dzone.com/articles/actorbase-or-quotthe-persistence-chaosquot},
-  urldate = {2018-08-18},
-}
-
-
-%% EXAMPLES
-@InProceedings{ABC01,
-  author   = {N. Abraham and U. Bibel and P. Corleone},
-  title    = {Formatting Contributions for Proceedings},
-  pages    = {46-53},
-}
-
-@InBook{Az09,
-  pages    = {135-162},
-  title    = {Die Fußnote in LNI-Bänden},
-  author   = {Azubi, L. and others},
-}
-
-@Book{AB00,
-  title     = {Formatierungsrichtlinien für Tagungsbände},
-  publisher = {Format-Verlag},
-  year      = {2000},
-  author    = {K. Abel and U. Bibel},
-  address   = {Bonn},
-}
-
-@Online{GI14,
-  author = {{Gesellschaft für Informatik e.\,V.}},
-  label  = {GI},
-  year  = {2014},
-  url  =  {http://www.gi-ev.de},
-  urldate = {2014-12-24}
-}
-
-@book{vernon2015reactive,
-  title={Reactive Messaging Patterns with the Actor Model: Applications and Integration in Scala and Akka},
-  author={Vernon, V.},
-  isbn={9780133846874},
-  url={https://books.google.de/books?id=wc0oCgAAQBAJ},
-  year={2015},
-  publisher={Pearson Education}
+  title      = {In search of an understandable consensus algorithm.},
+  author     = {Ongaro, Diego and Ousterhout, John K},
+  booktitle  = {USENIX Annual Technical Conference},
+  year       = {2014},
+  pages      = {305--319},
 }
 
 @inproceedings{Haller:2012,
- author = {Haller, Philipp},
- title = {On the Integration of the Actor Model in Mainstream Technologies: The Scala Perspective},
- booktitle = {Proceedings of the 2Nd Edition on Programming Systems, Languages and Applications Based on Actors, Agents, and Decentralized Control Abstractions},
- series = {AGERE! 2012},
- year = {2012},
- isbn = {978-1-4503-1630-9},
- location = {Tucson, Arizona, USA},
- pages = {1--6},
- numpages = {6},
- url = {http://doi.acm.org/10.1145/2414639.2414641},
- doi = {10.1145/2414639.2414641},
- acmid = {2414641},
- publisher = {ACM},
- address = {New York, NY, USA},
- keywords = {actors, concurrent programming, distributed programming, scala, threads},
+  author     = {Haller, Philipp},
+  title      = {On the Integration of the Actor Model in Mainstream Technologies: The Scala Perspective},
+  booktitle  = {Proceedings of the 2nd Edition on Programming Systems, Languages and Applications Based on Actors, Agents, and Decentralized Control Abstractions},
+  year       = {2012},
+  pages      = {1--6},
+}
+
+@techreport{Eldeeb:transactions,
+  author     = {Tamer Eldeeb and Phil Bernstein},
+  title      = {Transactions for Distributed Actors in the Cloud},
+  year       = {2016},
+  institution= {Microsoft Research},
+}
+
+@techreport{bernstein:orleans,
+  title      = {Orleans: Distributed Virtual Actors for Programmability and Scalability},
+  author     = {Bernstein, Philip A and Bykov, Sergey and Geller, Alan and Kliot, Gabriel and Thelin, Jorgen},
+  year       = {2014},
+  institution= {Microsoft Research},
+}
+
+@online{akka,
+  author     = {{Lightbend, Inc.}},
+  title      = {Akka},
+  year       = {2018},
+  url        = {https://akka.io/},
+  urldate    = {2018-08-15},
+}
+
+@online{akka.net,
+  author     = {{Akka.NET project}},
+  title      = {Akka.NET},
+  year       = {2017},
+  url        = {https://getakka.net/},
+  urldate    = {2018-08-15},
+}
+
+
+@online{orbit,
+  author     = {{Electronic Arts Inc.}},
+  title      = {What is Orbit?},
+  year       = {2018},
+  url        = {https://github.com/orbit/orbit/wiki},
+  urldate    = {2018-08-15},
+}
+
+@online{akka:clustersharding,
+  author     = {{Lightbend, Inc.}},
+  title      = {Akka Documentation -- Cluster Sharding},
+  year       = {2018},
+  url        = {https://doc.akka.io/docs/akka/current/cluster-sharding.html?language=scala#cluster-sharding},
+  urldate    = {2018-08-16},
+}
+
+@online{biokoda:actordb,
+  author     = {{Biokoda}},
+  title      = {ActorDB -- 1. About},
+  year       = {2018},
+  url        = {http://www.actordb.com/docs-about.html},
+  urldate    = {2018-08-16},
+}
+
+@online{akka_uses,
+  author     = {{Lightbend, Inc.}},
+  title      = {Lightbend Case Studies},
+  year       = {2018},
+  url        = {https://www.lightbend.com/case-studies#filter:akka},
+  urldate    = {2018-08-17},
+}
+
+@online{erlang_uses,
+  author     = {{Erlang Solutions Ltd }},
+  title      = {Case Studies \& Insights},
+  year       = {2018},
+  url        = {https://www.erlang-solutions.com/resources/case-studies.html},
+  urldate    = {2018-08-17},
+}
+
+@online{orleans_uses,
+  author     = {{.NET Foundation}},
+  title      = {Who Is Using Orleans?},
+  year       = {2018},
+  url        = {https://dotnet.github.io/orleans/Community/Who-Is-Using-Orleans.html},
+  urldate    = {2018-08-17},
+}
+
+@online{actorbase,
+  author     = {Cardin, Riccardo},
+  title      = {Actorbase, or "the Persistence Chaos"},
+  year       = {2017},
+  url        = {https://dzone.com/articles/actorbase-or-quotthe-persistence-chaosquot},
+  urldate    = {2018-08-18},
 }
