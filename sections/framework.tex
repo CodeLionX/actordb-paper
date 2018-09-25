@@ -39,10 +39,11 @@ These considerations directly apply to \glspl{dactor} as they are built on top o
 The direct control of the \glspl{dactor} lifecycles, in principle, enables close configuration of the in-memory state of the database system.
 Frequently accessed \glspl{dactor} can be kept in memory while ones, which haven't been involved in recent computational effort, could be temporarily persisted to disk.
 The virtual actor system implemented in the Orleans framework withdraws such control, making custom, database specific logic for configuring \gls{dactor} availability impossible.
+This makes our prototype on Akka different from the related implementations in Orleans.
 
 \subsection{Domain Actor Design}\label{subsec:domain_actor_design}
 
-To illustrate the definition of \code{Dactor}s we use the example introduced in \cref{sec:dactors}, which is schematically depicted in \cref{fig:dactor_diagram}.
+To illustrate the definition of \code{Dactor}s, we use the example introduced in \cref{sec:dactors}, which is schematically depicted in \cref{fig:dactor_diagram}.
 The corresponding definition of the \code{Film}'s data model is shown in \cref{lst:film_definition}.
 \begin{lstlisting}[float, caption={Film Dactor type definition using the presented framework.}, label={lst:film_definition}, language=Scala]
 object Film {
@@ -86,7 +87,7 @@ Note that, since \glspl{dactor} can logically encapsulate multiple data sets and
 
 The partial denormalization of information, which relates to \code{Actor} instances, into the \code{Film.Cast} \gls{relation} of \code{Film} type \glspl{dactor},
 enables the computation of and response to common queries, such as requesting info on a film and their cast list, from within a single \gls{dactor} instance.
-The trade-off for this is that inserting new information about an actor (person) starring in a film becomes a functionality involving two \gls{dactor} instances.
+The trade-off for this is that inserting new information about an actor (person) starring in a film becomes an operation that involves a multitude of \gls{dactor} instances.
 Implementation examples for this functionality and the trade-off are discussed in the following Section~\ref{subsec:multi_dactor_queries}.
 
 \subsection[Multi-Dactor Queries]{Multi-\Gls{dactor} Queries}\label{subsec:multi_dactor_queries}

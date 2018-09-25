@@ -10,7 +10,7 @@
 
 \subsection{Experimental Setup}
 
-  The exemplary actor database system used for testing consists of four different \gls{dactor} types, each containing different number of relations and data sizes.
+  The exemplary actor database system used for testing consists of four different \gls{dactor} types, each containing a different number of relations and data sizes.
   We used a script to generate four different datasets emulating the scaling of the system by increasing the number of \gls{dactor}-instances in the system and keeping the data size stored in one \gls{dactor} nearly constant.
   The script creates various primitive data types, such as \code{String}, \code{Double}, and \code{Int}, as well as complex data types, such as \code{ZonedDateTime}, and distributes the data across \glspl{dactor} and relations.
   The data distribution across the \gls{dactor} types is reported in \cref{tab:datasets:size_distribution} and the key figures of the datasets are reported in \cref{tab:datasets:keyfigures}.
@@ -119,7 +119,7 @@
 \subsection{Discussion}\label{sec:exp:discussion}
 
   \Cref{tab:memory_overhead} clearly shows that using \glspl{dactor} only introduces a very small memory overhead.
-  \Glspl{dactor} have a constant overhead of about 550~B per instance.
+  \Glspl{dactor} have a constant overhead of about 533~B per instance.
   Our experiments show a worst case scenario, where each \gls{dactor} only stores 230~KB on average.
 
   \begin{table}
