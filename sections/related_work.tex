@@ -7,7 +7,7 @@
 
   % the actor model and the virtual actor model
   Various programming languages and libraries~\cite{armstrong:erlang,Haller:2012,akka,akka.net} implement the actor model that we introduced in the previous section.
-  In 2004, \citet{bernstein:orleans} introduced the virtual actor programming model with the Orleans framework for .NET, which raises the abstraction level of actor objects.
+  In 2004, \citet{bernstein:orleans} raised the abstraction level of actor objects even further by introducing the virtual actor programming model within the Orleans framework for .NET.
   It still adheres to the plain actor model, but treats actors as virtual entities.
   In this model actor lifecycle management and distribution is managed by the framework or runtime and not by the application developer.
   The physical location of the actor is transparent to the application.
@@ -32,10 +32,11 @@
   \end{description}
 
   Most practical research in the field of actor database systems has been presented in conjunction with the Orleans framework and the Erlang programming language~\cite{Shah:reactdb,Eldeeb:transactions,Bernstein:indexing}.
-  \Citet{biokoda:actordb} encapsulates a full relational SQL database inside an actor and \citet{actorbase} uses actors to build a scalable key-value store.
+  \Citet{biokoda:actordb} takes another approach and encapsulates a full relational SQL database inside an actor.
+  \Citet{actorbase} uses actors to build a scalable key-value store.
 
   % what we do
-  In contrast to the other approaches, we developed our prototype using the Scala programming language and the Akka framework.
+  In contrast to the mentioned actor database systems, we developed our prototype using the Scala programming language and the Akka framework.
   While the Orleans framework, which has been used in earlier related work, provides virtual actors with automatic lifecycle management, Akka allows for and requires direct control over an actor's lifecycle.
   This allows close configuration of the in-memory state of the actor database system.
   Frequently accessed \glspl{dactor} can be kept in memory while ones, which haven't been involved in recent computational effort, could be temporarily persisted to disk.
