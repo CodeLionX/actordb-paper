@@ -3,70 +3,27 @@
 % !TeX spellcheck = en_US
 
 \section{Related Work}\label{sec:related_work}
+  In this section, we give an outline of recent actor model implementations and elaborate on the notion of \textit{Actor Database Systems} and their requirements.
 
-  The actor model, as described in the previous section, denotes a mathematical concept for concurrent computation, which dates back to the early 1970's.
-  It has gained popularity and has been implemented anew as language extensions or frameworks for existing object-oriented and functional languages, such as C\#, Java, and Scala, in the mid-2000's.
-  In this section, we give an outline of the recent history of actor model implementations,
-  discuss differences of the conventional actor model and the virtual actor model used in the Orleans framework,
-  and elaborate on the notion of \textit{Actor Database Systems} and their requirements.
-
-  \subsection{Actor Model}
-  % https://www.brianstorti.com/the-actor-model/
-  % https://en.wikipedia.org/wiki/Actor_model
-  % https://doc.akka.io/docs/akka/2.5.3/scala/guide/actors-intro.html
-  % https://link.springer.com/content/pdf/10.1007%2F978-3-642-39038-8.pdf#page=318 (page 302)
-  Various programming languages and libraries implement the actor model and provide the corresponding functionality:
-  The Erlang programming language supports concurrency using the actor programming model and is designed for distributed and highly available systems in the telecommunication sector~\cite{armstrong:erlang}.
-  The Scala programming language's standard library included an actor model implementation for concurrent computation starting in 2006, which has now been deprecated for the Akka library~\cite{Haller:2012}.
-  Akka implements the actor model for the \gls{jvm} and can be used with the languages Java and Scala~\cite{akka}.
-  Akka.Net is a community-driven port of the Akka toolkit for the .NET platform in the languages C\# and F\#~\cite{akka.net}.
-
-  \subsection{Virtual Actor Model}
-  While the actor programming model allows for low-level interaction with the actor lifecycle management, handling race conditions, physically distributing actors, and failure handling, the virtual actor programming model raises the abstraction level of actor objects.
+  % the actor model and the virtual actor model
+  Various programming languages and libraries~\cite{armstrong:erlang,Haller:2012,akka,akka.net} implement the actor model that we introduced in the previous section.
+  In 2004, \citet{bernstein:orleans} raised the abstraction level of actor objects even further by introducing the virtual actor programming model within the Orleans framework for .NET.
   It still adheres to the plain actor model, but treats actors as virtual entities.
   In this model actor lifecycle management and distribution is managed by the framework or runtime and not by the application developer.
   The physical location of the actor is transparent to the application.
-  This model is comparable to virtual memory, which allows processes to access a memory address whether it is currently physically available or not.
+  The framework Orbit~\cite{orbit} provides virtual actors for the \gls{jvm}.
 
-  The virtual actor model was introduced with the Orleans framework for .NET by Microsoft Research~\cite{bernstein:orleans}.
-  In Orleans, actors (virtually) exist at any time.
-  There is no possibility to create an actor explicitly.
-  Instead, this task is handled by the language runtime, which instantiates actors on demand.
-  The runtime's resource management deals with unused actors and reclaims their space automatically.
-  The Orleans runtime guarantees that actors are always available.
-  This means, that in the view of an application developer an actor can never fail.
-  The runtime will deal with crashing actors and servers and recreate missing actor incarnations accordingly.
-
-  The corresponding framework for the \gls{jvm} is Orbit~\cite{orbit}.
-  %In Orbit, a virtual actor can be active or inactive.
-  %But those two states are transparent to the application developer.
-  %Similar to Orleans, messages to an inactive actor in Orbit will activate it, so the actor can receive the sent message.
-  Actor state in Orbit is usually stored in a database, which allows for activation and deactivation of actors at runtime.
-  During activation of an actor, the state is recovered from persistent database storage.
-  Before the actor is deactivated, its state is written back to the database.
-
-  %Discussion about virtual actors in Akka.NET (also applies to Akka): \url{https://github.com/akkadotnet/akka.net/issues/756}
-  %-- somewhat implemented with cluster sharding project
-  Akka provides similar functionality with Akka Cluster Sharding~\cite{akka:clustersharding}.
-  It introduces the separation of virtual and physical Akka actors.
-  Actors are first grouped into shards, which can then be located at different physical locations.
-  The distribution of the shards and their actors is managed by the framework and it also deals with the routing of the messages and re-balancing the shards to different nodes based on different strategies.
-  A developer does not need to know, where a specific actor is physically located to send messages to it.
-  Akka Cluster Sharding also supports passivation of actors.
-  This means that unused persistent actors can be unloaded to free up memory (passivation).
-  A message to passive actors will instruct the framework to load it back into memory.
-
-
-  \subsection{Actor Database Systems}
+  % Actor Database Systems
   The actor and virtual actor programming model has increasingly been used to build soft caching layers and cloud applications for various purposes~\cite{erlang_uses,akka_uses,orleans_uses}.
   This shows the appeal of the programming model that allows developers to easily develop modular and scalable software, which can be deployed in the heterogenous parallel cloud computing infrastructure.
-  
+
   Despite its popularity for application development, the actor programming model and actor programming frameworks lack state management capabilities, specifically for data-centric applications.
   The developer has to decide how to handle state persistence and how to satisfy the failure and consistency requirements of the application, because actor model implementations do no provide atomicity or consistency guarantees for state across actors.
   \Citet{manifesto} find a need for state management guarantees in actor systems and propose to integrate actor-based programming models in database management systems.
   The authors postulate that \textit{Actor Database Systems} should be designed as a logical distributed runtime with state management guarantees.
   They should allow for and encourage the design of modular, scalable and cloud-ready applications.
-  \Citet{manifesto} outline four tenets that identify an \textit{Actor Database System} and specify needed features in their manifesto:
+  \Citet{manifesto} specify needed features in their manifesto and outline four tenets that identify an \textit{Actor Database System}:
+
   \begin{description}
     \item[Tenet 1] Modularity and encapsulation by a logical actor construct
     \item[Tenet 2] Asynchronous, nested function shipping
@@ -74,24 +31,29 @@
     \item[Tenet 4] Security, monitoring, administration and auditability
   \end{description}
 
-  Practical work on actor database systems has been done using the Orleans framework.
-  \Citet{Shah:reactdb} tightly follow the propositions of the manifesto and present \reactdb{},
-  an in-memory OLTP database system that is programmed via application-defined actors with relational semantics, called reactors.
-  A reactor is a logical entity encapsulating state as relations, with
-  asynchronous function processing capability, which typically represents an application-level scaling unit.
-  Within individual reactors, classic declarative querying can be used, but across actors explicit asynchronous function calls must be defined.
-  \citeauthor{Shah:reactdb} show that transactions across reactors can have serializability guarantees.
-  \Citet{Eldeeb:transactions} introduce a new transaction protocol for distributed actors improving the throughput compared to the two-phase commit protocol.
-  \Citet{Bernstein:indexing} explore indexing mechanisms in an actor database system.
-  They propose a new indexing architecture based on the Orleans framework that is fault-tolerant and eventually-consistent.
+  Most practical research in the field of actor database systems has been presented in conjunction with the Orleans framework and the Erlang programming language~\cite{Shah:reactdb,Eldeeb:transactions,Bernstein:indexing}.
+  \Citet{biokoda:actordb} takes another approach and encapsulates a full relational SQL database inside an actor.
+  \Citet{actorbase} uses actors to build a scalable key-value store.
 
-  \Citet{biokoda:actordb} takes a different approach to combine actor programming models and relational database systems.
-  In their prototype actorDB, an actor encapsulates a full relational SQL database using the SQLite database engine\footnote{\url{https://www.sqlite.org/about.html}}.
-  Actors can be deployed in an distributed cloud environment and communicate asynchronously.
-  The database is ACID-conform and enforces consistency across actors with the Raft consensus protocol~\cite{raft}.
-  The database can be used via the MySQL-protocol.
+  % what we do
+  In contrast to the mentioned actor database systems, we developed our prototype using the Scala programming language and the Akka framework.
+  While the Orleans framework, which has been used in earlier related work, provides virtual actors with automatic lifecycle management, Akka allows for and requires direct control over an actor's lifecycle.
+  This allows close configuration of the in-memory state of the actor database system.
+  Frequently accessed \glspl{dactor} can be kept in memory while ones, which haven't been involved in recent computational effort, could be temporarily persisted to disk.
+  The virtual actor system implemented in the Orleans framework withdraws such control, making custom, database specific logic for configuring \gls{dactor} availability impossible.
+  This makes our prototype on Akka different from the related implementations in Orleans.
 
-  Most practical research in the field of actor database systems has been presented in conjunction with the Orleans framework and the Erlang programming language.
-  The open-source project \textit{Actorbase} by \citet{actorbase} constitutes a key-value store implementation utilizing Akka actors for horizontal scaling and partitioning.
-  In this research database system, partitions are managed by storekeeper actors while inter-partition lookup and indexing is managed by so-called storefinder actors.
-  This approach is limited to a key-value store function set and does not provide functionality corresponding to the relational features discussed earlier.
+  The features of our prototype relate to three of the four tenets that define an \textit{Actor Database System} according to \citeauthor{manifesto}'s manifesto~\cite{manifesto}:
+  \textbf{Tenet 1} calls for the use of actors to achieve a modular logical model for data encapsulation.
+  \Gls{dactor} instances are in-memory storekeepers for application data.
+  They satisfy the actor definition and support high modularity.
+  Furthermore, \glspl{dactor} provide a model for concurrent computation of predefined functionality that increases locality of data accesses.
+  This is part of the requirements described in \textbf{Tenet 2}.
+  All communication between \glspl{dactor} is asynchronous to leverage the advantages of increasingly parallel hardware.
+  Our concept of \glspl{functor} allows for the definition of functionality using multiple actors' data.
+  The possibility to define these \glspl{functor} as well as \gls{dactor} behavior in a declarative way relates to the second part of \textbf{Tenet 3}.
+  Due to their single-threaded computation model, \glspl{dactor} can be argued to enforce internal consistency by default.
+  In principle, \glspl{functor} allow for the implementation of further transaction protocols to ensure inter-\gls{dactor} consistency guarantees.
+  Since the requirements listed under \textbf{Tenet 4} relate mostly to production-ready database products, we do not implement or investigate them in this research project.
+  The functionality described by \citeauthor{manifesto} in tenets one through three suffices the investigation of the practical feasibility and implications of the actor database concept.
+

@@ -14,33 +14,6 @@ The framework provides the aforementioned features for developers:
   \item \Gls{functor} objects for procedures, which rely on data contained in multiple \glspl{dactor}
 \end{itemize}
 
-% Tenets
-These features relate to three of the four core tenets that define an \textit{Actor Database System} according to \citeauthor{manifesto}'s manifesto~\cite{manifesto}:
-\textbf{Tenet 1} calls for the use of actors to achieve a modular logical model for data encapsulation.
-\Gls{dactor} instances are in-memory storekeepers for application data.
-They satisfy the actor definition and support high modularity.
-Furthermore, \glspl{dactor} provide a model for concurrent computation of predefined functionality that increases locality of data accesses.
-This is part of the requirements described in \textbf{Tenet 2}.
-All communication between \glspl{dactor} is asynchronous to leverage the advantages of increasingly parallel hardware.
-\Glspl{functor} allow for the definition of functionality using multiple actors' data and are executed asynchronously as well.
-The possibility to define these \glspl{functor} as well as \gls{dactor} behavior in a declarative way relates to the second part of \textbf{Tenet 3}.
-Due to their single-threaded computation model, \glspl{dactor} can be argued to enforce internal consistency by default.
-In principle, \glspl{functor} allow for the implementation of further transaction protocols to ensure inter-\gls{dactor} consistency guarantees.
-Since the requirements listed under \textbf{Tenet 4} relate mostly to production-ready database products, we do not implement or investigate them in this research project.
-The functionality described by \citeauthor{manifesto} in tenets one through three suffices the investigation of the practical feasibility and implications of the actor database concept.
-
-% Tech
-Our proof-of-concept framework is developed using the Scala programming language and the Akka framework.
-While the Orleans framework, which has been used in earlier related work, provides virtual actors with automatic lifecycle management, Akka allows for and requires direct control over an actor's lifecycle.
-% As \glspl{dactor} directly build on the provided Akka actor implementation, these considerations directly apply to them.
-These considerations directly apply to \glspl{dactor} as they are built on top of the Akka actor implementation.
-% More Discussion of the implication that this allows for more detailed configuration and custom \gls{dactor} idle behavior in Discussion
-
-The direct control of the \glspl{dactor} lifecycles, in principle, enables close configuration of the in-memory state of the database system.
-Frequently accessed \glspl{dactor} can be kept in memory while ones, which haven't been involved in recent computational effort, could be temporarily persisted to disk.
-The virtual actor system implemented in the Orleans framework withdraws such control, making custom, database specific logic for configuring \gls{dactor} availability impossible.
-This makes our prototype on Akka different from the related implementations in Orleans.
-
 \subsection{Domain Actor Design}\label{subsec:domain_actor_design}
 
 To illustrate the definition of \code{Dactor}s, we use the example introduced in \cref{sec:dactors}, which is schematically depicted in \cref{fig:dactor_diagram}.
