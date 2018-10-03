@@ -23,7 +23,7 @@
 
     We consider the following example of a web application with information on films and (human) actors similar to the imdb.com or rottentomatoes.com websites.
     A traditional data layout might be comprised of two tables containing information on films and actors, respectively.
-    In contrast to the relational model, our model, shown in \cref{fig:dactor_diagram}, is denormalized and distributed across two different \gls{dactor} types.
+    In contrast to the relational model, our model, shown in \cref{fig:film_diagram}, is denormalized and distributed across two different \gls{dactor} types.
     Both, \code{Film} and \code{Actor} \gls{dactor} instances contain two \glspl{relation} and store information about a specific film or actor, respectively.
     In addition, \code{Actor} instances keep some information on related \code{Film}s, i.e. those the \code{Actor} has starred in, including the \code{Film}'s \gls{dactor} id, and vice-versa.
     This realises a many-to-many relationship between both \gls{dactor} types.
@@ -38,13 +38,13 @@
       \begin{subfigure}[b]{0.44\textwidth}
         \centering
         \includestandalone[width=\textwidth]{pictures/tikz/dactor_diagram}
-        \caption{Class diagram of the \texttt{Film} \gls{dactor} type defined in the example application. It contains two \glspl{relation}.}
-        \label{fig:dactor_diagram}
+        \caption{Graphical representation of the \texttt{Film} \gls{dactor} type definition.}
+        \label{fig:film_diagram}
       \end{subfigure}\hfill
       \begin{subfigure}[b]{0.54\textwidth}
         \centering
         \scriptsize
-\begin{lstlisting}[]language=Scala]
+\begin{lstlisting}[language=Scala]
 class Film(id: Id) extends Dactor(id) {
   override protected val relations = {
     Film.Info -> SingleRowRelation(Film.Info),
@@ -66,9 +66,11 @@ object Film {
   }
 }
 \end{lstlisting}
-        \subcaption{Film Dactor type definition using the presented framework.}
+        \subcaption{Example code using our framework.}
         \label{lst:film_definition}
       \end{subfigure}
+      \caption[\texttt{Film} Dactor type definition with two relations of the example application.]{\code{Film} \gls{dactor} type definition with two relations of the example application.}
+      \label{fig:film_dactor_definition}
     \end{figure}
 
     % logic and processing capabilities
