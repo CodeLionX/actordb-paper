@@ -18,35 +18,6 @@ The framework provides the aforementioned features for developers:
 
 To illustrate the definition of \code{Dactor}s, we use the example introduced in \cref{sec:dactors}, which is schematically depicted in \cref{fig:dactor_diagram}.
 The corresponding definition of the \code{Film}'s data model is shown in \cref{lst:film_definition}.
-\begin{lstlisting}[float, caption={Film Dactor type definition using the presented framework.}, label={lst:film_definition}, language=Scala]
-object Film {
-  // Definitions of relations contained in Film type Dactors
-  object Info extends RelationDef {
-    // column with name "title" and data-type String:
-    val title = ColumnDef[String]("title")
-    val description = ColumnDef[String]("description")
-    // rich datetime data-type column:
-    val release = ColumnDef[ZonedDateTime]("release")
-  }
-
-  object Cast extends RelationDef {
-    // foreign key relating to an Actor type Dactor instance:
-    val actorId = ColumnDef[Id]("actor_id")
-    val name = ColumnDef[String]("actor_name")
-    val rolename = ColumnDef[String]("role_name")
-  }
-} 
-
-// Dactor type definition.
-class Film(id: Id) extends Dactor(id) {
-  override protected val relations = {
-    // special relation type ensuring domain-logic constraint
-    Film.Info -> SingleRowRelation(Film.Info),
-    Film.Cast -> RowRelation(Film.Cast)
-  }
-  override def receive: Receive = ??? // Dactor behavior
-}
-\end{lstlisting}
 
 Developers can model the application's domain objects by defining \gls{dactor} types as subclasses of the framework-provided \code{Dactor} class.
 Instances of such user-defined \gls{dactor} types are managed by the framework and are available for messaging in a consistent namespace.

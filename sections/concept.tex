@@ -34,9 +34,41 @@
 
     \begin{figure}
       \centering
-      \includestandalone[width=\textwidth]{pictures/tikz/dactor_diagram}
-      \caption{Class diagram of the \texttt{Film} \gls{dactor} type defined in the example application. It contains two \glspl{relation}.}
-      \label{fig:dactor_diagram}
+
+      \begin{subfigure}[b]{0.44\textwidth}
+        \centering
+        \includestandalone[width=\textwidth]{pictures/tikz/dactor_diagram}
+        \caption{Class diagram of the \texttt{Film} \gls{dactor} type defined in the example application. It contains two \glspl{relation}.}
+        \label{fig:dactor_diagram}
+      \end{subfigure}\hfill
+      \begin{subfigure}[b]{0.54\textwidth}
+        \centering
+        \scriptsize
+\begin{lstlisting}[]language=Scala]
+class Film(id: Id) extends Dactor(id) {
+  override protected val relations = {
+    Film.Info -> SingleRowRelation(Film.Info),
+    Film.Cast -> RowRelation(Film.Cast)
+  }
+  // define Dactor behavior
+  override def receive: Receive = ???
+}
+object Film {
+  object FilmInfo extends RelationDef {
+    val title = ColumnDef[String]("title")
+    val description = ColumnDef[String]("description")
+    val release = ColumnDef[ZonedDateTime]("release")
+  }
+  object Cast extends RelationDef {
+    val actorId = ColumnDef[Id]("actor_id")
+    val name = ColumnDef[String]("actor_name")
+    val rolename = ColumnDef[String]("role_name")
+  }
+}
+\end{lstlisting}
+        \subcaption{Film Dactor type definition using the presented framework.}
+        \label{lst:film_definition}
+      \end{subfigure}
     \end{figure}
 
     % logic and processing capabilities
