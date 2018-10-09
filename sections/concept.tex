@@ -160,11 +160,5 @@ object Film {
     \Glspl{dactor} are the only place in the system that actually have persistent state.
     Other actors are stateless or have non-durable state, such as intermediate results or actor references.
     These actors can interact with the \glspl{dactor} via the defined messages and represent application services or components of the infrastructure layer.
-    
-    To develop such a system, we can decompose our application into encapsulated domain objects.
-    In contrast to traditional entities in the relational model, domain objects should consider the most common query loads to encapsulate the needed information.
-    Those domain objects can be modeled as \glspl{dactor} and consist of a data schema and behavior.
-    During this process, we have to keep our requirements regarding query patterns and scaling in mind.
-    Those requirements will influence the domain decomposition and the messaging patterns used.
     The entry points to our application are stateless actors on top of the \glspl{dactor}, which provide high throughput and can be scaled out easily.
     They act as routers for incoming requests and orchestrate computations.
