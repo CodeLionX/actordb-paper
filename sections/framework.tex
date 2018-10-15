@@ -3,38 +3,23 @@
 % !TeX spellcheck = en_US
 
 \section{Domain Actor Database Framework}\label{sec:framework}
-% Describe implementation details and framework design
 
 After describing the general concept of an \textit{Actor Database System}, we present the implementation of a proof-of-concept application development framework, which allows for the definition of an application's data model and the provisioning of corresponding \glspl{dactor} as part of the application runtime.
-
-The framework provides the aforementioned features for developers:
-\begin{itemize}
-  \item Declarative data model definition using \glspl{dactor}
-  \item SQL-like interface for accessing and manipulating internal data within \glspl{dactor}
-  \item \Gls{functor} objects for procedures, which rely on data contained in multiple \glspl{dactor}
-\end{itemize}
 
 \subsection{Domain Actor Design}\label{subsec:domain_actor_design}
 
 To illustrate the definition of \code{Dactor}s, we use the example introduced in \cref{sec:dactors}, which is schematically depicted in \cref{fig:film_diagram}.
 The corresponding definition of the \code{Film}'s data model is shown in \cref{lst:film_definition}.
-
-Developers can model the application's domain objects by defining \gls{dactor} types as subclasses of the framework-provided \code{Dactor} class.
+Developers can model the application's domain objects by defining \gls{dactor} types as subclasses of the framework-provided \code{Dactor} class in a declarative way.
 Instances of such user-defined \gls{dactor} types are managed by the framework and are available for messaging in a consistent namespace.
-A \gls{dactor} type definition is comprised of the type's internal data layout, i.e. \glspl{relation}, and its functionality to process said data.
-In detail, a \gls{dactor} type's data model definition consists of \glspl{relation} with unique schemas.
-A \gls{relation}'s schema is comprised of column definitions, whereby every column is defined by a name and a data type.
 Using the column's predefined data types, all functions support compile-time type-safety.
 Due to the \gls{dactor} system sharing the application's runtime and programming environment, these data or object types are equal to the types handled in any application logic.
 Thus, this approach helps eliminate the impedance mismatch between application logic and data tier with regard to handled data types and object (de-)serialization.
-Note that, since \glspl{dactor} can logically encapsulate multiple data sets and state information, they can and often do comprise multiple \glspl{relation}.
-
-The partial denormalization of information, which relates to \code{Actor} instances, into the \code{Film.Cast} \gls{relation} of \code{Film} type \glspl{dactor},
-enables the computation of and response to common queries, such as requesting info on a film and their cast list, from within a single \gls{dactor} instance.
-The trade-off for this is that inserting new information about an actor (person) starring in a film becomes an operation that involves a multitude of \gls{dactor} instances.
-Implementation examples for this functionality and the trade-off are discussed in the following Section~\ref{subsec:multi_dactor_queries}.
 
 \subsection[Multi-Dactor Queries]{Multi-\Gls{dactor} Queries}\label{subsec:multi_dactor_queries}
+
+The trade-off for the denormalized schema definition is that inserting new information about an actor (person) starring in a film becomes an operation that involves a multitude of \gls{dactor} instances.
+Implementation examples for this functionality and the trade-off are discussed in the following.
 
 Explicit messaging and complementary actor behavior are used to implement the cascading communication pattern described in Section~\ref{sec:concept}.
 Besides this, \glspl{functor} are the framework's system, which enable inter-\gls{dactor} communication and computations.
@@ -74,7 +59,7 @@ The supervision concept between parent and child actors in the Akka framework, t
 The calling actor can then react to the failure by resuming or restarting the Functor, stopping this computation, or escalating the failure to its own parent.
 The correct course of action depends on the desired application behavior.
 
-\subsection[Framework Discussion]{Framework Discussion}\label{subsec:framework_discussion}
+\subsection{Framework Discussion}\label{subsec:framework_discussion}
 
 We presented an actor database framework and showcased some of its functionality in detail.
 In particular, the described feature set is aimed to alleviate some of the problems, which arise from a distributed database system.
