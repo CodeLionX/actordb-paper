@@ -27,7 +27,7 @@
     While the basic functionality of the two \gls{functor} types for sequential and concurrent computation is discussed in \cref{sec:concept}, this section focuses on the definition of a concrete function integrating data from multiple \glspl{dactor}.
     
     \Glspl{functor} are actors with a limited lifetime.
-    They are instantiated once a defined \gls{functor} is called by a Dactor or other actor and deleted once they return the final response or encounter a failure.
+    They are instantiated once a defined \gls{functor} is called by a \gls{dactor} or other actor and deleted once they return the final response or encounter a failure.
     \Glspl{functor} are always called from an Akka actor as a child actor.
     This Akka-specific hierarchical relationship enables notifying the calling actor even in case of an unforseen crash of the \gls{functor} themselves which in turn allows to trigger error handling, e.g. retrying the \gls{functor} execution.
     
@@ -38,10 +38,10 @@
     \Cref{fig:functor_diagram} displays the message-flow between the involved \glspl{dactor} and \glspl{functor}, as well as their supervision relations.
     To provide a top-level function that takes only an \code{Actor} id, a \code{Film} id, as well as a rolename and adds the corresponding Actor information to the Film's cast list and vice versa, this example utilizes a concurrent \gls{functor} wrapping two sequential \glspl{functor}.
     Both sequential \glspl{functor} are comprised of two subsequent steps:
-    The first sequential \gls{functor} queries information from the Film Dactor instance, which is needed to add the film to the Actor Dactor's filmography \gls{relation}, i.e. the film's title.
-    Then it sends a message to the Actor Dactor containing said data to trigger the insertion of the film.
+    The first sequential \gls{functor} queries information from the Film \gls{dactor} instance, which is needed to add the film to the Actor \gls{dactor}'s filmography \gls{relation}, i.e. the film's title.
+    Then it sends a message to the Actor \gls{dactor} containing said data to trigger the insertion of the film.
     The second sequential \gls{functor} queries the Actor instance's data, which is necessary to add them to the Film's cast \gls{relation}, i.e. their name.
-    Using this data and their rolename the \gls{functor} then sends another message to the Film Dactor to trigger an insertion into its cast \gls{relation}.
+    Using this data and their rolename the \gls{functor} then sends another message to the Film \gls{dactor} to trigger an insertion into its cast \gls{relation}.
     Both sequential \glspl{functor} are executed in parallel using a concurrent \gls{functor}, which only sends a successful response to its caller after both sequential \glspl{functor} have sent their responses to the concurrent \gls{functor}.
     
     \begin{figure}
