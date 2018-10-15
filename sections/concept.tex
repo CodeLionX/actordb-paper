@@ -86,13 +86,11 @@ object Film {
   \subsection{Communication between Domain Actors}\label{sec:dactor_comm}
     Not all computation can be done with the information residing in a single \gls{dactor}.
     Hence, communication between \glspl{dactor} is required.
-    As already mentioned, inter-\gls{dactor} communication is realized via explicit, asynchronous message passing.
-    This allows application developers to chose the right messaging pattern for their use case.
+    Explicit, asynchronous message passing allows application developers to chose the right messaging pattern for their use case.
     The choice is heavily influenced by the data layout used for the \glspl{dactor} and sets the level of parallelization and the network-load for the computation.
 
-    We consider three main messaging patterns for inter-\gls{dactor} communication, which are shown in \cref{fig:comp_patterns}: Cascading Computation, Sequential Computation, and Concurrent Computation.
-    They are provided as messaging primitives in our framework and can be combined to create more complex message flows and computation models.
-    All three patterns assume a request-response messaging schema and take a high-level message to a \gls{dactor}, lets call it \gls{dactor} A, as starting point.
+    We consider three main messaging patterns for inter-\gls{dactor} communication, which are shown in \cref{fig:comp_patterns}.
+    Those messaging primitives are provided in our framework and can be combined to create more complex message flows and computational models.
 
     \begin{figure}
       \centering
@@ -119,37 +117,22 @@ object Film {
       \label{fig:comp_patterns}
     \end{figure}
 
-    \begin{enumerate}
-      \item\label{enum:comp_pattern_1} \textbf{Cascading Computation}
-        A high-level message to \gls{dactor} A, will trigger successive messages to other \glspl{dactor}, which are hidden from the original requester.
-        Depending on the computation performed in \gls{dactor} A, it can send requests to another \gls{dactor} (e.\,g. \gls{dactor} B) and handle the result itself before returning the response to the initial requester.
-        \Gls{dactor} B can itself send messages to other \glspl{dactor} as well.
-        
-        As one can see in \cref{fig:comp_pattern_1}, this pattern is comparable to function calls in \gls{oop}.
-        But contrary to simple function calls, messages in this pattern are sent asynchronously.
-        This means that the requesting \gls{dactor} has to manage the state of pending responses, such as actor references and intermediate results, or failure cases.
-        This clutters the domain logic in the \gls{dactor} and leads to complex and error-prone code.
-        In addition, each message introduces network latency and can therefore increase the overall computation time compared to a single \gls{dactor} computing the response.
-        If used sparsely, this pattern supports separation of concerns and the tell-don't-ask paradigm.
+      The first messaging pattern is \textbf{Cascading Computation}.
+      A high-level message to an initial \gls{dactor} (\gls{dactor} A), will trigger successive messages to other \glspl{dactor}, which are hidden from the original requester.
+      Following \glspl{dactor} can also trigger further messages themselves.
+      As one can see in \cref{fig:comp_pattern_1}, this pattern is comparable to function calls in \gls{oop}.
+      But contrary to simple function calls, messages in this pattern are sent asynchronously.
+      This means that the requesting \gls{dactor} has to manage the state of pending responses.
+      This clutters the domain logic in the \gls{dactor} and leads to complex and error-prone code.
+      If used sparsely, this pattern supports separation of concerns and the tell-don't-ask paradigm.
 
-      \item\label{enum:comp_pattern_2} \textbf{Sequential Computation}
-        \Cref{fig:comp_pattern_2} shows the sequential computation pattern.
-        It is used for computations that consist of consecutive steps, where each step depends on the previous step's result, such as filter chains.
+      \Cref{fig:comp_pattern_2} shows the \textbf{Sequential Computation} pattern.
+      It is used for computations that consist of consecutive steps, where each step depends on the previous step's result, such as filter chains.
+      This pattern can be implemented via \glspl{functor}, which are \gls{dactor}-proxies provided by our framework.
+      We introduce the concept of \glspl{functor} in \cref{subsec:multi_dactor_queries}.
+      Using a \gls{functor} to process the consecutive steps of the computational chain relieves \gls{dactor} A from dealing with intermediate state, because it is managed by the \gls{functor}.
+      Each \gls{functor} only has to deal with one request-response pair at a time, which leads to a simple state and processing logic for the \gls{functor} itself.
 
-        For this and the next messaging pattern, we introduce the concept of actor-level \glspl{functor}.
-        \Glspl{functor} encapsulate the processing of a high-level request in a new, short-living actor.
-        They are able to communicate with other \glspl{dactor}, track the state of pending requests and handle failure cases.
-        Every actor can create a new \gls{functor} to encapsulate multiple depending requests to \glspl{dactor}.
-        The \gls{functor} handles the message processing and sends the final result or a failure message back to its parent actor before stopping itself.
-        This reduces the code complexity in \glspl{dactor} for handling such messages.
-        This message processing abstraction is also called cameo pattern\footnote{\url{http://blog.simplex.software/the-cameo-pattern}}.
-
-        Using a \gls{functor} to process the consecutive steps of the computational chain relieves \gls{dactor} A from dealing with intermediate state, because it is managed by the \gls{functor}.
-        Each \gls{functor} only has to deal with one request-response pair at a time, which leads to a simple state and processing logic for the \gls{functor} itself.
-
-      \item\label{enum:comp_pattern_3} \textbf{Concurrent Computation}
-        This messaging pattern also makes use of \glspl{functor} to encapsulate the processing of multiple request-response pairs.
-        The concurrent \gls{functor} sends messages to several \glspl{dactor} in parallel and collect the results when they are finished.
-        It allows for highly parallelized computations as all involved \glspl{dactor} are messaged at the same time and calculate their responses concurrently.
-        The \gls{functor} collects each individual response and returns the aggregated result to its creator.
-    \end{enumerate}
+      The \textbf{Concurrent Computation} messaging pattern also makes use of \glspl{functor} to encapsulate the processing of multiple request-response pairs.
+      The concurrent \gls{functor} sends messages to several \glspl{dactor} in parallel and collects the results when they are finished to forward them to its creator.
+      It allows for highly parallelized computations as all involved \glspl{dactor} are messaged at the same time and calculate their responses concurrently.
