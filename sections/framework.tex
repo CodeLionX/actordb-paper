@@ -16,37 +16,8 @@ The framework provides the aforementioned features for developers:
 
 \subsection{Domain Actor Design}\label{subsec:domain_actor_design}
 
-To illustrate the definition of \code{Dactor}s, we use the example introduced in \cref{sec:dactors}, which is schematically depicted in \cref{fig:dactor_diagram}.
+To illustrate the definition of \code{Dactor}s, we use the example introduced in \cref{sec:dactors}, which is schematically depicted in \cref{fig:film_diagram}.
 The corresponding definition of the \code{Film}'s data model is shown in \cref{lst:film_definition}.
-\begin{lstlisting}[float, caption={Film Dactor type definition using the presented framework.}, label={lst:film_definition}, language=Scala]
-object Film {
-  // Definitions of relations contained in Film type Dactors
-  object Info extends RelationDef {
-    // column with name "title" and data-type String:
-    val title = ColumnDef[String]("title")
-    val description = ColumnDef[String]("description")
-    // rich datetime data-type column:
-    val release = ColumnDef[ZonedDateTime]("release")
-  }
-
-  object Cast extends RelationDef {
-    // foreign key relating to an Actor type Dactor instance:
-    val actorId = ColumnDef[Id]("actor_id")
-    val name = ColumnDef[String]("actor_name")
-    val rolename = ColumnDef[String]("role_name")
-  }
-} 
-
-// Dactor type definition.
-class Film(id: Id) extends Dactor(id) {
-  override protected val relations = {
-    // special relation type ensuring domain-logic constraint
-    Film.Info -> SingleRowRelation(Film.Info),
-    Film.Cast -> RowRelation(Film.Cast)
-  }
-  override def receive: Receive = ??? // Dactor behavior
-}
-\end{lstlisting}
 
 Developers can model the application's domain objects by defining \gls{dactor} types as subclasses of the framework-provided \code{Dactor} class.
 Instances of such user-defined \gls{dactor} types are managed by the framework and are available for messaging in a consistent namespace.
@@ -67,7 +38,11 @@ Implementation examples for this functionality and the trade-off are discussed i
 
 Explicit messaging and complementary actor behavior are used to implement the cascading communication pattern described in Section~\ref{sec:concept}.
 Besides this, \glspl{functor} are the framework's system, which enable inter-\gls{dactor} communication and computations.
-While the basic functionality of the two \gls{functor} types for sequential and concurrent computation is discussed in Section~\ref{sec:concept}, this section focuses on the definition of a concrete function integrating data from multiple \glspl{dactor}.
+\Glspl{functor} encapsulate the processing of a high-level request in a new, short-living actor.
+They are able to communicate with other \glspl{dactor}, track the state of pending requests and handle failure cases.
+Every actor can create a new \gls{functor} to encapsulate multiple depending requests to \glspl{dactor}.
+The \gls{functor} handles the message processing and sends the final result or a failure message back to its parent actor before stopping itself.
+While the basic functionality of the two \gls{functor} types for sequential and concurrent computation is discussed in \cref{sec:concept}, this section focuses on the definition of a concrete function integrating data from multiple \glspl{dactor}.
 
 Functors are actors with a limited lifetime.
 They are instantiated once a defined Functor is called by a Dactor or other actor and deleted once they return the final response or encounter a failure.

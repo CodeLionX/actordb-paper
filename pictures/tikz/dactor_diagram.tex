@@ -1,7 +1,6 @@
 % !TeX root = ../../paper.tex
 % !TeX encoding = UTF-8
 % !TeX spellcheck = en_US
-
 \documentclass[crop,tikz]{standalone}
 \usepackage[simplified,school]{pgf-umlcd}
 
@@ -10,20 +9,21 @@
 \renewcommand{\umlfillcolor}{white}
 \tikzstyle{package}=[font=\bf]
 % UML class diagram dactor env
-\newenvironment{dactor}[1]{
-  \def\umlcdDactorName{#1}
+\newenvironment{dactor}[2]{
+  \def\umlcdDactorName{#2}
+  \def\umlcdDactorAnchor{#1}
   \def\umlcdPackageFit{}
 }{
   \begin{pgfonlayer}{background}
-    \node[umlcd style, draw, inner sep=0.5cm, fit=\umlcdPackageFit] (\umlcdDactorName) {};
-    \node[umlcd style, draw, outer ysep=-0.5, anchor=south west] (\umlcdDactorName caption) at
-    (\umlcdDactorName.north west) {\bf\umlcdDactorName : Dactor};
+    \node[umlcd style, draw, inner sep=0.5cm, fit=\umlcdPackageFit] (\umlcdDactorAnchor) {};
+    \node[umlcd style, draw, outer ysep=-0.5, anchor=south west] (\umlcdDactorAnchor caption) at
+    (\umlcdDactorAnchor.north west) {\bf\umlcdDactorName : Dactor};
   \end{pgfonlayer}
 }
 
 \begin{document}
 \begin{tikzpicture}[auto,node distance=2cm]
-  \begin{dactor}{Film}
+  \begin{dactor}{Film}{Film(\textit{id: DactorId})}
     \begin{object}[text width=5.5cm]{FilmInfo}{0,0}
       \instanceOf{SingleRowRelation}
       \attribute{title : String}
@@ -37,22 +37,5 @@
       \attribute{role\_name : String}
     \end{object}
   \end{dactor}
-
-  \begin{dactor}{Actor}[right = of Film]
-    \begin{object}[text width=5.5cm]{ActorInfo}{9,0}
-      \instanceOf{SingleRowRelation}
-      \attribute{first\_name : String}
-      \attribute{last\_name : String}
-      \attribute{dob : ZonedDateTime}
-    \end{object}
-    \begin{object}[text width=5.5cm]{Filmography}{9,-2.5}
-      \instanceOf{Relation}
-      \attribute{\textit{film\_id : DactorId}}
-      \attribute{role\_name : String}
-      \attribute{release\_date : ZonedDateTime}
-    \end{object}
-  \end{dactor}
-
-  \association{Film}{plays\_in}{0..*}{Actor}{0..*}{stars}
 \end{tikzpicture}
 \end{document}
