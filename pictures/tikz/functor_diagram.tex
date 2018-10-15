@@ -12,39 +12,47 @@
     shape=rectangle,
     text centered,
     font = \bfseries,
-    minimum size = 3.5cm,
-    text width = 3.2cm
+    minimum height = 2.5cm,
+  },
+  dactor/.style = {
+    box,
+    minimum width = 3.5cm,
+    text width = 3.5cm,
   },
   functor/.style = {
-    fill=black!20
+    box,
+    minimum width = 2.5cm,
+    text width = 2.5cm,
+    fill=black!20,
   },
   iface/.style = {
     draw,
     fill=white,
-    shape=rectangle
+    shape=rectangle,
   },
   every edge/.style = {
     draw,
     -latex,
-    thick
+    thick,
   },
   return/.style = {
     latex-,
     thick,
-    dashed
+    dashed,
   }
 }
+\newcommand{\supervheight}{2}
 \begin{tikzpicture}
-  \node (start) [box] {Top Level\\Actor / Dactor};
-  \node (cf) [box, functor, right=0.5cm of start] {Concurrent\\Functor};
-  \node (sftop) [box, functor, above right=-1.5cm and 0.5cm of cf] {Sequential\\Functor};
-  \node (sfbot) [box, functor, below right=-1.5cm and 0.5cm of cf] {Sequential\\Functor};
+  \node (start) [dactor, minimum width=3.5cm] {Top Level\\Actor / Dactor};
+  \node (cf) [functor, right=0.5cm of start] {Concurrent\\Functor};
+  \node (sftop) [functor, above right=-1.2cm and 0.5cm of cf] {Sequential\\Functor};
+  \node (sfbot) [functor, below right=-1.2cm and 0.5cm of cf] {Sequential\\Functor};
 
-  \node (film) [box, right=3.5cm of sftop] {Film\\(Dactor)};
+  \node (film) [dactor, minimum width=3.5cm, right=3.5cm of sftop] {Film\\(Dactor)};
   \node (filminfo) [iface] at (film.170) {getInfo};
-  \node (filmcast) [iface] at (film.190) {addCast};
+  \node (filmcast) [iface] at (film.190) {addStudio};
 
-  \node (actor) [box, right=3.5cm of sfbot] {Actor\\(Dactor)};
+  \node (actor) [dactor, minimum width=3.5cm, right=3.5cm of sfbot] {Studio\\(Dactor)};
   \node (actorfilm) [iface] at (actor.170) {addFilm};
   \node (actorinfo) [iface] at (actor.190) {getInfo};
 
@@ -61,22 +69,28 @@
   \path (sftop.east|-filminfo.165) edge node[fill=white, pos=0.5,shape=circle, draw, yshift=15pt] {1} (filminfo.165);
   \path[return] (filminfo.190) edge (sftop.east|-filminfo.190);
 
-  \path (sftop.355) edge node[fill=white, pos=0.5,shape=circle, draw, yshift=25pt] {2} (actorfilm.165);
+  \path (sftop.355) edge node[fill=white, pos=0.5,shape=circle, draw, yshift=15pt] {2} (actorfilm.165);
   \path[return] (actorfilm.195) edge (sftop.340);
 
   \path (sfbot.east|-actorinfo.165) edge node[fill=white, pos=0.5,shape=circle, draw, yshift=-23pt] {1} (actorinfo.165);
   \path[return] (actorinfo.190) edge (sfbot.east|-actorinfo.190);
 
-  \path (sfbot.5) edge node[fill=white, pos=0.5,shape=circle, draw, yshift=-25pt] {2} (filmcast.195);
+  \path (sfbot.5) edge node[fill=white, pos=0.5,shape=circle, draw, yshift=-15pt] {2} (filmcast.195);
   \path[return] (filmcast.165) edge (sfbot.20);
 
   % supervision
   \draw [-diamond, dashed]
-      (start.north) -- +(0,2) |- node[fill=white, pos=0.9] {supervision} +(2.5,2) -| (cf.95);
+      (start.north) -- +(0,\supervheight)
+                    |- node[fill=white, pos=0.85] {supervision} +(2.5,\supervheight) 
+                    -| (cf.95);
   \draw [-diamond, dashed]
-      (cf.85) -- + (0,3) |- node[fill=white, pos=1.15] {supervision} +(1.5,3) -| (sftop.north);
+      (cf.85)       -- + (0,\supervheight)
+                    |- node[fill=white, pos=1.05] {supervision} +(1.5,\supervheight) 
+                    -| (sftop.north);
   \draw [-diamond, dashed]
-      (cf.south) -- + (0,-3) |- node[fill=white, pos=1.15] {supervision} +(1.5,-3) -| (sfbot.south);
+      (cf.south) 		-- + (0,-\supervheight)
+                    |- node[fill=white, pos=1.05] {supervision} +(1.5,-\supervheight)
+                    -| (sfbot.south);
       
   
 \end{tikzpicture}
