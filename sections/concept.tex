@@ -22,18 +22,18 @@
     \Glspl{relation} provide an SQL-like interface to query and manipulate the contained data, so known and proven syntax and semantics can be used to define \gls{dactor}-behavior.
     \Glspl{relation} form a typed, \gls{dactor}-internal data model.
     Using \glspl{dactor} to implement a database leads to a modeling approach that is different to Entity-relationship modeling.
-    We want to discuss the conceptual differences between the two in the following example.
+    We want to discuss the conceptual differences between the two with the following example.
 
     We consider the example of a web application with information on movies similar to the imdb.com or rottentomatoes.com websites.
-    Standard queries for those websites is to display a film with its description and cast.
+    A standard query for those websites is to display a film with its description and cast.
     A traditional data layout might be comprised of two entities: \textit{Film} containing the film's ID, title, description and release date and \textit{Actor} containing the actor's ID and name.
     Those two entities might be in a N-to-M relation (\textit{Cast}) with an attribute showing the actor's role in the film.
     In contrast to the relational model, our model, shown in \cref{fig:film_diagram}, consists of one \gls{dactor} type and two \glspl{relation} and is denormalized.
     The information contained in the \textit{Actor} entity is distributed across the \code{Cast} \glspl{relation}.
     This allows us to answer the standard queries from one single actor instance instead of joining the result together from different \glspl{dactor} instances, which could be distributed across a network.
 
-    This approach to layout an application's data results in much smaller data sizes stored in one \gls{dactor} than is stored in typical database tables, since each \gls{dactor} instance only stores data related to one specific domain entity, and enables many business-logic-driven approaches to scaling, data partitioning, and caching.
-    The tradeoff to take into account, however, is a large number of \gls{dactor} instances encapsulating the application's data and a denormalized schema.
+    This approach to layout an application's data results in much smaller data sizes per \gls{dactor} compared to typical database tables and enables many business-logic-driven approaches to scaling, data partitioning, and caching.
+    The trade-off to take into account, however, is a large number of \gls{dactor} instances and a denormalized schema.
 
     \begin{figure}
       \centering
@@ -77,11 +77,11 @@ object Film {
     \end{figure}
 
 
-  % logic and processing capabilities
-  As \glspl{dactor} not only contain data, but also the corresponding domain logic, computation is executed concurrently.
-  Actors provide single-threaded semantics, which makes enforcing constraints on data tied to one domain object stored inside a \gls{dactor} easy.
-  While state querying and modification within \glspl{dactor} is possible in a declarative way, the application developer can explicitly define the communication across all kinds of actors via asynchronous messages and how the \glspl{dactor} handle the said messages.
-  The explicit message definition and handling differentiates \glspl{dactor} from \citet{Shah:reactdb}'s reactors, as reactors can be used as relational entities and hide the message passing from the developer.
+    % logic and processing capabilities
+    As \glspl{dactor} not only contain data, but also the corresponding domain logic, computation is executed concurrently.
+    Actors provide single-threaded semantics, which makes enforcing constraints on data tied to one domain object stored inside a \gls{dactor} easy.
+    While state querying and modification within \glspl{dactor} is possible in a declarative way, the application developer can explicitly define the communication across all kinds of actors via asynchronous messages and how the \glspl{dactor} handle the said messages.
+    The explicit message definition and handling differentiates \glspl{dactor} from \citet{Shah:reactdb}'s reactors, as reactors can be used as relational entities and hide the message passing from the developer.
 
   \subsection{Communication between Domain Actors}\label{sec:dactor_comm}
     Not all computation can be done with the information residing in a single \gls{dactor}.
