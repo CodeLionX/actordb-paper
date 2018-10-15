@@ -87,12 +87,8 @@ As such, they provide flexible, fine-grained data partitioning based on applicat
 
 From the distributed setting of the database system the new problem of partition or \textbf{actor discovery} arises.
 The framework maintains a unified namespace, in which each \gls{dactor} instance is identified by its \gls{dactor} type and a unique id.
-In fact, querying a specific \gls{dactor} just requires obtaining the messaging address from the nameservice and sending a message to it as shown in \cref{lst:dactor_lookup}.
+In fact, querying a specific \gls{dactor} just requires obtaining the messaging address from the nameservice and sending a message to it.
 In the case of a multi-node deployment, this is complemented by the functionality of Akka Cluster Sharding~\cite{akka:clustersharding}, which routes the messages to the right physical host.
-\begin{lstlisting}[float,caption={Lookup of and querying from a Film dactor instance.}, label={lst:dactor_lookup}, language=Scala]
-val ref = Dactor.dactorSelection(classOf[Film], filmId)
-ref ! SelectAllFromRelation.Request("film_info")
-\end{lstlisting}
 
 Finally, \textbf{failure handling}, especially with regard to computations relying on multiple \glspl{dactor}' data, requires careful monitoring due to \gls{dactor} distribution.
 Building on the Akka framework's parent-child supervision concept, our framework allows for transparent failure handling configurations.
