@@ -153,15 +153,3 @@ object Film {
         It allows for highly parallelized computations as all involved \glspl{dactor} are messaged at the same time and calculate their responses concurrently.
         The \gls{functor} collects each individual response and returns the aggregated result to its creator.
     \end{enumerate}
-
-
-  \subsection{Domain Actor Database System}\label{sec:domain_actor_database}
-    A domain actor database system is the combination of \glspl{dactor} and other types of actors, which together offer an interface to other applications or clients.
-    The domain actor database system is a distributed runtime for persisting data and performing computations on it.
-    Each \gls{dactor} must incarnate a specific \gls{dactor} type.
-    This type is defined by application developers and determines the data schema encapsulated by the \gls{dactor} and the messages it can handle (its behavior).
-    \Glspl{dactor} are the only place in the system that actually have persistent state.
-    Other actors are stateless or have non-durable state, such as intermediate results or actor references.
-    These actors can interact with the \glspl{dactor} via the defined messages and represent application services or components of the infrastructure layer.
-    The entry points to our application are stateless actors on top of the \glspl{dactor}, which provide high throughput and can be scaled out easily.
-    They act as routers for incoming requests and orchestrate computations.
