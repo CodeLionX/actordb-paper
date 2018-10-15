@@ -26,34 +26,34 @@
     The \gls{functor} handles the message processing and sends the final result or a failure message back to its parent actor before stopping itself.
     While the basic functionality of the two \gls{functor} types for sequential and concurrent computation is discussed in \cref{sec:concept}, this section focuses on the definition of a concrete function integrating data from multiple \glspl{dactor}.
     
-    Functors are actors with a limited lifetime.
-    They are instantiated once a defined Functor is called by a Dactor or other actor and deleted once they return the final response or encounter a failure.
-    Functors are always called from an Akka actor as a child actor.
-    This Akka-specific hierarchical relationship enables notifying the calling actor even in case of an unforseen crash of the Functor themselves which in turn allows to trigger error handling, e.g. retrying the Functor execution.
+    \Glspl{functor} are actors with a limited lifetime.
+    They are instantiated once a defined \gls{functor} is called by a Dactor or other actor and deleted once they return the final response or encounter a failure.
+    \Glspl{functor} are always called from an Akka actor as a child actor.
+    This Akka-specific hierarchical relationship enables notifying the calling actor even in case of an unforseen crash of the \gls{functor} themselves which in turn allows to trigger error handling, e.g. retrying the \gls{functor} execution.
     
     Returning to the web application example, we can define simple functionality concerning instances of both \gls{dactor} types defined in Section~\ref{subsec:domain_actor_design}.
     Adding a new character role to a film, played by a specific actor, involves changes to \code{Film} and \code{Actor} instances.
     We describe the implementation of this functionality using the concurrent and sequential computation patterns, introduced in \cref{sec:dactor_comm}.
     
-    \Cref{fig:functor_diagram} displays the message-flow between the involved \glspl{dactor} and Functors, as well as their supervision relations.
-    To provide a top-level function that takes only an \code{Actor} id, a \code{Film} id, as well as a rolename and adds the corresponding Actor information to the Film's cast list and vice versa, this example utilizes a concurrent Functor wrapping two sequential Functors.
-    Both sequential Functors are comprised of two subsequent steps:
-    The first sequential Functor queries information from the Film Dactor instance, which is needed to add the film to the Actor Dactor's filmography \gls{relation}, i.e. the film's title.
+    \Cref{fig:functor_diagram} displays the message-flow between the involved \glspl{dactor} and \glspl{functor}, as well as their supervision relations.
+    To provide a top-level function that takes only an \code{Actor} id, a \code{Film} id, as well as a rolename and adds the corresponding Actor information to the Film's cast list and vice versa, this example utilizes a concurrent \gls{functor} wrapping two sequential \glspl{functor}.
+    Both sequential \glspl{functor} are comprised of two subsequent steps:
+    The first sequential \gls{functor} queries information from the Film Dactor instance, which is needed to add the film to the Actor Dactor's filmography \gls{relation}, i.e. the film's title.
     Then it sends a message to the Actor Dactor containing said data to trigger the insertion of the film.
-    The second sequential Functor queries the Actor instance's data, which is necessary to add them to the Film's cast \gls{relation}, i.e. their name.
-    Using this data and their rolename the Functor then sends another message to the Film Dactor to trigger an insertion into its cast \gls{relation}.
-    Both sequential Functors are executed in parallel using a concurrent Functor, which only sends a successful response to its caller after both sequential Functors have sent their responses to the concurrent Functor.
+    The second sequential \gls{functor} queries the Actor instance's data, which is necessary to add them to the Film's cast \gls{relation}, i.e. their name.
+    Using this data and their rolename the \gls{functor} then sends another message to the Film Dactor to trigger an insertion into its cast \gls{relation}.
+    Both sequential \glspl{functor} are executed in parallel using a concurrent \gls{functor}, which only sends a successful response to its caller after both sequential \glspl{functor} have sent their responses to the concurrent \gls{functor}.
     
-    \begin{figure}[t]
+    \begin{figure}
       \centering
       \includestandalone[width=\textwidth]{pictures/tikz/functor_diagram}
-      \caption{Component diagram indicating the message flow through Functor objects and their supervision by the calling actor or \gls{dactor}. Arrow and dashed arrow pairs indicate corresponding request and response messages. The outgoing requests of each sequential functor are numbered to indicate their order.}
+      \caption{Component diagram indicating the message flow through \gls{functor} objects and their supervision by the calling actor or \gls{dactor}. Arrow and dashed arrow pairs indicate corresponding request and response messages. The outgoing requests of each sequential \gls{functor} are numbered to indicate their order.}
       \label{fig:functor_diagram}
     \end{figure}
     
-    Using the parent-child relationship between calling actors and Functors enables a framework-level supervision of Functors, which are currently computing or waiting on results from down-stream \glspl{dactor}.
-    The supervision concept between parent and child actors in the Akka framework, termed parental supervision, enables passing back the control flow to the parent actor in case that a child actor, in this case a Functor, fails.
-    The calling actor can then react to the failure by resuming or restarting the Functor, stopping this computation, or escalating the failure to its own parent.
+    Using the parent-child relationship between calling actors and \glspl{functor} enables a framework-level supervision of \glspl{functor}, which are currently computing or waiting on results from down-stream \glspl{dactor}.
+    The supervision concept between parent and child actors in the Akka framework, termed parental supervision, enables passing back the control flow to the parent actor in case that a child actor, in this case a \gls{functor}, fails.
+    The calling actor can then react to the failure by resuming or restarting the \gls{functor}, stopping this computation, or escalating the failure to its own parent.
     The correct course of action depends on the desired application behavior.
   
   \subsection{Framework Discussion}\label{subsec:framework_discussion}
