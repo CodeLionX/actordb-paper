@@ -161,12 +161,11 @@
   System architectures for data-centric applications are commonly comprised of two tiers:
   An application tier and a data tier.
   The fact that these tiers do not typically share a common format for data is referred to as \textit{object-relational impedance mismatch}.
-  To mitigate this, we implement a proof-of-concept actor database framework, which enables the definition of application logic as part of the data storage runtime.
-  This approach is based on the concept of actor database systems introduced by \citet{manifesto}, who propose using the actor programming model to build a distributed database runtime.
-  Our framework's domain actors provide a typesafe, SQL-like interface to develop actor-internal functionality.
-  Additionally, we present the Functor concept to enable queries spanning data contained in multiple actor instances.
-  Our experiments demonstrate the feasibility of domain actors by evaluating their memory overhead and performance.
-  We also discuss challenges that arise from the distributed database concept and how the actor model lends itself to implement solutions for data partitioning and failure handling for distributed, concurrent query processing.
+  To mitigate this, we develop an actor database system that enables the implementation of application logic into the data storage runtime. 
+  The actor model also allows for easy distribution of both data and computation across multiple nodes in a cluster.
+  More specifically, we propose the concept of \emph{domain actors} that provide a typesafe, SQL-like interface to develop the actors of our database system and the concept of \emph{functors} to build queries retrieving data contained in multiple actor instances.
+  Our experiments demonstrate the feasibility of encapsulating data into domain actors by evaluating their memory overhead and performance.
+  We also discuss how our proposed actor database system framework solves some of the challenges that arise from the design of distributed databases such as data partitioning, failure handling, and concurrent query processing.
 \end{abstract}
 
 \begin{keywords}

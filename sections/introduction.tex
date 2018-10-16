@@ -26,32 +26,35 @@
   % \subsection{Paper Overview}
   % summarize and reference all following chapters
 
-  Most web-based applications process data at ever growing rates.
-  Whether user logins, the processing and storage of sensor data, or dynamic information provisioning, data is at the center of online applications.
+  Todays applications need to process data at ever growing rates.
+  Regardless of being user data, stock data, sensor or event data, data is ever growing and needs to be stored and queried.
   Cluster or cloud deployments and multi-core hardware architectures allow scaling application logic in terms of computational power.
-  Data management systems, however, are at risk of becoming the bottleneck in data-centric software systems.
-  Such applications create an increasing demand for scalable data storage solutions that are capable of fulfilling real-time requirements for OLTP workloads at low latency. % too long, use system instead of 'applications', maybe lose the OLTP
+  Traditional data management systems, however, are at risk of becoming the bottleneck in data-centric software systems, because the separation into data and application tier costs performance, impacts code maintainability, and increases error susceptibility.
+%  Such applications create an increasing demand for scalable data storage solutions that are capable of fulfilling real-time requirements for OLTP workloads at low latency. % too long, use system instead of 'applications', maybe lose the OLTP
 
-  Traditionally, system architectures for these types of software are comprised in two tiers:
-  An application tier containing the bulk of the business logic, as well as a data tier, storing the application's data.
-  The separation of concerns within this design depends on the choice of data storage solution.
-  A \gls{rdbms} enables data manipulation and the execution of most data-related computation in the data tier by using a complex, declarative query language.
-  However, the monolithic design of conventional \glspl{rdbms} proves a hurdle for scalability and reduces modularity, which has a negative impact on code maintainability. % todo source (maybe from manifesto/reactors)
-  More recently key-value storage solutions have gained popularity especially for highly scalable online applications.
-  This is due to the fact that their less rigid schema guarantees allow for improved scalability. % source
-  The trade-off of this solution is having to offload much of the data-handling logic into the application tier, thereby increasing load on the application as well as not keeping true to the separation of concerns.
+The performance costs are due to the fact that \gls{rdbms} model their data in terms of relations while applications usually model the data as objects. The translation of relations into objects and vise versa is known as the \emph{object-relational impedance mismatch} and requires some additional effort. The use of \gls{orm} tools, such as Hibernate for Java or Active Record for Ruby on Rails, is a convenient yet expensive approach to provide a middle tier for the translation. Some key-value stores solve the impedance mismatch more elegantly, but they suffer from worse join and aggregation costs. Furthermore, code maintainability reduces when stored procedures are being used to push application logic closer to the data, {i.e.}, into the data tier for performance reasons, and the error susceptibility increases, because large, monolithic \glspl{rdbms} suffer from hand-crafted, non-standardized, and inconsistent attempts to fault-tolerance, parallelization, data encapsulation, workload distribution, replication and so on. The actor programming model, on the contrary, offers an effective solution for all these challenges.
 
-  In either case, the data and application tier do not necessarily share a format for data objects.
-  Application logic and database exhibit differences in available data types and modelling capabilities.
-  \Gls{oop} languages provide concepts, such as inheritance, polymorphism, and nested objects.
-  They enforce strict object encapsulation.
-  \Glspl{rdbms} are not able to express all of the same concepts due to the representation of data as relations in tables. % maybe it is necessary to elaborate on this
-  Even data storage solutions with a less rigid schema, such as document-oriented databases, face the same problems as \glspl{rdbms} with regard to data formats, inheritance, and encapsulation.
-  The described set of difficulties when persisting application state and data objects in a database is commonly referred to as \textit{object-relational impedance mismatch}.
-  The use of \gls{orm} tools, such as Hibernate for Java or Active Record for Ruby on Rails, is one approach to provide a middle tier for mapping between the data formats of the application and data tier.
+%  Traditionally, system architectures for these types of software are comprised in two tiers:
+%  An application tier containing the bulk of the business logic, as well as a data tier, storing the application's data.
+%  The separation of concerns within this design depends on the choice of data storage solution.
+%  A \gls{rdbms} enables data manipulation and the execution of most data-related computation in the data tier by using a complex, declarative query language.
+%  However, the monolithic design of conventional \glspl{rdbms} proves a hurdle for scalability and reduces modularity, which has a negative impact on code maintainability. % todo source (maybe from manifesto/reactors)
+%  More recently key-value storage solutions have gained popularity especially for highly scalable online applications.
+%  This is due to the fact that their less rigid schema guarantees allow for improved scalability. % source
+%  The trade-off of this solution is having to offload much of the data-handling logic into the application tier, thereby increasing load on the application as well as not keeping true to the separation of concerns.
+
+%  In either case, the data and application tier do not necessarily share a format for data objects.
+%  Application logic and database exhibit differences in available data types and modelling capabilities.
+%  \Gls{oop} languages provide concepts, such as inheritance, polymorphism, and nested objects.
+%  They enforce strict object encapsulation.
+%  \Glspl{rdbms} are not able to express all of the same concepts due to the representation of data as relations in tables. % maybe it is necessary to elaborate on this
+%  Even data storage solutions with a less rigid schema, such as document-oriented databases, face the same problems as \glspl{rdbms} with regard to data formats, inheritance, and encapsulation.
+%  The described set of difficulties when persisting application state and data objects in a database is commonly referred to as \textit{object-relational impedance mismatch}.
+%  The use of \gls{orm} tools, such as Hibernate for Java or Active Record for Ruby on Rails, is one approach to provide a middle tier for mapping between the data formats of the application and data tier.
   % However, shortcoming of this approach
 
-  \Citet{manifesto} call for a new paradigm for designing a scalable data storage solution using the Actor model.
+  Using the actor programing model to fuse application and data tier is an idea that was already proposed by \citet{manifesto} and tested on the Orleans actor framework. 
+  The authors call for a new paradigm by designing a scalable data storage solution using the actor model.
   The core primitive in this model are actors, which are objects comprised of state and behavior that execute computational tasks concurrently.
   Individual actors communicate with each other exclusively via asynchronous message passing.
   Incoming messages are stored in a mailbox allowing for the separate and independent processing of each message.
@@ -61,9 +64,13 @@
   \Citeauthor{manifesto} propose an implementation of the data tier using the actor model as a logically distributed runtime.
   They predict that this programming abstraction will allow for a modular, scalable application design.
 
+
+  
+
   % first try
   We build on this idea and present an application development framework for actor-based data-centric applications.
-  With this framework, we make the following contributions:
+  In contrast to \citet{manifesto}, our actor database system targets the Akka actor framework that offers different mechanisms for fault tolerance and actor lifecycles than Orleans.
+  In detail, we make the following contributions:
   We introduce domain actors (\glspl{dactor}) to model application data in an Akka-based actor database system.
   Similarly to the work of \citeauthor{Shah:reactdb} on reactors \cite{Shah:reactdb}, \glspl{dactor} encapsulate application data and logic.
   Since these actors are not part of a dedicated database runtime, but are defined using the application framework, data objects share the same representation throughout business logic and data storage.
