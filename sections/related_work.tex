@@ -3,26 +3,26 @@
 % !TeX spellcheck = en_US
 
 \section{Related Work}\label{sec:related_work}
-  In this section, we give an outline of recent actor model implementations and elaborate on the notion of \textit{Actor Database Systems} and their requirements.
+%  In this section, we give an outline of recent actor model implementations and elaborate on the notion of \textit{Actor Database Systems} and their requirements.
 
   % the actor model and the virtual actor model
-  Various programming languages and libraries~\cite{armstrong:erlang,Haller:2012,akka,akka.net} implement the actor model that we introduced in the previous section.
-  In 2004, \citet{bernstein:orleans} raised the abstraction level of actor objects even further by introducing the virtual actor programming model within the Orleans framework for .NET.
-  It still adheres to the plain actor model, but treats actors as virtual entities.
-  In this model actor lifecycle management and distribution is managed by the framework or runtime and not by the application developer.
-  The physical location of the actor is transparent to the application.
-  The framework Orbit~\cite{orbit} provides virtual actors for the \gls{jvm}.
+  The actor model that we introduced in the previous section has been implemented as libraries for various programming languages. 
+  The most popular implementations are Erlang's in-build actors, the Orleans framework for .NET, and the Akka framework for Java~\cite{armstrong:erlang,Haller:2012,akka,akka.net,bernstein:orleans}.
+  Although most research in the area of database systems targets the Orleans framework, Akka is probably the most widely use actor model implementation -- not least because of the popularity of Java and the fact that it is used in frameworks such as Apache Spark and Apache Flink.
+  For this reason and because Akka differs in various aspects from Orleans, we focus on this framework in our research.
+  
+%  In 2004, \citet{bernstein:orleans} raised the abstraction level of actor objects even further by introducing the virtual actor programming model within the Orleans framework for .NET.
+%  It still adheres to the plain actor model, but treats actors as virtual entities.
+%  In this model actor lifecycle management and distribution is managed by the framework or runtime and not by the application developer.
+%  The physical location of the actor is transparent to the application.
+%  The framework Orbit~\cite{orbit} provides virtual actors for the \gls{jvm}.
 
-  % Actor Database Systems
-  The actor and virtual actor programming model has increasingly been used to build soft caching layers and cloud applications for various purposes~\cite{erlang_uses,akka_uses,orleans_uses}.
-  This shows the appeal of the programming model that allows developers to easily develop modular and scalable software, which can be deployed in the heterogenous parallel cloud computing infrastructure.
-
-  Despite its popularity for application development, the actor programming model and actor programming frameworks lack state management capabilities, specifically for data-centric applications.
-  The developer has to decide how to handle state persistence and how to satisfy the failure and consistency requirements of the application, because actor model implementations do no provide atomicity or consistency guarantees for state across actors.
-  \Citet{manifesto} find a need for state management guarantees in actor systems and propose to integrate actor-based programming models in database management systems.
-  The authors postulate that \textit{Actor Database Systems} should be designed as a logical distributed runtime with state management guarantees.
-  They should allow for and encourage the design of modular, scalable and cloud-ready applications.
-  \Citet{manifesto} specify needed features in their manifesto and outline four tenets that identify an \textit{Actor Database System}:
+  Despite their popularity for building distributed applications, all current actor programming frameworks lack database-like state management capabilities, specifically for data-centric applications.
+  The developer has to decide how to handle state persistence and how to satisfy failure, replication, and consistency requirements of an application -- the actor model implementations neither provide atomicity nor consistency guarantees for state across actors.
+  \Citet{manifesto} therefore stated the need for state management in actor systems and proposed to integrate database functionality into the actor model.
+  The authors postulate that \textit{Actor Database Systems} should be designed as a logical distributed runtime with own state management guarantees.
+%  They should allow for and encourage the design of modular, scalable and cloud-ready applications.
+  More specifically, their manifesto specifies four tenets that define an Actor Database System~\cite{manifesto}:
 
   \begin{description}
     \item[Tenet 1] Modularity and encapsulation by a logical actor construct
@@ -31,29 +31,30 @@
     \item[Tenet 4] Security, monitoring, administration and auditability
   \end{description}
 
-  Most practical research in the field of actor database systems has been presented in conjunction with the Orleans framework and the Erlang programming language~\cite{Shah:reactdb,Eldeeb:transactions,Bernstein:indexing}.
-  \Citet{biokoda:actordb} takes another approach and encapsulates a full relational SQL database inside an actor.
-  \Citet{actorbase} uses actors to build a scalable key-value store.
-
-  % what we do
-  In contrast to the mentioned actor database systems, we developed our prototype using the Scala programming language and the Akka framework.
-  While the Orleans framework, which has been used in earlier related work, provides virtual actors with automatic lifecycle management, Akka allows for and requires direct control over an actor's lifecycle.
-  This allows close configuration of the in-memory state of the actor database system.
-  Frequently accessed \glspl{dactor} can be kept in memory while ones, which haven't been involved in recent computational effort, could be temporarily persisted to disk.
-  The virtual actor system implemented in the Orleans framework withdraws such control, making custom, database specific logic for configuring \gls{dactor} availability impossible.
-  This makes our prototype on Akka different from the related implementations in Orleans.
-
-  The features of our prototype relate to three of the four tenets that define an \textit{Actor Database System} according to \citeauthor{manifesto}'s manifesto~\cite{manifesto}:
-  \textbf{Tenet 1} calls for the use of actors to achieve a modular logical model for data encapsulation.
+  Our actor database system (currently) covers the first three of these four tenets:
+  For \textbf{tenet 1}, we use actors to achieve a modular logical model for data encapsulation.
   \Gls{dactor} instances are in-memory storekeepers for application data.
   They satisfy the actor definition and support high modularity.
-  Furthermore, \glspl{dactor} provide a model for concurrent computation of predefined functionality that increases locality of data accesses.
-  This is part of the requirements described in \textbf{Tenet 2}.
+  For \textbf{tenet 2}, \glspl{dactor} provide a model for the concurrent computation of predefined functionality that enforces locality of data accesses.
   All communication between \glspl{dactor} is asynchronous to leverage the advantages of increasingly parallel hardware.
   Our concept of \glspl{functor} allows for the definition of functionality using multiple actors' data.
-  The possibility to define these \glspl{functor} as well as \gls{dactor} behavior in a declarative way relates to the second part of \textbf{Tenet 3}.
-  Due to their single-threaded computation model, \glspl{dactor} can be argued to enforce internal consistency by default.
-  In principle, \glspl{functor} allow for the implementation of further transaction protocols to ensure inter-\gls{dactor} consistency guarantees.
-  Since the requirements listed under \textbf{Tenet 4} relate mostly to production-ready database products, we do not implement or investigate them in this research project.
-  The functionality described by \citeauthor{manifesto} in tenets one through three suffices the investigation of the practical feasibility and implications of the actor database concept.
+  To meet \textbf{tenet 3}, \glspl{functor} and \gls{dactor} behavior can be defined in a declarative way.
+  Due to their single-threaded computation model, \glspl{dactor} basically enforce internal consistency by default.
+  In principle, \glspl{functor} also enable the implementation of further transaction protocols to ensure inter-\gls{dactor} consistency guarantees.
+%  Since the requirements listed under \textbf{Tenet 4} relate mostly to production-ready database products, we do not implement or investigate them in this research project.
+%  The functionality described by \citeauthor{manifesto} in tenets one through three suffices the investigation of the practical feasibility and implications of the actor database concept.
+
+  % what we do
+  In contrast to the actor database system prototype introduced in~\cite{manifesto}, we developed our prototype using the Scala programming language and the Akka framework (instead of .NET and Orleans).
+%  While the Orleans framework, which has been used in earlier related work, provides virtual actors with automatic lifecycle management, 
+  In contrast to Orleans and its convenient \emph{virtual actors}, Akka offers more control over an actor's lifecycle, has a more explicit failure handling, and models actors in hierarchies -- aspects that enable more fine-grained control over the system but also demand for more thorough architectural system design decisions.
+%  This allows close configuration of the in-memory state of the actor database system.
+%  Frequently accessed \glspl{dactor} can be kept in memory while ones, which haven't been involved in recent computational effort, could be temporarily persisted to disk.
+%  The virtual actor system implemented in the Orleans framework withdraws such control, making custom, database specific logic for configuring \gls{dactor} availability impossible.
+%  This makes our prototype on Akka different from the related implementations in Orleans.
+
+  Most related research in the field of actor database systems has been presented in conjunction with the Orleans framework and the Erlang programming language~\cite{Shah:reactdb,Eldeeb:transactions,Bernstein:indexing}.
+  \Citet{biokoda:actordb} takes another approach and encapsulates a full relational SQL database inside an actor.
+  \Citet{actorbase} uses actors to build a scalable key-value store and others use the actor model to build soft caching layers and cloud applications for various purposes~\cite{erlang_uses,akka_uses,orleans_uses}.
+%  This shows the appeal of the programming model that allows developers to easily develop modular and scalable software, which can be deployed in the heterogeneous parallel cloud computing infrastructure.
 
