@@ -10,10 +10,10 @@ The framework provides a shared, distributed runtime for database functionality 
 %We discuss challenges specific to a database system in a distributed runtime and how the proposed actor database framework solves these challenges.
 %In particular, \glspl{dactor} constitute independent units, which allow for flexible partitioning of application data based on application domain logic and concepts.
 %The use of the Akka framework enables efficient implementation of partition discovery and failure handling in this distributed setup.
-The introduced Functor concept, which are temporary actors that manage multi-\gls{dactor} queries, provides a transparent computation model and failure handling capabilities.
+The introduced \gls{functor} concept, which are temporary actors that manage multi-\gls{dactor} queries, provides a transparent computation model and failure handling capabilities.
 First experiments with our Akka-based actor database system show that the memory overhead introduced by using actors for data management is low.
 %The results show that, due to the constant and low memory footprint of actors, 
 Hence, the approach is feasible and pays off especially if large amounts of data need to be stored for highly concurrent data manipulation workloads.
 %The research implementation of the framework provides a platform for the integration of traditional database functionalities.
-As future work, we aim to develop inter-\gls{dactor} consistency guarantees by extending Functors with a rollback and, e.g., a \textit{two-phase commit} protocol implementation.
+As future work, we aim to develop inter-\gls{dactor} consistency guarantees by extending \gls{functor} with a rollback and, e.g., a \textit{two-phase commit} protocol implementation.
 %In addition, further testing of this research implementation's query execution latency and throughput performance remains a topic of interest.
