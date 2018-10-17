@@ -155,7 +155,7 @@ object Film {
     This involves changes to a new \code{Film} and the corresponding \code{Studio} \gls{dactor} instances.
     We can combine the concurrent and sequential \glspl{functor} to implement this functionality, which is displayed in \cref{fig:functor_diagram}.
     Both sequential \glspl{functor} are comprised of two subsequent steps:
-    They retrieve information from one \glspl{dactor} to update the other one.
+    They retrieve information from one \gls{dactor} to update the other one.
     They are independent of each other, so they can be executed in parallel, which is done by using the concurrent \gls{functor}.
     It only sends a successful response to its caller after both sequential \glspl{functor} have sent their responses to the concurrent \gls{functor}.
     
@@ -175,7 +175,7 @@ object Film {
       The distributed nature of the database system introduces the new problem of partition or \emph{actor discovery}.
       The framework maintains a unified namespace, in which each \gls{dactor} instance is identified by its \gls{dactor} type and a unique ID.
       In fact, querying a specific \gls{dactor} just requires obtaining the messaging address from the name-service and sending a message to it.
-      In case of a multi-node deployment, this is complemented by Akka's Cluster Sharding component~\cite{akka:clustersharding}, which routes the messages to the right physical host.
+      In case of a multi-node deployment, this is complemented by Akka's Cluster Sharding component, which routes the messages to the right physical host.
       
       Finally, \emph{failure handling}, especially with regard to computations relying on multiple \glspl{dactor}' data, requires careful monitoring due to \gls{dactor} distribution.
       Building on Akka's parent-child supervision concept, our framework allows for transparent failure handling configurations.
