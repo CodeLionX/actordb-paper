@@ -5,8 +5,7 @@
 \section[Dactor Memory Overhead Experiments]{\Gls{dactor} Memory Overhead Experiments}\label{sec:experiments}
 
   \textcolor{red}{
-  We measured the time a complex query consisting of multiple \glspl{functor} takes to return the final result in our framework.
-  It only took x~ms, which is super fast.
+  A complex query consisting of multiple \glspl{functor} takes x~ms to return the final result in our framework.
   }
   Our concept is based on the usage of hundreds of thousands of \glspl{dactor}, which all store only a small amount of data.
   Therefore, the question of how much memory overhead is introduced for storing data split across a multitude of actors is more interesting than the computation time.
@@ -14,7 +13,7 @@
   We performed experiments using an exemplary actor database system, which is modeled based on a real-world scenario.
   It consists of four different \gls{dactor} types, each containing one to three relations.
   The data stored in one \gls{dactor} ranges from seven to about 700 kilobytes depending on its type.
-  This small data size makes the relative memory overhead more visible as we need thousands of \glspl{dactor} and relations to store our datasets in the heap.
+  This small data size makes the relative memory overhead more visible as we need thousands of \glspl{dactor} and relations to load our datasets into memory.
   We used a script to generate four different datasets emulating the scaling of the system by increasing the number of \gls{dactor}-instances and keeping the data size stored in one \gls{dactor} nearly constant.
   The script creates various primitive data types, such as \code{String}, \code{Double}, and \code{Int}, as well as complex data types, such as \code{ZonedDateTime}, and distributes the data across \glspl{dactor} and relations.
   The dataset sizes are reported in \cref{tab:memory_overhead}.

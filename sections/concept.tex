@@ -3,7 +3,7 @@
 % !TeX spellcheck = en_US
 
 \section{Domain Actor Database Framework}\label{sec:concept}
-  Our actor databases system consists of two building blocks: \emph{domain actors} and \emph{functors}. These two concepts allow for the definition of application data within the application itself. Since both are based on actor model principles, they make the database system modular, cloud-ready, and scalable. In this section, we introduce both domain actors and functors. 
+  Our actor databases system consists of two building blocks: \emph{domain actors} and \emph{\glspl{functor}}. These two concepts allow for the definition of application data within the application itself. Since both are based on actor model principles, they make the database system modular, cloud-ready, and scalable. In this section, we introduce both domain actors and \glspl{functor}.
   
 %  Our concept is based on the idea of actor database systems as introduced by \citet{manifesto}.
 %  The combination of application and data tier provides considerable advantages for data-centric systems.
@@ -32,10 +32,10 @@
     Those two entities might be in a N-to-M relation (\textit{Cast}) with an attribute showing the actor's role in the film.
     In contrast to the relational model, our model, shown in \cref{fig:film_diagram}, consists of one \gls{dactor} type and two \glspl{relation} and is denormalized.
     The information contained in the \textit{Actor} entity is distributed across the \code{Cast} \glspl{relation}.
-    This allows us to answer the standard queries from one single actor instance without needing to join the answers from different, possibly physically distributed \glspl{dactor} instances.
+    This allows us to answer the standard queries from one single actor instance without needing to join the answers from different, possibly physically distributed \gls{dactor} instances.
 
     This approach to layout an application's data results in much smaller data sizes per \gls{dactor} compared to typical database tables and enables many business-logic-driven approaches to scaling, data partitioning, and caching.
-    The trade-off to take into account, however, is a large number of \gls{dactor} instances and a (partially) denormalized schema.
+    The trade-off, however, is a large number of \gls{dactor} instances and a (partially) denormalized schema.
 
     \begin{figure}
       \centering
@@ -55,8 +55,7 @@ class Film(id: Id) extends Dactor(id) {
     Film.Info -> SingleRowRelation(Film.Info),
     Film.Cast -> RowRelation(Film.Cast)
   }
-  // define Dactor behavior
-  override def receive: Receive = ???
+  override def receive: Receive =  //Dactor behavior
 }
 object Film {
   object FilmInfo extends RelationDef {
@@ -74,15 +73,15 @@ object Film {
         \subcaption{Example code using our framework.}
         \label{lst:film_definition}
       \end{subfigure}
-      \caption[\texttt{Film} Dactor type definition with two relations of the example application.]{\code{Film} \gls{dactor} type definition with two relations of the example application.}
+      \caption[\texttt{Film} Dactor type definition with two relations of the example application.]{\code{Film} \gls{dactor} type definition with two relations from the example application.}
       \label{fig:film_dactor_definition}
     \end{figure}
 
     % logic and processing capabilities
     As \glspl{dactor} not only contain data, but also the corresponding domain logic, computation is executed concurrently.
-    Actors provide single-threaded semantics, which makes enforcing constraints on data tied to one domain object stored inside a \gls{dactor} easy.
-    While state querying and modification within \glspl{dactor} is possible in a declarative way, the application developer can explicitly define the communication across all kinds of actors via asynchronous messages and how the \glspl{dactor} handle the said messages.
-    The explicit message definition and handling differentiates \glspl{dactor} from \citet{Shah:reactdb}'s reactors, as reactors can be used as relational entities and hide the message passing from the developer.
+    Actors provide single-threaded semantics, which makes enforcing constraints on data stored inside one \gls{dactor} easy.
+    While state querying and modification within \glspl{dactor} is possible in a declarative way, the application developer can explicitly define the communication across all kinds of actors via asynchronous messages.
+    The explicit messaging differentiates \glspl{dactor} from \citet{Shah:reactdb}'s reactors, as reactors can be used as relational entities and hide the message passing from the developer.
     
     To illustrate the definition of a \code{Dactor} in code, we show the definition of \code{Film}'s data model in \cref{lst:film_definition}.
     Developers can model the application's domain objects by defining \gls{dactor} types as subclasses of the framework-provided \code{Dactor} class in a declarative way.
@@ -94,7 +93,7 @@ object Film {
   \subsection{Functors -- Encapsulation of Queries}
     \Glspl{dactor} can answer queries via explicit, asynchronous messaging, {i.e.}, they answer a query with their local data.
     Sometimes, however, queries need be answered by several actors.
-    In such cases, it makes sense to encapsulate the processing in a new, short-living actors that we call \glspl{functor}.
+    In such cases, it makes sense to encapsulate the processing in a new, short-living actor that we call \gls{functor}.
     \Glspl{functor} are the framework's concepts that enable inter-\gls{dactor} communication and computations.
     They communicate with (usually multiple) \glspl{dactor}, track the completion of a query, handle the state of pending requests, and resolve failure cases.
     Every actor can create a new \gls{functor} to encapsulate multiple requests to \glspl{dactor}.
@@ -136,15 +135,14 @@ object Film {
 
       \textbf{Cascading Computation} is a pattern where a high-level message to an initial \gls{dactor} (\gls{dactor} A) triggers successive messages to other \glspl{dactor}, which are hidden from the original requester.
       Following \glspl{dactor} can also trigger further messages themselves.
-      As one can see in \cref{fig:comp_pattern_1}, this pattern is comparable to function calls in \gls{oop}.
+      As one can see in \cref{fig:comp_pattern_1}, this pattern is comparable to function calls in Object-oriented Programming.
       But contrary to simple function calls, messages in this pattern are sent asynchronously.
       This means that the requesting \gls{dactor} has to manage the state of pending responses.
       This clutters the domain logic in the \gls{dactor} and leads to complex and error-prone code.
       If used sparsely, this pattern supports separation of concerns and the tell-don't-ask paradigm.
 
       \textbf{Sequential Computation} is used for queries that consist of consecutive steps, where each step depends on the previous step's result, such as filter chains.
-      This pattern can be implemented via \glspl{functor}, which are \gls{dactor}-proxies provided by our framework.
-      We introduce the concept of \glspl{functor} in \cref{subsec:multi_dactor_queries}.
+      This pattern can be implemented via the aforementioned \glspl{functor}.
       Using a \gls{functor} to process the consecutive steps of the computational chain relieves \gls{dactor} A from dealing with intermediate state, because it is managed by the \gls{functor}.
       Each \gls{functor} deals with only one request-response pair at a time, which leads to simple state and processing logic for the \gls{functor} itself.
 
@@ -152,12 +150,12 @@ object Film {
       The concurrent \gls{functor} sends messages to several \glspl{dactor} in parallel and collects the results when they are finished to forward them to its creator.
       It allows for highly parallelized computations as all involved \glspl{dactor} are messaged at the same time and calculate their responses concurrently.
       
-    In summary, explicit message handling in \glspl{dactor} is used to implement the cascading communication pattern; \glspl{functor} are the framework's concepts to enable inter-\gls{dactor} communication and computations.
+    In summary, explicit message handling in \glspl{dactor} is used to implement the cascading communication pattern; sequential and concurrent \glspl{functor} are the framework's concepts to enable inter-\gls{dactor} communication and computations.
     Returning to the web application example, we now want to add a new film to the database using the \gls{functor} concept.
-    This involves changes to a new \code{Film} and the corresponding \code{Studio} \glspl{dactor} instances.
+    This involves changes to a new \code{Film} and the corresponding \code{Studio} \gls{dactor} instances.
     We can combine the concurrent and sequential \glspl{functor} to implement this functionality, which is displayed in \cref{fig:functor_diagram}.
     Both sequential \glspl{functor} are comprised of two subsequent steps:
-    They retrieve information from one \glspl{dactor} to update the other one.
+    They retrieve information from one \gls{dactor} to update the other one.
     They are independent of each other, so they can be executed in parallel, which is done by using the concurrent \gls{functor}.
     It only sends a successful response to its caller after both sequential \glspl{functor} have sent their responses to the concurrent \gls{functor}.
     
@@ -168,18 +166,18 @@ object Film {
       \label{fig:functor_diagram}
     \end{figure}      
       
-      \subsection{System Details}\label{subsec:framework_discussion}
-    \emph{Data partitioning} in an actor database system differs fundamentally from common partitioning techniques used in relational databases.
-    While large tables are typically partitioned based on a specific column's value or the hash thereof, our framework provides \glspl{dactor} as entities for data encapsulation and partitioning.
-    \Glspl{dactor} can be provisioned across multiple virtual runtimes and physical machines, because every \gls{dactor} instance is independent of the others and the only mean of communication is message passing.
-    As such, they provide flexible, fine-grained data partitioning based on application needs.
-    
-    The distributed nature of the database system introduces the new problem of partition or \emph{actor discovery}.
-    The framework maintains a unified namespace, in which each \gls{dactor} instance is identified by its \gls{dactor} type and a unique id.
-    In fact, querying a specific \gls{dactor} just requires obtaining the messaging address from the name-service and sending a message to it.
-    In case of a multi-node deployment, this is complemented by Akka's Cluster Sharding component~\cite{akka:clustersharding}, which routes the messages to the right physical host.
-    
-    Finally, \emph{failure handling}, especially with regard to computations relying on multiple \glspl{dactor}' data, requires careful monitoring due to \gls{dactor} distribution.
-    Building on the Akka framework's parent-child supervision concept, our framework allows for transparent failure handling configurations.
-    Failures can be handled within \glspl{dactor} if appropriate.
-    In case of multi-\gls{dactor} queries a fail-fast approach is chosen to allow calling actors or \glspl{dactor} to react to exceptions in a timely manner.
+    \subsection{System Details}\label{subsec:framework_discussion}
+      \emph{Data partitioning} in an actor database system differs fundamentally from common partitioning techniques used in relational databases.
+      While large tables are typically partitioned based on a specific column's value or the hash thereof, our framework provides \glspl{dactor} as entities for data encapsulation and partitioning.
+      \Glspl{dactor} can be provisioned across multiple virtual runtimes and physical machines, because every \gls{dactor} instance is independent of the others and the only mean of communication is message passing.
+      As such, they provide flexible, fine-grained data partitioning based on application needs.
+      
+      The distributed nature of the database system introduces the new problem of partition or \emph{actor discovery}.
+      The framework maintains a unified namespace, in which each \gls{dactor} instance is identified by its \gls{dactor} type and a unique ID.
+      In fact, querying a specific \gls{dactor} just requires obtaining the messaging address from the name-service and sending a message to it.
+      In case of a multi-node deployment, this is complemented by Akka's Cluster Sharding component, which routes the messages to the right physical host.
+      
+      Finally, \emph{failure handling}, especially with regard to computations relying on multiple \glspl{dactor}' data, requires careful monitoring due to \gls{dactor} distribution.
+      Building on Akka's parent-child supervision concept, our framework allows for transparent failure handling configurations.
+      Failures can be handled within \glspl{dactor} if appropriate.
+      In case of multi-\gls{dactor} queries a fail-fast approach is chosen to allow calling actorsto react to exceptions in a timely manner.
