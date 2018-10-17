@@ -162,7 +162,7 @@
   The fact that these tiers do not typically share a common format for data is referred to as \textit{object-relational impedance mismatch}.
   To mitigate this, we develop an actor database system that enables the implementation of application logic into the data storage runtime. 
   The actor model also allows for easy distribution of both data and computation across multiple nodes in a cluster.
-  More specifically, we propose the concept of \emph{domain actors} that provide a typesafe, SQL-like interface to develop the actors of our database system and the concept of \emph{\glspl{functor}} to build queries retrieving data contained in multiple actor instances.
+  More specifically, we propose the concept of \emph{domain actors} that provide a type-safe, SQL-like interface to develop the actors of our database system and the concept of \emph{\glspl{functor}} to build queries retrieving data contained in multiple actor instances.
   Our experiments demonstrate the feasibility of encapsulating data into domain actors by evaluating their memory overhead and performance.
   We also discuss how our proposed actor database system framework solves some of the challenges that arise from the design of distributed databases such as data partitioning, failure handling, and concurrent query processing.
 \end{abstract}
