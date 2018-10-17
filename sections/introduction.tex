@@ -26,13 +26,15 @@
   % \subsection{Paper Overview}
   % summarize and reference all following chapters
 
-  Todays applications need to process data at ever growing rates.
-  Regardless of being user data, stock data, sensor or event data, data is ever growing and needs to be stored and queried.
+  Today's applications need to process data at ever growing rates.
+  Regardless of its origin and kind, data is ever growing and needs to be stored and queried.
   Cluster or cloud deployments and multi-core hardware architectures allow scaling application logic in terms of computational power.
   Traditional data management systems, however, are at risk of becoming the bottleneck in data-centric software systems, because the separation into data and application tier costs performance, impacts code maintainability, and increases error susceptibility.
 %  Such applications create an increasing demand for scalable data storage solutions that are capable of fulfilling real-time requirements for OLTP workloads at low latency. % too long, use system instead of 'applications', maybe lose the OLTP
 
-The performance costs are due to the fact that \gls{rdbms} model their data in terms of relations while applications usually model the data as objects. The translation of relations into objects and vise versa is known as the \emph{object-relational impedance mismatch} and requires some additional effort. The use of \gls{orm} tools, such as Hibernate for Java or Active Record for Ruby on Rails, is a convenient yet expensive approach to provide a middle tier for the translation. Some key-value stores solve the impedance mismatch more elegantly, but they suffer from worse join and aggregation costs. Furthermore, code maintainability reduces when stored procedures are being used to push application logic closer to the data, {i.e.}, into the data tier for performance reasons, and the error susceptibility increases, because large, monolithic \glspl{rdbms} suffer from hand-crafted, non-standardized, and inconsistent attempts to fault-tolerance, parallelization, data encapsulation, workload distribution, replication and so on. The actor programming model, on the contrary, offers an effective solution for all these challenges.
+  The performance costs are due to the fact that \gls{rdbms} model their data in terms of relations while applications usually model the data as objects.
+  The translation of relations into objects and vise versa is known as the \emph{object-relational impedance mismatch} and requires some additional effort.
+  The use of \gls{orm} tools, such as Hibernate for Java or Active Record for Ruby on Rails, is a convenient yet expensive approach to provide a middle tier for the translation. Some key-value stores solve the impedance mismatch more elegantly, but they suffer from worse join and aggregation costs. Furthermore, code maintainability reduces when stored procedures are being used to push application logic closer to the data, {i.e.}, into the data tier for performance reasons, and the error susceptibility increases, because large, monolithic \glspl{rdbms} suffer from hand-crafted, non-standardized, and inconsistent attempts to fault-tolerance, parallelization, data encapsulation, workload distribution, replication and so on. The actor programming model, on the contrary, offers an effective solution for all these challenges.
 
 %  Traditionally, system architectures for these types of software are comprised in two tiers:
 %  An application tier containing the bulk of the business logic, as well as a data tier, storing the application's data.
@@ -53,7 +55,7 @@ The performance costs are due to the fact that \gls{rdbms} model their data in t
 %  The use of \gls{orm} tools, such as Hibernate for Java or Active Record for Ruby on Rails, is one approach to provide a middle tier for mapping between the data formats of the application and data tier.
   % However, shortcoming of this approach
 
-  Using the actor programing model to fuse application and data tier is an idea that was already proposed by \citet{manifesto} and tested on the Orleans actor framework. 
+  Using the actor programming model to fuse application and data tier is an idea that was already proposed by \citet{manifesto} and tested on the Orleans actor framework.
   The authors call for a new paradigm by designing a scalable data storage solution using the actor model.
   The core primitive in this model are actors, which are objects comprised of state and behavior that execute computational tasks concurrently.
   Individual actors communicate with each other exclusively via asynchronous message passing.
@@ -61,10 +63,8 @@ The performance costs are due to the fact that \gls{rdbms} model their data in t
   An actor's internal state is only available to said actor, which encourages a shared-nothing system architecture.
   The self-contained nature of actors and the fact that actors provide a lock-free concurrency model, allows for naturally scaling out applications and systems~\cite{vernon2015reactive}.
   % \enquote{The actor model brings OOP back to the system level with actors appearing to developers very much like the familiar model of interacting objects}~\cite{bernstein:orleans}.
-  \Citeauthor{manifesto} propose an implementation of the data tier using the actor model as a logically distributed runtime.
-  They predict that this programming abstraction will allow for a modular, scalable application design.
-
-
+  %\Citeauthor{manifesto} propose an implementation of the data tier using the actor model as a logically distributed runtime.
+  %They predict that this programming abstraction will allow for a modular, scalable application design.
   
 
   % first try
@@ -72,17 +72,16 @@ The performance costs are due to the fact that \gls{rdbms} model their data in t
   In contrast to \citet{manifesto}, our actor database system targets the Akka actor framework that offers different mechanisms for fault tolerance and actor lifecycles than Orleans.
   In detail, we make the following contributions:
   We introduce domain actors (\glspl{dactor}) to model application data in an Akka-based actor database system.
-  Similarly to the work of \citeauthor{Shah:reactdb} on reactors \cite{Shah:reactdb}, \glspl{dactor} encapsulate application data and logic.
+  Similarly to the work of \citeauthor{Shah:reactdb} on reactors~\cite{Shah:reactdb}, \glspl{dactor} encapsulate application data and logic.
   Since these actors are not part of a dedicated database runtime, but are defined using the application framework, data objects share the same representation throughout business logic and data storage.
-  This approach bridges the aforementioned impedance mismatch between data and the application logic tier.
+  This approach bridges the aforementioned impedance mismatch between data and application logic tier.
   In contrast to reactors, \glspl{dactor} are not relational entities, but employ relational structures internally.
   \Gls{dactor} state can be manipulated via an SQL-like interface.
-  To define application logic relying on data contained within multiple \glspl{dactor}, we provide the concept of \glspl{functor}.
-  \Glspl{functor} make the usage of asynchronous and concurrent computations explicit. 
+  To define application logic relying on data contained within multiple \glspl{dactor}, we provide the concept of \glspl{functor}, which make the usage of asynchronous and concurrent computations explicit.
 
   To our knowledge, we present the first implementation of this concept using the Akka framework.
   Comparable approaches are discussed in \cref{sec:related_work}.
   In \cref{sec:concept}, we outline our concept for an actor database system in more detail,
-  before explicitly describing the implementation of our prototype in \cref{sec:framework}.
-  We present the results of our experimental evaluation using our framework in \cref{sec:experiments} and offer a concluding statement about this and future work in \cref{sec:conclusion}.
+  before presenting the results of our experimental evaluation using our framework in \cref{sec:experiments}.
+  We offer a concluding statement about this and future work in \cref{sec:conclusion}.
   
