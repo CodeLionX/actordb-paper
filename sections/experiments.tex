@@ -4,9 +4,7 @@
 
 \section[Dactor Memory Overhead Experiments]{\Gls{dactor} Memory Overhead Experiments}\label{sec:experiments}
 
-  \textcolor{red}{
-  In our framework, a complex query consisting of multiple \glspl{functor} only takes x~ms to return the final result.
-  }
+  In our framework, a complex query comprising multiple \glspl{functor} has a runtime of 25~ms while queries involving a single \gls{dactor} instance respond under 10~ms.
   Our concept is based on the usage of hundreds of thousands of \glspl{dactor}, which all store only a small amount of data.
   Therefore, the question of how much memory overhead is introduced for storing data split across a multitude of actors is more interesting than the computation time.
 
