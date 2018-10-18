@@ -50,7 +50,7 @@
         \centering
         \scriptsize
 \begin{lstlisting}[language=Scala]
-class Film(id: Id) extends Dactor(id) {
+class Film(id: DactorId) extends Dactor(id) {
   override protected val relations = {
     Film.Info -> SingleRowRelation(Film.Info),
     Film.Cast -> RowRelation(Film.Cast)
@@ -64,7 +64,7 @@ object Film {
     val release = ColumnDef[ZonedDateTime]("release")
   }
   object Cast extends RelationDef {
-    val actorId = ColumnDef[Id]("actor_id")
+    val actorId = ColumnDef[DactorId]("actor_id")
     val name = ColumnDef[String]("actor_name")
     val rolename = ColumnDef[String]("role_name")
   }
@@ -180,4 +180,4 @@ object Film {
       Finally, \emph{failure handling}, especially with regard to computations relying on multiple \glspl{dactor}' data, requires careful monitoring due to \gls{dactor} distribution.
       Building on Akka's parent-child supervision concept, our framework allows for transparent failure handling configurations.
       Failures can be handled within \glspl{dactor} if appropriate.
-      In case of multi-\gls{dactor} queries a fail-fast approach is chosen to allow calling actorsto react to exceptions in a timely manner.
+      In case of multi-\gls{dactor} queries a fail-fast approach is chosen to allow calling actors to react to exceptions in a timely manner.
