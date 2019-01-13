@@ -11,12 +11,12 @@
   It consists of four different \gls{dactor} types, each containing one to three relations.
   The data stored in one \gls{dactor} ranges from seven to about 700 kilobytes depending on its type.
   We generated four different datasets emulating the scaling of the system by increasing the number of \gls{dactor}-instances and keeping the data size stored in one \gls{dactor} nearly constant.
-  The datasets include various primitive and complex data types and is distributed across \glspl{dactor} and relations.
+  The datasets include various primitive and complex data types and are distributed across \glspl{dactor} and relations.
   The dataset sizes are reported in \cref{tab:memory_overhead}.
 
   For all runtime performance experiments the median runtime of $N=1000$ concurrently executed queries are reported.
   A point-query for data contained in a single instance of a \gls{dactor} object presents a response time latency of 22~ms.
-  A concurrent insert of related data points into two \glspl{dactor} objects, managed by a concurrent functor ensuring a consistency constraint, runs 111~ms.
+  A concurrent insert of related data points into two \gls{dactor} objects, managed by a concurrent functor ensuring a consistency constraint, runs 111~ms.
   For each dataset we performed three different tests in order to evaluate the memory overhead introduced by encapsulating the system's data in a large number of \glspl{dactor} and relations:
   
   \begin{description}
