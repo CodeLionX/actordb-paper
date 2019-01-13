@@ -4,23 +4,20 @@
 
 \section[Performance and Memory Overhead Experiments]{Performance and Memory Overhead Experiments}\label{sec:experiments}
 
-  We present a short evaluation of the proof-of-concept framework implementation with regard to query performance.
-  We also measure the memory overhead introduced by storing data in possibly hundreds of thousands of \glspl{dactor}, each storing only a relatively small amount of data respectively. 
-  All tests were executed on a single consumer computer fitted with an Intel Core~i5-7600K CPU running at 3.8~GHz and 16~GB of DDR4 RAM.
-  The test system runs the 64~bit version of the Kubuntu~18.10 Linux distribution.
-
+  We present a short evaluation of the framework implementation with regard to query performance and the memory overhead introduced by storing data in possibly hundreds of thousands of \glspl{dactor}, each storing only a relatively small amount of data respectively. 
+  All tests were executed on a single consumer computer fitted with an Intel Core~i5-7600K CPU running at 3.8~GHz and 16~GB of RAM.
   We performed experiments using an exemplary actor database system, which is modeled based on a real-world scenario.
   It consists of four different \gls{dactor} types, each containing one to three relations.
   The data stored in one \gls{dactor} ranges from seven to about 700 kilobytes depending on its type.
-  We used a script to generate four different datasets emulating the scaling of the system by increasing the number of \gls{dactor}-instances and keeping the data size stored in one \gls{dactor} nearly constant.
-  The script creates various primitive data types, such as \code{String}, \code{Double}, and \code{Int}, as well as complex data types, such as \code{ZonedDateTime}, and distributes the data across \glspl{dactor} and relations.
+  We generated four different datasets emulating the scaling of the system by increasing the number of \gls{dactor}-instances and keeping the data size stored in one \gls{dactor} nearly constant.
+  The datasets include various primitive and complex data types and is distributed across \glspl{dactor} and relations.
   The dataset sizes are reported in \cref{tab:memory_overhead}.
 
   For all runtime performance experiments the median runtime of $N=1000$ concurrently executed queries are reported.
-  A point-query for data contained in a single instance of a \gls{dactor} object presents a response time latency of XX~ms.
-  A concurrent insert of related data points into two \glspl{dactor} objects, managed by a concurrent functor ensuring a consistency constraint, runs XX~ms.
-
-  For each dataset we performed three different tests in order to evaluate the memory overhead introduced by encapsuling the system's data in a large number of \glspl{dactor} and relations:
+  A point-query for data contained in a single instance of a \gls{dactor} object presents a response time latency of 22~ms.
+  A concurrent insert of related data points into two \glspl{dactor} objects, managed by a concurrent functor ensuring a consistency constraint, runs 111~ms.
+  For each dataset we performed three different tests in order to evaluate the memory overhead introduced by encapsulating the system's data in a large number of \glspl{dactor} and relations:
+  
   \begin{description}
     \item[\textit{Single string}] Convert all data into its \code{String} representation and load it as a single big \code{String} into memory.
     This test serves as baseline for the other tests.
@@ -33,7 +30,7 @@
   After the data was completely loaded into memory, we triggered a garbage collection run and created a heap dump.
   VisualVM is able to compute the retained sizes of object hierarchies in those dumps.
   This allowed us to investigate the memory usage of selected objects and their members in detail.
-  We report the results of those experiments in \cref{tab:memory_overhead}.
+  We report the results in \cref{tab:memory_overhead}.
   
   \begin{table}
     \centering
@@ -60,10 +57,10 @@
   % 26453405 / 18637898 = 142%
   % 72695967 / 49246330 = 148%
   % 145392010 / 98492584 = 148%
-  Even for the smallest dataset the data is split up across thousands of relations, which each use a two dimensional \code{Array} to store the individual values in a non-optimized way.
+  Even for the smallest dataset the data is split up across thousands of relations, which each use a two dimensional \code{Array} to store the individual values.
   In addition to that, relations also store metadata about the contained data, such as column names and data types.
   % show relations with more data stored than a couple kilobytes
-  As we can see in \cref{tab:memory_overhead}, using the full framework with \glspl{dactor} does not introduce much additional memory overhead.
+  Using the full framework with \glspl{dactor} does not introduce much additional memory overhead.
   On average, using a \gls{dactor} only needs an additional 533~B more.
   
   Let us assume that we have a 1~TB database and we chose to store 1~MB per \gls{dactor}.
