@@ -100,7 +100,6 @@ object Film {
     The \gls{functor} handles the message processing and sends the final result or a failure message back to its creator.
     Since all Akka actors live in hierarchical parent-child relationships, \glspl{functor} are always created by an actor as a child.
     This Akka-specific hierarchical relationship enables notifying the calling actor even in case of unforeseen crashes of the \gls{functor} themselves, which in turn allows to trigger error handling, e.g. retrying the \gls{functor} execution.
-
 %  \subsection{Comunication Patterns for Domain Actors}\label{sec:dactor_comm}
 %    Not all computation can be done with the information residing in a single \gls{dactor}.
 %    Hence, communication between \glspl{dactor} is required.
