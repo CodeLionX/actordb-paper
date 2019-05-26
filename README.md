@@ -5,7 +5,51 @@ Paper about https://github.com/CodeLionX/actordb
 [BTW 2019 _Studierendenprogramm_](https://btw.informatik.uni-rostock.de/index.php/de/calls/studierendenprogramm)
 resides in the [`btw`-branch](https://github.com/CodeLionX/actordb-paper/tree/btw).**
 
-## Contents
+## Paper versions
+
+The **unpublished** PDF versions of the paper are included in this repository and can be downloaded directly from Github using the following links:
+
+- [unrefined technical full-length version (20 pages)](https://github.com/CodeLionX/actordb-paper/blob/master/ActorDB.pdf)
+- [revised and submitted version (10 pages)](https://github.com/CodeLionX/actordb-paper/blob/btw/ActorDB.pdf)
+
+If you want to download the **published version** of this paper, you can do so from my personal website or from GI's digital library:
+
+- [direct download published paper](https://sebastianschmidl.de/assets/LNI-BTW2019-ActorDB.pdf)
+- [GI Digital Library](https://dl.gi.de/handle/20.500.12116/21810) (resolved from `doi:10.18420/btw2019-ws-23`)
+
+### Citing this paper
+
+You can cite this paper with:
+
+> Schmidl, S., Schneider, F. & Papenbrock, T., (2019). An Actor Database System for Akka. In: Meyer, H., Ritter, N., Thor, A., Nicklas, D., Heuer, A. & Klettke, M. (Hrsg.), BTW 2019 – Workshopband. Gesellschaft für Informatik, Bonn. (S. 225-234).
+
+or using BibTeX:
+
+```bibtex
+@inproceedings{mci/Schmidl2019,
+  author = {Schmidl, Sebastian AND Schneider, Frederic AND Papenbrock, Thorsten},
+  title = {An Actor Database System for Akka},
+  booktitle = {BTW 2019 – Workshopband},
+  year = {2019},
+  editor = {Meyer, Holger AND Ritter, Norbert AND Thor, Andreas AND Nicklas, Daniela AND Heuer, Andreas AND Klettke, Meike} ,
+  pages = { 225-234 },
+  publisher = {Gesellschaft für Informatik, Bonn}
+}
+```
+
+## Abstract
+
+System architectures for data-centric applications are commonly comprised of two tiers:
+An application tier and a data tier.
+The fact that these tiers do not typically share a common format for data is referred to as object-relational impedance mismatch.
+To mitigate this, we develop an actor database system that enables the implementation of application logic into the data storage runtime.
+The actor model also allows for easy distribution of both data and computation across multiple nodes in a cluster.
+More specifically, we propose the concept of domain actors that provide a type-safe, SQL-like interface to develop the actors of our database system
+and the concept of Functors to build queries retrieving data contained in multiple actor instances.
+Our experiments demonstrate the feasibility of encapsulating data into domain actors by evaluating their memory overhead and performance.
+We also discuss how our proposed actor database system framework solves some of the challenges that arise from the design of distributed databases such as data partitioning, failure handling, and concurrent query processing.
+
+## Repository Contents
 
 The main file is called `paper.tex`.
 It contains the preamble and document setup stuff.
